@@ -28,7 +28,7 @@ import {
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import type { JwtPayload } from 'src/common/interfaces/jwt-payload.interface';
 
-@ApiTags('Admin')
+@ApiTags('Admin / AI')
 @ApiBearerAuth('access-token')
 @Controller('admin/ai')
 export class AdminAiController {

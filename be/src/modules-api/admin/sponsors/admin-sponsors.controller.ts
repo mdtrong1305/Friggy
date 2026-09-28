@@ -9,9 +9,10 @@ import { AdminSponsorsService } from './admin-sponsors.service';
 import {
   CreateSponsorDto, UpdateSponsorDto,
   CreateCampaignDto, UpdateCampaignDto,
-} from './dto/admin-phase12.dto';
+} from './dto/admin-sponsors.dto';
+import { SponsorDto, CampaignDto } from './dto/admin-sponsors-response.dto';
 
-@ApiTags('Admin')
+@ApiTags('Admin / Sponsors')
 @ApiBearerAuth('access-token')
 @Roles('admin')
 @Controller('admin/sponsors')
@@ -22,13 +23,14 @@ export class AdminSponsorsController {
 
   @Get()
   @ApiOperation({ summary: '[Admin] Danh sách sponsors' })
+  @ApiResponse({ status: 200, type: [SponsorDto] })
   getSponsors() {
     return this.service.getSponsors();
   }
 
   @Post()
   @ApiOperation({ summary: '[Admin] Tạo sponsor mới' })
-  @ApiResponse({ status: 201, description: 'Đã tạo sponsor' })
+  @ApiResponse({ status: 201, type: SponsorDto })
   createSponsor(@Body() dto: CreateSponsorDto) {
     return this.service.createSponsor(dto);
   }
@@ -36,6 +38,8 @@ export class AdminSponsorsController {
   @Patch(':id')
   @ApiOperation({ summary: '[Admin] Cập nhật thông tin sponsor' })
   @ApiParam({ name: 'id', description: 'Sponsor ID' })
+  @ApiResponse({ status: 200, type: SponsorDto })
+  @ApiResponse({ status: 404, description: 'Sponsor không tồn tại' })
   updateSponsor(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateSponsorDto,
@@ -48,6 +52,7 @@ export class AdminSponsorsController {
   @Get(':id/campaigns')
   @ApiOperation({ summary: '[Admin] Campaigns của 1 sponsor' })
   @ApiParam({ name: 'id', description: 'Sponsor ID' })
+  @ApiResponse({ status: 200, type: [CampaignDto] })
   getCampaigns(@Param('id', ParseIntPipe) id: number) {
     return this.service.getCampaigns(id);
   }
@@ -55,7 +60,7 @@ export class AdminSponsorsController {
   @Post(':id/campaigns')
   @ApiOperation({ summary: '[Admin] Tạo campaign cho sponsor' })
   @ApiParam({ name: 'id', description: 'Sponsor ID' })
-  @ApiResponse({ status: 201, description: 'Đã tạo campaign' })
+  @ApiResponse({ status: 201, type: CampaignDto })
   createCampaign(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: CreateCampaignDto,
@@ -66,6 +71,8 @@ export class AdminSponsorsController {
   @Patch('campaigns/:campaignId')
   @ApiOperation({ summary: '[Admin] Cập nhật campaign (status, endDate)' })
   @ApiParam({ name: 'campaignId', description: 'Campaign ID (UUID)' })
+  @ApiResponse({ status: 200, type: CampaignDto })
+  @ApiResponse({ status: 404, description: 'Campaign không tồn tại' })
   updateCampaign(
     @Param('campaignId') campaignId: string,
     @Body() dto: UpdateCampaignDto,

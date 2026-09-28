@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from 'src/modules-system/prisma/prisma.service';
-import type { UpdatePlanDto } from './dto/admin-plan.dto';
+import type { CreatePlanDto, UpdatePlanDto } from './dto/admin-plan.dto';
 
 @Injectable()
 export class AdminPlansService {
@@ -38,5 +38,40 @@ export class AdminPlansService {
 
     this.logger.log(`[AdminPlans] Cập nhật gói #${id} (${plan.name}): ${JSON.stringify(dto)}`);
     return updated;
+  }
+  // ─── POST /admin/plans ────────────────────────────────────
+
+  async createPlan(dto: CreatePlanDto) {
+    const created = await this.prisma.subscriptionPlan.create({
+      data: {
+        name: dto.name,
+        displayName: dto.displayName ?? dto.name,
+        priceVnd: dto.priceVnd,
+        billingCycle: dto.billingCycle,
+        aiUsagePerWeek: dto.aiUsagePerWeek,
+        features: dto.features ?? [],
+        isActive: dto.isActive ?? true,
+      },
+    });
+
+    this.logger.log(`[AdminPlans] Tạo gói mới: ${created.name} (#${created.id})`);
+    return created;
+  }
+
+  // ─── DELETE /admin/plans/:id ───────────────────────────────
+
+  async deletePlan(id: number) {
+    const plan = await this.prisma.subscriptionPlan.findFirst({
+      where: { id, deletedAt: null },
+    });
+    if (!plan) throw new NotFoundException(`Gói #${id} không tồn tại`);
+
+    await this.prisma.subscriptionPlan.update({
+      where: { id },
+      data: { deletedAt: new Date(), isActive: false },
+    });
+
+    this.logger.log(`[AdminPlans] Xóa gói #${id} (${plan.name})`);
+    return { message: `Đã xóa gói "${plan.displayName ?? plan.name}" (#${id})` };
   }
 }

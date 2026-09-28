@@ -1,15 +1,9 @@
 import {
   Injectable,
   NotFoundException,
-  ConflictException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/modules-system/prisma/prisma.service';
-import { v4 as uuid } from 'uuid';
-import type {
-  ListRecipesQueryDto,
-  CreateRecipeDto,
-  UpdateRecipeDto,
-} from './dto/recipes.dto';
+import type { ListRecipesQueryDto } from './dto/recipes.dto';
 import type {
   RecipeSummaryDto,
   RecipeDetailDto,
@@ -232,102 +226,6 @@ export class RecipesService {
 
     await this.prisma.userSavedRecipe.update({
       where: { userId_recipeId: { userId, recipeId } },
-      data: { deletedAt: new Date() },
-    });
-  }
-
-  // ─────────────────────────────────────────────────────────
-  // POST / — Tạo công thức (Admin)
-  // ─────────────────────────────────────────────────────────
-
-  async create(dto: CreateRecipeDto, authorId: string): Promise<RecipeDetailDto> {
-    // Kiểm tra tên trùng
-    const existing = await this.prisma.recipe.findFirst({
-      where: { title: dto.title, deletedAt: null },
-    });
-    if (existing) throw new ConflictException('Tên công thức đã tồn tại');
-
-    const id = uuid();
-
-    await this.prisma.recipe.create({
-      data: {
-        id,
-        title: dto.title,
-        description: dto.description ?? null,
-        mealType: dto.mealType as any,
-        cookTimeMinutes: dto.cookTimeMinutes,
-        servings: dto.servings,
-        difficultyLevel: dto.difficultyLevel as any,
-        estimatedCost: dto.estimatedCost ?? null,
-        authorId,
-        status: 'published',
-        ingredients: dto.ingredients?.length
-          ? {
-              create: dto.ingredients.map((i) => ({
-                ingredientId: i.ingredientId,
-                quantity: i.quantity,
-                unit: i.unit,
-                isOptional: i.isOptional ?? false,
-                note: i.note ?? null,
-              })),
-            }
-          : undefined,
-        steps: dto.steps?.length
-          ? {
-              create: dto.steps.map((s) => ({
-                stepNumber: s.stepNumber,
-                instruction: s.instruction,
-                durationMinutes: s.durationMinutes ?? null,
-              })),
-            }
-          : undefined,
-        tags: dto.tagIds?.length
-          ? { create: dto.tagIds.map((tagId) => ({ tagId })) }
-          : undefined,
-      },
-    });
-
-    return this.findOne(id, authorId);
-  }
-
-  // ─────────────────────────────────────────────────────────
-  // PATCH /:id — Cập nhật (Admin)
-  // ─────────────────────────────────────────────────────────
-
-  async update(id: string, dto: UpdateRecipeDto, userId: string): Promise<RecipeDetailDto> {
-    const recipe = await this.prisma.recipe.findFirst({
-      where: { id, deletedAt: null },
-    });
-    if (!recipe) throw new NotFoundException('Không tìm thấy công thức');
-
-    await this.prisma.recipe.update({
-      where: { id },
-      data: {
-        ...(dto.title && { title: dto.title }),
-        ...(dto.description !== undefined && { description: dto.description }),
-        ...(dto.mealType && { mealType: dto.mealType as any }),
-        ...(dto.cookTimeMinutes && { cookTimeMinutes: dto.cookTimeMinutes }),
-        ...(dto.servings && { servings: dto.servings }),
-        ...(dto.difficultyLevel && { difficultyLevel: dto.difficultyLevel as any }),
-        ...(dto.estimatedCost !== undefined && { estimatedCost: dto.estimatedCost }),
-      },
-    });
-
-    return this.findOne(id, userId);
-  }
-
-  // ─────────────────────────────────────────────────────────
-  // DELETE /:id — Soft delete (Admin)
-  // ─────────────────────────────────────────────────────────
-
-  async remove(id: string): Promise<void> {
-    const recipe = await this.prisma.recipe.findFirst({
-      where: { id, deletedAt: null },
-    });
-    if (!recipe) throw new NotFoundException('Không tìm thấy công thức');
-
-    await this.prisma.recipe.update({
-      where: { id },
       data: { deletedAt: new Date() },
     });
   }
