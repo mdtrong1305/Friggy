@@ -32,8 +32,8 @@ import {
 } from './dto/auth-response.dto';
 import { ClientProxy } from '@nestjs/microservices';
 import { Inject } from '@nestjs/common';
+import { GOOGLE_CLIENT_ID } from 'src/common/constants/app.constant';
 
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID ?? '';
 const OTP_TTL_SECONDS = 300; // 5 phút
 const OTP_MAX_ATTEMPTS = 5;
 const OTP_RATE_LIMIT_MAX = 3;

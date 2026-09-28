@@ -3,16 +3,15 @@ import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { PORT, NODE_ENV, SWAGGER_PATH } from './common/constants/app.constant';
-import { join } from 'path';
+import {
+  PORT,
+  NODE_ENV,
+  SWAGGER_PATH,
+  APP_URL,
+} from './common/constants/app.constant';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-
-  // ── Static files (ảnh upload lưu tại /public) ──────────────────────────
-  app.useStaticAssets(join(__dirname, '..', 'public'), {
-    prefix: '/public',
-  });
 
   // ── Global API prefix & versioning ─────────────────────────────────────
   app.setGlobalPrefix('api');
@@ -34,65 +33,70 @@ async function bootstrap() {
     credentials: false,
   });
 
-  // ── Swagger (chỉ bật ở môi trường development) ─────────────────────────
-  if (NODE_ENV !== 'production') {
-    const config = new DocumentBuilder()
-      .setTitle('Friggy API')
-      .setDescription(
-        `**Tủ lạnh thông minh** — Hệ thống quản lý thực phẩm & tư vấn bữa ăn AI.\n\n` +
-          `### Quy ước\n` +
-          `- Tất cả response bọc trong \`{ success, data, message }\`\n` +
-          `- DateTime theo chuẩn **ISO 8601** (UTC)\n` +
-          `- Tiền tệ đơn vị **VND** (số nguyên)\n` +
-          `- Ảnh trả về dưới dạng **path tương đối** \`/public/...\`\n\n` +
-          `### Auth\n` +
-          `Dùng **Bearer Token** (JWT). Lấy token qua \`POST /api/v1/auth/google\` hoặc \`POST /api/v1/auth/phone/verify\`.`,
-      )
-      .setVersion('1.0')
-      .addBearerAuth(
-        {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
-          description: 'Nhập Access Token JWT vào đây',
-        },
-        'access-token', // tên security scheme — dùng @ApiBearerAuth('access-token') trên controller
-      )
-      .addTag('Auth', 'Đăng nhập / Đăng xuất')
-      .addTag('Users', 'Hồ sơ & Tùy chọn người dùng')
-      .addTag('Ingredients', 'Nguyên liệu & Danh mục')
-      .addTag('Recipes', 'Công thức nấu ăn')
-      .addTag('Fridge', 'Tủ lạnh cá nhân')
-      .addTag('Notifications', 'Thông báo & Cài đặt thông báo')
-      .addTag('Subscriptions', 'Gói dịch vụ Free & Individual')
-      .addTag('Payment Transactions', 'Lịch sử giao dịch thanh toán & Polling trạng thái')
-      .addTag('Family', 'Gói Gia Đình — Mời thành viên, Chấp nhận, Giải tán')
-      .addTag('Meal Planning', 'Thực đơn tuần & Danh sách mua')
-      .addTag('AI Chat', 'Đầu bếp AI — Chat có tài khoản & Chatbot công khai')
-      .addTag('AI Public Chat', 'API Chat public (Chatbot SEO)')
-      .addTag('Admin', 'Quản trị hệ thống')
-      .addTag('Admin — Payment Transactions', 'Quản trị — Lịch sử giao dịch thanh toán')
-      .build();
-
-    const document = SwaggerModule.createDocument(app, config);
-
-    SwaggerModule.setup(SWAGGER_PATH, app, document, {
-      customSiteTitle: 'Friggy API Docs',
-      customfavIcon: '/public/favicon.ico',
-      swaggerOptions: {
-        persistAuthorization: true, // giữ token sau khi reload trang
-        tagsSorter: 'alpha',
-        operationsSorter: 'method',
-        docExpansion: 'none', // collapse tất cả endpoint mặc định
-        filter: true, // bật ô tìm kiếm endpoint
-        displayRequestDuration: true, // hiển thị thời gian response
+  // ── Swagger UI (bật cả production & development) ────────────────────────
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('Friggy API')
+    .setDescription(
+      `**Tủ lạnh thông minh** — Hệ thống quản lý thực phẩm & tư vấn bữa ăn AI.\n\n` +
+        `### Quy ước\n` +
+        `- Tất cả response bọc trong \`{ success, data, message }\`\n` +
+        `- DateTime theo chuẩn **ISO 8601** (UTC)\n` +
+        `- Tiền tệ đơn vị **VND** (số nguyên)\n` +
+        `- Ảnh trả về dưới dạng **path tương đối** \`/avatars/...\`\n\n` +
+        `### Auth\n` +
+        `Dùng **Bearer Token** (JWT). Lấy token qua \`POST /api/v1/auth/google\` hoặc \`POST /api/v1/auth/email/login\`.`,
+    )
+    .setVersion('1.0')
+    .addServer(
+      APP_URL,
+      NODE_ENV === 'production' ? 'Production' : 'Development',
+    )
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'Nhập Access Token JWT vào đây',
       },
-    });
+      'access-token',
+    )
+    .addTag('Auth', 'Đăng nhập / Đăng xuất')
+    .addTag('Users', 'Hồ sơ & Tùy chọn người dùng')
+    .addTag('Ingredients', 'Nguyên liệu & Danh mục')
+    .addTag('Recipes', 'Công thức nấu ăn')
+    .addTag('Fridge', 'Tủ lạnh cá nhân')
+    .addTag('Notifications', 'Thông báo & Cài đặt thông báo')
+    .addTag('Subscriptions', 'Gói dịch vụ Free & Individual')
+    .addTag(
+      'Payment Transactions',
+      'Lịch sử giao dịch thanh toán & Polling trạng thái',
+    )
+    .addTag('Family', 'Gói Gia Đình — Mời thành viên, Chấp nhận, Giải tán')
+    .addTag('Meal Planning', 'Thực đơn tuần & Danh sách mua')
+    .addTag('AI Chat', 'Đầu bếp AI — Chat có tài khoản & Chatbot công khai')
+    .addTag('AI Public Chat', 'API Chat public (Chatbot SEO)')
+    .addTag('Admin', 'Quản trị hệ thống')
+    .addTag(
+      'Admin — Payment Transactions',
+      'Quản trị — Lịch sử giao dịch thanh toán',
+    )
+    .build();
 
-    console.log(
-      `\nSwagger UI: http://localhost:${PORT || 3069}/${SWAGGER_PATH}\n`,
-    );
-  }
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+
+  SwaggerModule.setup(SWAGGER_PATH, app, document, {
+    customSiteTitle: 'Friggy API Docs',
+    swaggerOptions: {
+      persistAuthorization: true,
+      tagsSorter: 'alpha',
+      operationsSorter: 'method',
+      docExpansion: 'none',
+      filter: true,
+      displayRequestDuration: true,
+    },
+  });
+
+  console.log(`\nSwagger UI: ${APP_URL}/${SWAGGER_PATH}\n`);
 
   const port = PORT || 3069;
   await app.listen(port, () => {

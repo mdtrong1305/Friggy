@@ -5,6 +5,8 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/modules-system/prisma/prisma.service';
+import { existsSync, unlinkSync } from 'fs';
+import { join } from 'path';
 import type {
   ListIngredientsQueryDto,
   CreateIngredientDto,
@@ -206,6 +208,33 @@ export class IngredientsService {
       where: { id },
       data: { deletedAt: new Date() },
     });
+  }
+
+  // ─────────────────────────────────────────────────────────
+  // POST /:id/image — Upload ảnh nguyên liệu (Admin)
+  // ─────────────────────────────────────────────────────────
+
+  async uploadImage(id: number, file: Express.Multer.File): Promise<IngredientResponseDto> {
+    const ingredient = await this.prisma.ingredient.findFirst({
+      where: { id, deletedAt: null },
+      include: { category: true },
+    });
+    if (!ingredient) throw new NotFoundException('Không tìm thấy nguyên liệu');
+
+    // Xóa ảnh cũ trên disk nếu có
+    if (ingredient.imagePath) {
+      const oldFile = join(process.cwd(), 'public', ingredient.imagePath);
+      if (existsSync(oldFile)) unlinkSync(oldFile);
+    }
+
+    const imagePath = `/ingredients/${file.filename}`;
+    const updated = await this.prisma.ingredient.update({
+      where: { id },
+      data: { imagePath },
+      include: { category: true },
+    });
+
+    return this.mapIngredient(updated);
   }
 
   // ─────────────────────────────────────────────────────────
