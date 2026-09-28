@@ -1,36 +1,47 @@
 import { Module } from '@nestjs/common';
 import { PrismaModule } from 'src/modules-system/prisma/prisma.module';
 
-// ── AI Management (Phase 8) ──────────────────────────────
-import { AdminAiController } from './admin-ai.controller';
-import { AdminAiService } from './admin-ai.service';
+// ── AI ────────────────────────────────────────────────────
+import { AdminAiController } from './ai/admin-ai.controller';
+import { AdminAiService } from './ai/admin-ai.service';
 
-// ── Cron Management (Phase 11) ───────────────────────────
-import { AdminCronController } from './admin-cron.controller';
-import { AdminCronService } from './admin-cron.service';
+// ── Cron ─────────────────────────────────────────────────
+import { AdminCronController } from './cron/admin-cron.controller';
+import { AdminCronService } from './cron/admin-cron.service';
 import { NotificationsModule } from 'src/modules-api/notifications/notifications.module';
 
-// ── Phase 12: User, Stats, Sponsors ─────────────────────
-import { AdminUsersController } from './admin-users.controller';
-import { AdminUsersService } from './admin-users.service';
-import { AdminStatsController } from './admin-stats.controller';
-import { AdminStatsService } from './admin-stats.service';
-import { AdminSponsorsController } from './admin-sponsors.controller';
-import { AdminSponsorsService } from './admin-sponsors.service';
+// ── Users ─────────────────────────────────────────────────
+import { AdminUsersController } from './users/admin-users.controller';
+import { AdminUsersService } from './users/admin-users.service';
 
-// ── Phase 14: Plan Management ────────────────────────────
-import { AdminPlansController } from './admin-plans.controller';
-import { AdminPlansService } from './admin-plans.service';
+// ── Stats ─────────────────────────────────────────────────
+import { AdminStatsController } from './stats/admin-stats.controller';
+import { AdminStatsService } from './stats/admin-stats.service';
+
+// ── Sponsors ──────────────────────────────────────────────
+import { AdminSponsorsController } from './sponsors/admin-sponsors.controller';
+import { AdminSponsorsService } from './sponsors/admin-sponsors.service';
+
+// ── Plans ─────────────────────────────────────────────────
+import { AdminPlansController } from './plans/admin-plans.controller';
+import { AdminPlansService } from './plans/admin-plans.service';
 
 // ── Payment Transactions ──────────────────────────────────
-import { AdminPaymentTransactionsController } from './admin-payment-transactions.controller';
-import { PaymentTransactionsModule } from 'src/modules-api/payment-transactions/payment-transactions.module';
+import { AdminPaymentTransactionsController } from './payment-transactions/admin-payment-transactions.controller';
+import { AdminPaymentTransactionsService } from './payment-transactions/admin-payment-transactions.service';
+
+// ── Ingredients ───────────────────────────────────────────
+import { AdminIngredientsController } from './ingredients/admin-ingredients.controller';
+import { AdminIngredientsService } from './ingredients/admin-ingredients.service';
+
+// ── Recipes ───────────────────────────────────────────────
+import { AdminRecipesController } from './recipes/admin-recipes.controller';
+import { AdminRecipesService } from './recipes/admin-recipes.service';
 
 @Module({
   imports: [
     PrismaModule,
     NotificationsModule,
-    PaymentTransactionsModule,
   ],
   controllers: [
     AdminAiController,
@@ -40,6 +51,8 @@ import { PaymentTransactionsModule } from 'src/modules-api/payment-transactions/
     AdminSponsorsController,
     AdminPlansController,
     AdminPaymentTransactionsController,
+    AdminIngredientsController,
+    AdminRecipesController,
   ],
   providers: [
     AdminAiService,
@@ -48,6 +61,9 @@ import { PaymentTransactionsModule } from 'src/modules-api/payment-transactions/
     AdminStatsService,
     AdminSponsorsService,
     AdminPlansService,
+    AdminPaymentTransactionsService,
+    AdminIngredientsService,
+    AdminRecipesService,
   ],
 })
 export class AdminModule {}

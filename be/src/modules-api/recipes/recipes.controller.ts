@@ -2,35 +2,27 @@ import {
   Controller,
   Get,
   Post,
-  Patch,
   Delete,
-  Body,
   Param,
   Query,
   HttpCode,
   HttpStatus,
-  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
+  ApiParam,
 } from '@nestjs/swagger';
 import { RecipesService } from './recipes.service';
-import {
-  ListRecipesQueryDto,
-  CreateRecipeDto,
-  UpdateRecipeDto,
-} from './dto/recipes.dto';
+import { ListRecipesQueryDto } from './dto/recipes.dto';
 import {
   RecipeSummaryDto,
   RecipeDetailDto,
   PaginatedRecipesDto,
 } from './dto/recipes-response.dto';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
-import { RolesGuard } from 'src/common/guards/roles.guard';
-import { Roles } from 'src/common/decorators/roles.decorator';
 import type { JwtPayload } from 'src/common/interfaces/jwt-payload.interface';
 
 @ApiTags('Recipes')
@@ -73,11 +65,12 @@ export class RecipesController {
   }
 
   // ─────────────────────────────────────────────────────────
-  // GET /:id — Chi tiết
+  // GET /:id — Chi tiết (phải sau các route literal)
   // ─────────────────────────────────────────────────────────
 
   @Get(':id')
   @ApiOperation({ summary: 'Chi tiết công thức (steps + ingredients + inFridge)' })
+  @ApiParam({ name: 'id', description: 'Recipe ID (UUID)' })
   @ApiResponse({ status: 200, type: RecipeDetailDto })
   @ApiResponse({ status: 404, description: 'Không tìm thấy' })
   findOne(
@@ -88,59 +81,13 @@ export class RecipesController {
   }
 
   // ─────────────────────────────────────────────────────────
-  // POST / — Tạo (Admin)
-  // ─────────────────────────────────────────────────────────
-
-  @Post()
-  @UseGuards(RolesGuard)
-  @Roles('admin')
-  @ApiOperation({ summary: '[Admin] Tạo công thức mới (kèm ingredients + steps + tags)' })
-  @ApiResponse({ status: 201, type: RecipeDetailDto })
-  create(
-    @Body() dto: CreateRecipeDto,
-    @CurrentUser() user: JwtPayload,
-  ): Promise<RecipeDetailDto> {
-    return this.recipesService.create(dto, user.sub);
-  }
-
-  // ─────────────────────────────────────────────────────────
-  // PATCH /:id — Cập nhật (Admin)
-  // ─────────────────────────────────────────────────────────
-
-  @Patch(':id')
-  @UseGuards(RolesGuard)
-  @Roles('admin')
-  @ApiOperation({ summary: '[Admin] Cập nhật thông tin công thức' })
-  @ApiResponse({ status: 200, type: RecipeDetailDto })
-  update(
-    @Param('id') id: string,
-    @Body() dto: UpdateRecipeDto,
-    @CurrentUser() user: JwtPayload,
-  ): Promise<RecipeDetailDto> {
-    return this.recipesService.update(id, dto, user.sub);
-  }
-
-  // ─────────────────────────────────────────────────────────
-  // DELETE /:id — Soft delete (Admin)
-  // ─────────────────────────────────────────────────────────
-
-  @Delete(':id')
-  @UseGuards(RolesGuard)
-  @Roles('admin')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: '[Admin] Xóa công thức (soft delete)' })
-  @ApiResponse({ status: 204, description: 'Đã xóa' })
-  remove(@Param('id') id: string): Promise<void> {
-    return this.recipesService.remove(id);
-  }
-
-  // ─────────────────────────────────────────────────────────
   // POST /:id/bookmark — Bookmark
   // ─────────────────────────────────────────────────────────
 
   @Post(':id/bookmark')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Bookmark công thức' })
+  @ApiParam({ name: 'id', description: 'Recipe ID (UUID)' })
   @ApiResponse({ status: 204, description: 'Đã bookmark' })
   addBookmark(
     @Param('id') id: string,
@@ -156,6 +103,7 @@ export class RecipesController {
   @Delete(':id/bookmark')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Bỏ bookmark công thức' })
+  @ApiParam({ name: 'id', description: 'Recipe ID (UUID)' })
   @ApiResponse({ status: 204, description: 'Đã bỏ bookmark' })
   removeBookmark(
     @Param('id') id: string,

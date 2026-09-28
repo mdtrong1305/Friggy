@@ -8,7 +8,7 @@ import type {
   UpdateSponsorDto,
   CreateCampaignDto,
   UpdateCampaignDto,
-} from './dto/admin-phase12.dto';
+} from './dto/admin-sponsors.dto';
 
 @Injectable()
 export class AdminSponsorsService {

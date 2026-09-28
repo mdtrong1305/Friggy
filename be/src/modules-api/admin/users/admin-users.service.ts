@@ -3,7 +3,7 @@
  */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/modules-system/prisma/prisma.service';
-import type { ListUsersQueryDto } from './dto/admin-phase12.dto';
+import type { ListUsersQueryDto } from './dto/admin-users.dto';
 
 @Injectable()
 export class AdminUsersService {

@@ -75,11 +75,15 @@ async function bootstrap() {
     .addTag('Meal Planning', 'Thực đơn tuần & Danh sách mua')
     .addTag('AI Chat', 'Đầu bếp AI — Chat có tài khoản & Chatbot công khai')
     .addTag('AI Public Chat', 'API Chat public (Chatbot SEO)')
-    .addTag('Admin', 'Quản trị hệ thống')
-    .addTag(
-      'Admin — Payment Transactions',
-      'Quản trị — Lịch sử giao dịch thanh toán',
-    )
+    .addTag('Admin / AI', 'Quản lý AI providers & prompts')
+    .addTag('Admin / Cron', 'Quản lý cron jobs — bật/tắt, đổi schedule, trigger thủ công')
+    .addTag('Admin / Ingredients', 'Quản lý nguyên liệu & danh mục nguyên liệu')
+    .addTag('Admin / Payment Transactions', 'Toàn bộ lịch sử giao dịch thanh toán')
+    .addTag('Admin / Plans', 'Quản lý gói dịch vụ — giá, rate limit, tính năng')
+    .addTag('Admin / Recipes', 'Quản lý công thức nấu ăn')
+    .addTag('Admin / Sponsors', 'Quản lý đối tác & chiến dịch quảng cáo')
+    .addTag('Admin / Stats', 'Dashboard thống kê — users, revenue, AI usage, subscriptions')
+    .addTag('Admin / Users', 'Quản lý tài khoản người dùng')
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);

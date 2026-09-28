@@ -15,8 +15,9 @@ import {
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { AdminCronService } from './admin-cron.service';
 import { UpdateCronJobDto } from './dto/admin-cron.dto';
+import { CronJobDto, CronJobUpdateResponseDto } from './dto/admin-cron-response.dto';
 
-@ApiTags('Admin')
+@ApiTags('Admin / Cron')
 @ApiBearerAuth('access-token')
 @Roles('admin')
 @Controller('admin/cron-jobs')
@@ -33,8 +34,8 @@ export class AdminCronController {
     description:
       'Xem tất cả cron jobs, schedule, trạng thái bật/tắt, lần chạy cuối.',
   })
-  @ApiResponse({ status: 200, description: 'Danh sách cron jobs' })
-  async getCronJobs() {
+  @ApiResponse({ status: 200, type: [CronJobDto] })
+  async getCronJobs(): Promise<CronJobDto[]> {
     return this.adminCronService.getCronJobs();
   }
 
@@ -52,7 +53,8 @@ export class AdminCronController {
     name: 'name',
     description: 'Tên cron job: expiry_warning | weekly_plan_remind | subscription_renewal_reminder',
   })
-  @ApiResponse({ status: 200, description: 'Đã cập nhật cron job' })
+  @ApiResponse({ status: 200, type: CronJobUpdateResponseDto })
+  @ApiResponse({ status: 404, description: 'Không tìm thấy cron job' })
   async updateCronJob(
     @Param('name') name: string,
     @Body() dto: UpdateCronJobDto,

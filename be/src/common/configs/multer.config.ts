@@ -80,3 +80,10 @@ export const multerIngredientConfig: MulterOptions = {
   fileFilter: imageFileFilter,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
 };
+
+// ── Icon danh mục nguyên liệu ────────────────────────────────────────────────
+export const multerCategoryIconConfig: MulterOptions = {
+  storage: createStorage(() => 'categories'),
+  fileFilter: imageFileFilter,
+  limits: { fileSize: 2 * 1024 * 1024 }, // 2 MB
+};
