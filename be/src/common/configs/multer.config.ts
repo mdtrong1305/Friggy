@@ -73,3 +73,10 @@ export const multerSponsorConfig: MulterOptions = {
   fileFilter: imageFileFilter,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
 };
+
+// ── Ảnh nguyên liệu ─────────────────────────────────────────────────────────
+export const multerIngredientConfig: MulterOptions = {
+  storage: createStorage(() => 'ingredients'),
+  fileFilter: imageFileFilter,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
+};

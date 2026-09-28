@@ -11,6 +11,9 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -18,7 +21,10 @@ import {
   ApiParam,
   ApiResponse,
   ApiBearerAuth,
+  ApiConsumes,
 } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { multerIngredientConfig } from 'src/common/configs/multer.config';
 import { IngredientsService } from './ingredients.service';
 import {
   ListIngredientsQueryDto,
@@ -165,6 +171,27 @@ export class IngredientsController {
     @Body() dto: UpdateIngredientDto,
   ): Promise<IngredientResponseDto> {
     return this.ingredientsService.update(id, dto);
+  }
+
+  // ─────────────────────────────────────────────────────────
+  // POST /:id/image — Upload ảnh nguyên liệu (Admin only)
+  // ─────────────────────────────────────────────────────────
+
+  @Post(':id/image')
+  @UseGuards(RolesGuard)
+  @Roles('admin')
+  @ApiOperation({ summary: '[Admin] Upload ảnh nguyên liệu (JPEG/PNG/WEBP, tối đa 5MB)' })
+  @ApiConsumes('multipart/form-data')
+  @ApiParam({ name: 'id', description: 'Ingredient ID' })
+  @ApiResponse({ status: 200, type: IngredientResponseDto })
+  @ApiResponse({ status: 404, description: 'Không tìm thấy nguyên liệu' })
+  @UseInterceptors(FileInterceptor('file', multerIngredientConfig))
+  uploadImage(
+    @Param('id', ParseIntPipe) id: number,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<IngredientResponseDto> {
+    if (!file) throw new BadRequestException('Chưa chọn file');
+    return this.ingredientsService.uploadImage(id, file);
   }
 
   // ─────────────────────────────────────────────────────────
