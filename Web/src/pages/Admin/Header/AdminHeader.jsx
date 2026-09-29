@@ -8,11 +8,22 @@ import { API_BASE_URL } from '../../../utils/constants';
 export const AdminHeader = ({ activeTab, setMobileOpen, onExitAdmin }) => {
   const resolveAvatarUrl = (rawUrl) => {
     if (!rawUrl) return cuteMascotImg;
-    if (rawUrl.startsWith('http://') || rawUrl.startsWith('https://') || rawUrl.startsWith('data:')) {
-      return rawUrl;
+    let formatted = rawUrl.trim();
+    if (formatted.includes('api.friggy.io.vn')) {
+      formatted = formatted.replace('api.friggy.io.vn', 'file.friggy.io.vn');
     }
-    const baseUrl = (API_BASE_URL || '').replace(/\/api\/v1\/?$/, '').replace(/\/$/, '');
-    return `${baseUrl}${rawUrl.startsWith('/') ? '' : '/'}${rawUrl}`;
+    if (formatted.startsWith('http://') || formatted.startsWith('https://') || formatted.startsWith('data:')) {
+      return formatted;
+    }
+    if (formatted.startsWith('file.friggy.io.vn')) {
+      return `https://${formatted}`;
+    }
+    const apiBase = API_BASE_URL || 'https://api.friggy.io.vn/api/v1';
+    let fileBase = 'https://file.friggy.io.vn';
+    if (!apiBase.includes('friggy.io.vn')) {
+      fileBase = apiBase.replace(/\/api\/v1\/?$/, '').replace(/\/$/, '');
+    }
+    return `${fileBase}${formatted.startsWith('/') ? '' : '/'}${formatted}`;
   };
 
   // Synchronously get cached user profile from localStorage to eliminate flicker
@@ -79,8 +90,12 @@ export const AdminHeader = ({ activeTab, setMobileOpen, onExitAdmin }) => {
         return { title: 'Trang Chủ Tổng Quan', sub: 'Thống kê người dùng, gói cước và doanh thu hệ thống' };
       case 'ingredients':
         return { title: 'Quản Lý Kho Nguyên Liệu', sub: 'Quản lý nguyên liệu tủ lạnh, danh mục phân loại & thông tin dinh dưỡng' };
+      case 'recipes':
+        return { title: 'Quản Lý Công Thức Nấu Ăn', sub: 'Quản lý thư viện công thức nấu ăn, khẩu phần & hướng dẫn chế biến' };
       case 'users':
         return { title: 'Quản Lý Người Dùng', sub: 'Quản lý tài khoản, phân quyền và lịch sử hoạt động' };
+      case 'transactions':
+        return { title: 'Lịch Sử Giao Dịch Thanh Toán', sub: 'Toàn bộ nhật ký giao dịch mua gói Premium từ PayOS' };
       case 'ai':
         return { title: 'Quản Lý AI Engine', sub: 'Cấu hình Provider AI và System Prompts' };
       case 'cron':

@@ -28,7 +28,9 @@ export const AdminLayout = () => {
 
   const getActiveTab = () => {
     if (location.pathname.includes('/admin/ingredients')) return 'ingredients';
+    if (location.pathname.includes('/admin/recipes')) return 'recipes';
     if (location.pathname.includes('/admin/users')) return 'users';
+    if (location.pathname.includes('/admin/transactions')) return 'transactions';
     if (location.pathname.includes('/admin/ai')) return 'ai';
     if (location.pathname.includes('/admin/cron')) return 'cron';
     if (location.pathname.includes('/admin/sponsors')) return 'sponsors';

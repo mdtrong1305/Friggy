@@ -433,15 +433,18 @@ class AuthService {
     try {
       final storage = await StorageService.getInstance();
       final refreshToken = storage.getRefreshToken();
-      if (refreshToken == null || refreshToken.isEmpty) {
-        debugPrint('[AuthService] No refreshToken stored.');
+      final accessToken = storage.getAccessToken();
+
+      if ((refreshToken == null || refreshToken.isEmpty) &&
+          (accessToken == null || accessToken.isEmpty)) {
+        debugPrint('[AuthService] No stored tokens found.');
         return false;
       }
 
       final dio = Dio(BaseOptions(
         baseUrl: AppConstants.baseUrl,
-        connectTimeout: AppConstants.connectTimeout,
-        receiveTimeout: AppConstants.receiveTimeout,
+        connectTimeout: const Duration(seconds: 4),
+        receiveTimeout: const Duration(seconds: 4),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -450,7 +453,7 @@ class AuthService {
 
       final response = await dio.post(
         AppConstants.epAuthRefreshToken,
-        data: {'refreshToken': refreshToken},
+        data: {'refreshToken': refreshToken ?? ''},
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -482,8 +485,29 @@ class AuthService {
           }
         }
       }
+    } on DioException catch (e) {
+      debugPrint('[AuthService] DioException during auto-login refresh: ${e.type} - ${e.message}');
+      // If network error/timeout occurs (device is offline), but user has local tokens, allow offline session!
+      if (e.type == DioExceptionType.connectionError ||
+          e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.sendTimeout ||
+          e.type == DioExceptionType.receiveTimeout ||
+          e.error.toString().contains('SocketException')) {
+        final storage = await StorageService.getInstance();
+        final token = storage.getAccessToken() ?? storage.getRefreshToken();
+        if (token != null && token.isNotEmpty) {
+          debugPrint('[AuthService] Device is offline. Valid local session found -> Allowing Offline App Access!');
+          return true;
+        }
+      }
     } catch (e) {
       debugPrint('[AuthService] Auto-login checkAndRefreshToken error: $e');
+      final storage = await StorageService.getInstance();
+      final token = storage.getAccessToken() ?? storage.getRefreshToken();
+      if (token != null && token.isNotEmpty) {
+        debugPrint('[AuthService] Unexpected offline error. Valid local session found -> Allowing Offline App Access!');
+        return true;
+      }
     }
     return false;
   }

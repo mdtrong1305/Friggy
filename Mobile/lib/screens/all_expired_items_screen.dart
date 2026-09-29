@@ -4,6 +4,7 @@ import '../data/models/ingredient_model.dart';
 import '../l10n/app_localizations.dart';
 import '../data/services/api_service.dart';
 import '../widgets/ingredient_avatar_widget.dart';
+import '../sqlite/services/ingredient_local_service.dart';
 
 class AllExpiredItemsScreen extends StatefulWidget {
   const AllExpiredItemsScreen({super.key});
@@ -25,6 +26,7 @@ class _AllExpiredItemsScreenState extends State<AllExpiredItemsScreen> {
 
   Future<void> _loadExpiredItems() async {
     setState(() => _isLoading = true);
+    final ingredientLocalService = IngredientLocalService();
     try {
       final res = await _apiService.getFridgeItems();
       final list = res
@@ -38,12 +40,44 @@ class _AllExpiredItemsScreenState extends State<AllExpiredItemsScreen> {
         });
       }
     } catch (e) {
-      debugPrint('Error loading expired items: $e');
-      if (mounted) {
-        setState(() {
-          _expiredItems = [];
-          _isLoading = false;
-        });
+      debugPrint('[AllExpiredItemsScreen] Error/Offline loading expired items: $e. Loading from SQLite...');
+      try {
+        final cached = await ingredientLocalService.getCachedIngredients();
+        final List<IngredientModel> offlineExpired = cached
+            .where((item) => (item.daysUntilExpiry ?? 5) < 0)
+            .map((item) {
+          return IngredientModel(
+            id: item.id,
+            fridgeId: '1',
+            fridgeName: 'Tủ lạnh',
+            name: item.name,
+            englishName: item.name,
+            quantity: '${item.quantity} ${item.unit}',
+            unit: item.unit,
+            category: 'Thực phẩm',
+            storageArea: item.storageLocation,
+            daysUntilExpiry: item.daysUntilExpiry ?? -1,
+            expiryText: 'Quá hạn ${(item.daysUntilExpiry ?? -1).abs()} ngày',
+            imagePath: item.imagePath ?? '',
+            badgeBgColor: const Color(0xFFFFEBEE),
+            badgeTextColor: const Color(0xFFC62828),
+          );
+        }).toList();
+
+        if (mounted) {
+          setState(() {
+            _expiredItems = offlineExpired;
+            _isLoading = false;
+          });
+        }
+      } catch (err) {
+        debugPrint('[AllExpiredItemsScreen] SQLite read error: $err');
+        if (mounted) {
+          setState(() {
+            _expiredItems = [];
+            _isLoading = false;
+          });
+        }
       }
     }
   }

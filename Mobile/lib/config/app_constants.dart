@@ -13,6 +13,38 @@ class AppConstants {
     }
     return baseUrl;
   }
+
+  static String get fileBaseUrl {
+    const override = String.fromEnvironment('FILE_BASE_URL');
+    if (override.isNotEmpty) return override;
+    if (baseUrl.contains('api.friggy.io.vn')) {
+      return 'https://file.friggy.io.vn';
+    }
+    return serverBaseUrl;
+  }
+
+  static String? getImageUrl(String? url) {
+    if (url == null) return null;
+    final trimmed = url.trim();
+    if (trimmed.isEmpty || trimmed == 'null') return null;
+
+    String formatted = trimmed;
+
+    if (formatted.contains('api.friggy.io.vn')) {
+      formatted = formatted.replaceAll('api.friggy.io.vn', 'file.friggy.io.vn');
+    }
+
+    if (formatted.startsWith('http://') || formatted.startsWith('https://')) {
+      return formatted;
+    }
+
+    if (formatted.startsWith('file.friggy.io.vn')) {
+      return 'https://$formatted';
+    }
+
+    final leadingSlash = formatted.startsWith('/') ? '' : '/';
+    return '$fileBaseUrl$leadingSlash$formatted';
+  }
   static const String googleClientId = '302076463841-itoefla7rlbl9rgadphcodev7poj62rn.apps.googleusercontent.com';
   static const Duration connectTimeout = Duration(seconds: 30);
   static const Duration receiveTimeout = Duration(seconds: 30);

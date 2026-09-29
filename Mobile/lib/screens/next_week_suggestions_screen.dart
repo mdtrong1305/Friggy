@@ -8,6 +8,9 @@ import '../widgets/friggy_app_bar.dart';
 import 'recipe_detail_screen.dart';
 import 'package_management_screen.dart';
 import 'shopping_reminder_screen.dart';
+import '../sqlite/services/weekly_plan_local_service.dart';
+import '../sqlite/models/local_weekly_plan_model.dart';
+import 'dart:convert';
 
 class NextWeekSuggestionsScreen extends StatefulWidget {
   const NextWeekSuggestionsScreen({super.key});
@@ -228,6 +231,7 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
       _loadingMessage = '🤖 Đang tải thực đơn tuần từ hệ thống...';
     });
 
+    final weeklyPlanLocalService = WeeklyPlanLocalService();
     try {
       final plans = await ApiService().getMealPlans();
       if (plans.isNotEmpty) {
@@ -246,6 +250,16 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                   ?.map((e) => Map<String, dynamic>.from(e as Map))
                   .toList() ??
               [];
+
+          // Save / Overwrite SQLite cache
+          await weeklyPlanLocalService.saveWeeklyPlanOverwrite(
+            LocalWeeklyPlanModel(
+              id: planId,
+              weekStartDate: detail['weekStartDate']?.toString() ?? '',
+              daysDataJson: jsonEncode(list),
+              updatedAt: DateTime.now().millisecondsSinceEpoch,
+            ),
+          );
 
           final Map<int, Map<String, dynamic>> mapByDay = {};
           for (final item in list) {
@@ -267,7 +281,35 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
         }
       }
     } catch (e) {
-      debugPrint('[NextWeekSuggestionsScreen] Error fetching weekly plan: $e');
+      debugPrint('[NextWeekSuggestionsScreen] Error/Offline fetching weekly plan: $e. Loading from SQLite...');
+      try {
+        final cachedPlan = await weeklyPlanLocalService.getCachedWeeklyPlan();
+        if (cachedPlan != null) {
+          final list = cachedPlan.decodedDaysData;
+          final Map<int, Map<String, dynamic>> mapByDay = {};
+          for (final item in list) {
+            if (item is Map) {
+              final dayMap = Map<String, dynamic>.from(item);
+              final rawDay = dayMap['dayOfWeek'];
+              final dOfWeek = rawDay is int
+                  ? rawDay
+                  : (int.tryParse(rawDay?.toString() ?? '') ?? 1);
+              mapByDay[dOfWeek] = dayMap;
+            }
+          }
+
+          if (mapByDay.isNotEmpty && mounted) {
+            setState(() {
+              _weeklyPlanId = cachedPlan.id;
+              _dailyPlansMap = mapByDay;
+              _isLoading = false;
+            });
+            return;
+          }
+        }
+      } catch (err) {
+        debugPrint('[NextWeekSuggestionsScreen] SQLite read error: $err');
+      }
     }
 
     if (mounted) {
@@ -280,6 +322,7 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
 
   Future<void> _generateWeeklyPlanWithAi() async {
     if (_isGenerating) return;
+    final weeklyPlanLocalService = WeeklyPlanLocalService();
 
     setState(() {
       _isGenerating = true;
@@ -371,8 +414,22 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                 }
               }
 
-              if (hasNewSlots || mapByDay.length > _dailyPlansMap.length) {
-                _dailyPlansMap = mapByDay;
+              if (hasNewSlots || mapByDay.isNotEmpty) {
+                await weeklyPlanLocalService.saveWeeklyPlanOverwrite(
+                  LocalWeeklyPlanModel(
+                    id: latestPlanId,
+                    weekStartDate: detail['weekStartDate']?.toString() ?? '',
+                    daysDataJson: jsonEncode(dailyList),
+                    updatedAt: DateTime.now().millisecondsSinceEpoch,
+                  ),
+                );
+
+                if (mounted) {
+                  setState(() {
+                    _weeklyPlanId = latestPlanId;
+                    _dailyPlansMap = mapByDay;
+                  });
+                }
                 break;
               }
             }

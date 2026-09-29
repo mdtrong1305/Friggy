@@ -95,7 +95,7 @@ class IngredientModel {
     if (storageLoc == 'freezer') storageArea = 'Freezer';
     if (storageLoc == 'pantry') storageArea = 'Pantry';
 
-    final daysUntilExpiry = json['daysUntilExpiry'] as int? ?? 999;
+    final daysUntilExpiry = (json['daysUntilExpiry'] as num?)?.toInt() ?? 999;
     String expiryText = 'Còn $daysUntilExpiry ngày';
     Color badgeBgColor = const Color(0xFFE8F5E9);
     Color badgeTextColor = const Color(0xFF2E7D32);

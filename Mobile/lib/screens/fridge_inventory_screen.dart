@@ -9,6 +9,8 @@ import 'recipe_suggestions_screen.dart';
 import '../widgets/fridge_members_modal.dart';
 import '../widgets/ingredient_avatar_widget.dart';
 import '../theme/app_theme.dart';
+import '../sqlite/services/ingredient_local_service.dart';
+import '../sqlite/models/local_ingredient_model.dart';
 
 class FridgeInventoryScreen extends StatefulWidget {
   final FridgeModel fridge;
@@ -51,9 +53,29 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
 
   Future<void> _loadIngredients() async {
     setState(() => _isLoading = true);
+    final ingredientLocalService = IngredientLocalService();
+
     try {
       final res = await _apiService.getFridgeItems();
       final list = res.map((e) => IngredientModel.fromFridgeApi(e, widget.fridge.id, widget.fridge.name)).toList();
+      
+      // Save to SQLite
+      final List<LocalIngredientModel> localItems = list.map((item) {
+        return LocalIngredientModel(
+          id: item.id,
+          ingredientId: 0,
+          name: item.name,
+          quantity: double.tryParse(item.quantity.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 1.0,
+          unit: item.unit,
+          storageLocation: item.storageArea,
+          expiresAt: null,
+          daysUntilExpiry: item.daysUntilExpiry,
+          imagePath: item.imagePath,
+          updatedAt: DateTime.now().millisecondsSinceEpoch,
+        );
+      }).toList();
+      await ingredientLocalService.saveIngredientsCache(localItems);
+
       FamilyRoleModel? familyRole;
       try {
         final familyRes = await _apiService.getMyFamily();
@@ -70,12 +92,44 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
         });
       }
     } catch (e) {
-      debugPrint('Error loading fridge items: $e');
-      if (mounted) {
-        setState(() {
-          _ingredients = [];
-          _isLoading = false;
-        });
+      debugPrint('[FridgeInventoryScreen] Error/Offline loading fridge items: $e. Loading from SQLite...');
+      try {
+        final cached = await ingredientLocalService.getCachedIngredients();
+        final List<IngredientModel> offlineList = cached.map((item) {
+          return IngredientModel(
+            id: item.id,
+            fridgeId: widget.fridge.id,
+            fridgeName: widget.fridge.name,
+            name: item.name,
+            englishName: item.name,
+            quantity: '${item.quantity} ${item.unit}',
+            unit: item.unit,
+            category: 'Thực phẩm',
+            storageArea: item.storageLocation,
+            daysUntilExpiry: item.daysUntilExpiry ?? 5,
+            expiryText: (item.daysUntilExpiry ?? 5) < 0
+                ? 'Quá hạn ${(item.daysUntilExpiry ?? 5).abs()} ngày'
+                : 'Còn ${item.daysUntilExpiry ?? 5} ngày',
+            imagePath: item.imagePath ?? '',
+            badgeBgColor: const Color(0xFFE8F5E9),
+            badgeTextColor: const Color(0xFF2E7D32),
+          );
+        }).toList();
+
+        if (mounted) {
+          setState(() {
+            _ingredients = offlineList;
+            _isLoading = false;
+          });
+        }
+      } catch (err) {
+        debugPrint('[FridgeInventoryScreen] SQLite read error: $err');
+        if (mounted) {
+          setState(() {
+            _ingredients = [];
+            _isLoading = false;
+          });
+        }
       }
     }
   }

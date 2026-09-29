@@ -49,7 +49,7 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly notificationsService: NotificationsService,
-  ) {}
+  ) { }
 
   // ─────────────────────────────────────────────────────────
   // GET /me

@@ -49,7 +49,7 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly tokensService: TokensService,
     @Inject('EMAIL_SERVICE') private readonly emailClient: ClientProxy,
-  ) {}
+  ) { }
 
   // ─────────────────────────────────────────────────────────
   // EMAIL REGISTER

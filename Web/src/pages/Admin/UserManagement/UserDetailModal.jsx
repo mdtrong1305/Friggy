@@ -20,6 +20,26 @@ import {
 import { getAdminUserDetailApi } from '../../../services/adminService';
 import { showToast } from '../../../components/common/Toast';
 
+const resolveAvatarUrl = (rawUrl) => {
+  if (!rawUrl) return null;
+  let formatted = rawUrl.trim();
+  if (formatted.includes('api.friggy.io.vn')) {
+    formatted = formatted.replace('api.friggy.io.vn', 'file.friggy.io.vn');
+  }
+  if (formatted.startsWith('http://') || formatted.startsWith('https://') || formatted.startsWith('data:')) {
+    return formatted;
+  }
+  if (formatted.startsWith('file.friggy.io.vn')) {
+    return `https://${formatted}`;
+  }
+  const apiBase = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'https://api.friggy.io.vn/api/v1';
+  let fileBase = 'https://file.friggy.io.vn';
+  if (!apiBase.includes('friggy.io.vn')) {
+    fileBase = apiBase.replace(/\/api\/v1\/?$/, '').replace(/\/$/, '');
+  }
+  return `${fileBase}${formatted.startsWith('/') ? '' : '/'}${formatted}`;
+};
+
 export const UserDetailModal = ({ user: initialUser, onClose }) => {
   const [userDetail, setUserDetail] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -64,7 +84,7 @@ export const UserDetailModal = ({ user: initialUser, onClose }) => {
     : 'Chưa đăng nhập';
 
   const avatarUrl =
-    displayUser.profile?.avatarUrl ||
+    resolveAvatarUrl(displayUser.profile?.avatarUrl) ||
     `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(
       displayUser.name || displayUser.googleEmail || 'User'
     )}`;

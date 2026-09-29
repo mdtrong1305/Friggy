@@ -15,6 +15,7 @@ import {
   CheckCircle2,
   Tag,
   DollarSign,
+  FolderPlus,
 } from 'lucide-react';
 import {
   getIngredientsApi,
@@ -23,6 +24,7 @@ import {
 } from '../../../services/ingredientService';
 import { AddEditIngredientModal } from './AddEditIngredientModal';
 import { IngredientDetailModal } from './IngredientDetailModal';
+import { CategoryManagementModal } from './CategoryManagementModal';
 import { showToast } from '../../../components/common/Toast';
 
 export const IngredientManagement = () => {
@@ -44,6 +46,7 @@ export const IngredientManagement = () => {
   const [editingIngredient, setEditingIngredient] = useState(null);
   const [openDetailModal, setOpenDetailModal] = useState(false);
   const [selectedDetailId, setSelectedDetailId] = useState(null);
+  const [openCategoryModal, setOpenCategoryModal] = useState(false);
 
   // Fetch Category Tree on Mount
   const fetchCategories = async () => {
@@ -158,13 +161,23 @@ export const IngredientManagement = () => {
           </p>
         </div>
 
-        <button
-          onClick={handleOpenAdd}
-          className="px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-emerald-600/20 hover:scale-105 transition-all duration-200 cursor-pointer flex items-center gap-2 self-start md:self-auto"
-        >
-          <Plus className="w-4 h-4 stroke-[3]" />
-          <span>Thêm Nguyên Liệu Mới</span>
-        </button>
+        <div className="flex flex-wrap items-center gap-3 self-start md:self-auto">
+          <button
+            onClick={() => setOpenCategoryModal(true)}
+            className="px-5 py-3 rounded-2xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-extrabold text-xs sm:text-sm border border-emerald-200 transition-all cursor-pointer flex items-center gap-2"
+          >
+            <FolderPlus className="w-4 h-4 text-emerald-600" />
+            <span>Quản Lý Danh Mục</span>
+          </button>
+
+          <button
+            onClick={handleOpenAdd}
+            className="px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-emerald-600/20 hover:scale-105 transition-all duration-200 cursor-pointer flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4 stroke-[3]" />
+            <span>Thêm Nguyên Liệu Mới</span>
+          </button>
+        </div>
       </div>
 
       {/* Control & Search Bar */}
@@ -371,6 +384,13 @@ export const IngredientManagement = () => {
         isOpen={openDetailModal}
         onClose={() => setOpenDetailModal(false)}
         ingredientId={selectedDetailId}
+      />
+
+      {/* Category Management Modal */}
+      <CategoryManagementModal
+        isOpen={openCategoryModal}
+        onClose={() => setOpenCategoryModal(false)}
+        onSuccess={fetchCategories}
       />
     </div>
   );
