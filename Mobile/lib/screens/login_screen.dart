@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../data/services/auth_service.dart';
 import '../l10n/app_localizations.dart';
@@ -78,9 +79,9 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               // 1. Top Curved Decorative Background
               Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
+                top: 0.h,
+                left: 0.w,
+                right: 0.w,
                 height: topHeaderHeight + 60,
                 child: Container(
                   decoration: BoxDecoration(
@@ -110,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
               // 2. Mascot Header Image
               Positioned(
                 top: topPadding + 55,
-                right: 0,
+                right: 0.w,
                 width: 260,
                 height: topHeaderHeight - 35,
                 child: Image.asset(
@@ -122,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
               // 3. Top Left Back Button + Brand Logo
               Positioned(
                 top: topPadding + 12,
-                left: 16,
+                left: 16.w,
                 child: GestureDetector(
                   onTap: () {
                     Navigator.of(context).pushReplacement(
@@ -137,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           );
                           return SlideTransition(
                             position: Tween<Offset>(
-                              begin: const Offset(-1.0, 0.0),
+                              begin: Offset(-1.0, 0.0),
                               end: Offset.zero,
                             ).animate(curvedAnimation),
                             child: FadeTransition(
@@ -150,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     );
                   },
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -160,11 +161,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: isDark ? Colors.white : AppColors.textPrimary,
                           size: 18,
                         ),
-                        const SizedBox(width: 4),
+                        SizedBox(width: 4.w),
                         RichText(
                           text: TextSpan(
-                            style: const TextStyle(
-                              fontSize: 26,
+                            style: TextStyle(
+                              fontSize: 26.sp,
                               fontWeight: FontWeight.w900,
                               letterSpacing: 0.5,
                             ),
@@ -199,18 +200,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF0E1611) : Colors.white,
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(36),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(36.r),
                   ),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.12),
                       blurRadius: 16,
-                      offset: const Offset(0, -6),
+                      offset: Offset(0, -6),
                     ),
                   ],
                 ),
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 28,
                   vertical: 28,
                 ),
@@ -223,13 +224,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       Text(
                         isEn ? 'Welcome Back' : 'Chào mừng trở lại',
                         style: GoogleFonts.plusJakartaSans(
-                          fontSize: 30,
+                          fontSize: 30.sp,
                           fontWeight: FontWeight.w900,
                           color: isDark ? Colors.white : AppColors.textPrimary,
                           letterSpacing: -0.5,
                         ),
                       ),
-                      const SizedBox(height: 18),
+                      SizedBox(height: 18.h),
 
                       // Email Address Input Field
                       CustomTextField(
@@ -249,7 +250,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
 
                       // Password Input Field
                       CustomTextField(
@@ -281,7 +282,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
 
                       // Keep me signed in & Forgot Password Row
                       Row(
@@ -313,7 +314,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                   ),
                                   child: _keepMeSignedIn
-                                      ? const Icon(
+                                      ? Icon(
                                           Icons.check,
                                           size: 14,
                                           color: Colors.white,
@@ -321,7 +322,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       : null,
                                 ),
                               ),
-                              const SizedBox(width: 10),
+                              SizedBox(width: 10.w),
                               GestureDetector(
                                 onTap: () {
                                   setState(() {
@@ -331,7 +332,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Text(
                                   isEn ? 'Remember me' : 'Ghi nhớ đăng nhập',
                                   style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 14.sp,
                                     color: isDark
                                         ? const Color(0xFFD0D7D1)
                                         : const Color(0xFF6B786F),
@@ -355,7 +356,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     );
                                     return SlideTransition(
                                       position: Tween<Offset>(
-                                        begin: const Offset(1.0, 0.0),
+                                        begin: Offset(1.0, 0.0),
                                         end: Offset.zero,
                                       ).animate(curvedAnimation),
                                       child: FadeTransition(
@@ -375,7 +376,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Text(
                               isEn ? 'Forgot Password?' : 'Quên mật khẩu?',
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.bold,
                                 color: isDark ? const Color(0xFF81C784) : AppColors.primary,
                               ),
@@ -383,7 +384,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20.h),
 
                       // Main Log In Button
                       SizedBox(
@@ -397,26 +398,26 @@ class _LoginScreenState extends State<LoginScreen> {
                             elevation: 2,
                             shadowColor: AppColors.primary.withValues(alpha: 0.3),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(28),
+                              borderRadius: BorderRadius.circular(28.r),
                             ),
                           ),
                           child: _isLoading
-                              ? const SizedBox(
+                              ? SizedBox(
                                   width: 22,
                                   height: 22,
                                   child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                                 )
                               : Text(
                                   isEn ? 'Log In' : 'Đăng nhập',
-                                  style: const TextStyle(
-                                    fontSize: 18,
+                                  style: TextStyle(
+                                    fontSize: 18.sp,
                                     fontWeight: FontWeight.bold,
                                     letterSpacing: 0.5,
                                   ),
                                 ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20.h),
 
                       // Social Login Divider ("Or Continue With")
                       Row(
@@ -430,11 +431,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            padding: EdgeInsets.symmetric(horizontal: 16),
                             child: Text(
                               isEn ? 'Or continue with' : 'Hoặc tiếp tục với',
                               style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 13.sp,
                                 fontWeight: FontWeight.w500,
                                 color: isDark ? const Color(0xFF9DA8A0) : AppColors.hintText,
                               ),
@@ -450,7 +451,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 18),
+                      SizedBox(height: 18.h),
 
                       // Google Social Button (Full Width)
                       Row(
@@ -482,7 +483,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24.h),
 
                       // Footer Link: "Don't have an account? Register"
                       Center(
@@ -492,7 +493,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Text(
                               isEn ? "Don't have an account? " : "Bạn chưa có tài khoản? ",
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 14.sp,
                                 color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF6B786F),
                               ),
                             ),
@@ -510,7 +511,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       );
                                       return SlideTransition(
                                         position: Tween<Offset>(
-                                          begin: const Offset(1.0, 0.0),
+                                          begin: Offset(1.0, 0.0),
                                           end: Offset.zero,
                                         ).animate(curvedAnimation),
                                         child: FadeTransition(
@@ -525,7 +526,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: Text(
                                 isEn ? 'Register' : 'Đăng ký',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 14.sp,
                                   fontWeight: FontWeight.bold,
                                   color: isDark ? const Color(0xFF81C784) : AppColors.primary,
                                 ),
@@ -534,8 +535,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 24),
-                      const SizedBox(height: 36),
+                      SizedBox(height: 24.h),
+                      SizedBox(height: 36.h),
                     ],
                   ),
                 ),

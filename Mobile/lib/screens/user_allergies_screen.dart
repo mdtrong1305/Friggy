@@ -1,10 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:uuid/uuid.dart';
 import '../data/models/user_models.dart';
 import '../data/services/api_exception.dart';
 import '../data/services/api_service.dart';
 import '../l10n/app_localizations.dart';
+import '../sqlite/models/local_allergy_model.dart';
+import '../sqlite/models/local_ingredient_catalog_model.dart';
+import '../sqlite/services/allergy_local_service.dart';
+import '../sqlite/services/ingredient_catalog_local_service.dart';
 
 class UserAllergiesScreen extends StatefulWidget {
   const UserAllergiesScreen({super.key});
@@ -15,6 +21,7 @@ class UserAllergiesScreen extends StatefulWidget {
 
 class _UserAllergiesScreenState extends State<UserAllergiesScreen> {
   final ApiService _apiService = ApiService();
+  final AllergyLocalService _allergyLocalService = AllergyLocalService();
   bool _isLoading = true;
   List<AllergyModel> _allergies = [];
 
@@ -25,18 +32,61 @@ class _UserAllergiesScreenState extends State<UserAllergiesScreen> {
   }
 
   Future<void> _fetchAllergies() async {
+    // Hiển thị ngay từ SQLite cache trước khi gọi API
+    final cachedFirst = await _allergyLocalService.getCachedAllergies();
+    if (cachedFirst.isNotEmpty && mounted) {
+      setState(() {
+        _allergies = cachedFirst.map((c) => AllergyModel(
+          id: c.id,
+          ingredientId: c.ingredientId,
+          ingredientName: c.ingredientName,
+          note: c.note,
+        )).toList();
+        _isLoading = false;
+      });
+      debugPrint('[UserAllergiesScreen] Pre-loaded ${cachedFirst.length} allergies from SQLite.');
+    }
+
     try {
       final list = await _apiService.getAllergies();
       if (mounted) {
         setState(() {
           _allergies = list.map((item) => AllergyModel.fromJson(item)).toList();
+          _isLoading = false;
         });
       }
+      // Cập nhật SQLite cache với data mới nhất
+      await _allergyLocalService.saveAllergiesCache(
+        _allergies.map((a) => LocalAllergyModel(
+          id: a.id,
+          ingredientId: a.ingredientId,
+          ingredientName: a.ingredientName,
+          note: a.note,
+          updatedAt: DateTime.now().millisecondsSinceEpoch,
+        )).toList(),
+      );
     } catch (e) {
-      debugPrint('[UserAllergiesScreen] Error fetching allergies: $e');
-    } finally {
+      debugPrint('[UserAllergiesScreen] API error, using SQLite: $e');
+      // Nếu trước đó SQLite đã có → giữ nguyên
+      if (_allergies.isNotEmpty) {
+        if (mounted) setState(() => _isLoading = false);
+        return;
+      }
+
+      // SQLite chưa có (BackgroundSync chưa xong) → đợi 2s rồi thử lại
+      await Future.delayed(const Duration(seconds: 2));
+      final cached = await _allergyLocalService.getCachedAllergies();
       if (mounted) {
         setState(() {
+          if (cached.isNotEmpty) {
+            _allergies = cached.map((c) => AllergyModel(
+              id: c.id,
+              ingredientId: c.ingredientId,
+              ingredientName: c.ingredientName,
+              note: c.note,
+            )).toList();
+            debugPrint('[UserAllergiesScreen] Retry: loaded ${cached.length} from SQLite.');
+          }
           _isLoading = false;
         });
       }
@@ -44,30 +94,38 @@ class _UserAllergiesScreenState extends State<UserAllergiesScreen> {
   }
 
   Future<void> _removeAllergy(AllergyModel allergy) async {
+    // Xóa khỏi UI ngay lập tức (optimistic)
+    setState(() {
+      _allergies.removeWhere((a) => a.id == allergy.id);
+    });
+
     try {
       await _apiService.removeAllergy(allergy.id);
-      setState(() {
-        _allergies.removeWhere((a) => a.id == allergy.id);
-      });
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Đã xóa "${allergy.ingredientName}" khỏi danh sách dị ứng'),
-            backgroundColor: const Color(0xFF008435),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
+      // Online: xóa API thành công → xóa luôn khỏi SQLite
+      await _allergyLocalService.deleteAllergyFromCache(allergy.id);
+      debugPrint('[UserAllergiesScreen] Allergy "${allergy.ingredientName}" deleted from API + SQLite.');
+    } on ApiException catch (e) {
+      if (e.isNetworkError) {
+        // Offline: đánh dấu pending_delete → UI đã ẩn rồi, sẽ xóa server khi online
+        await _allergyLocalService.markPendingDelete(allergy.id);
+        debugPrint('[UserAllergiesScreen] Offline: allergy "${allergy.ingredientName}" marked pending_delete.');
+      } else {
+        // Lỗi server → rollback UI và hiện lỗi
+        setState(() => _allergies.add(allergy));
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Không thể xóa: ${e.message}'),
+              backgroundColor: const Color(0xFFD32F2F),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
       }
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Không thể xóa dị ứng. Vui lòng thử lại'),
-            backgroundColor: Color(0xFFD32F2F),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
+      // Lỗi không xác định → xem như offline
+      await _allergyLocalService.markPendingDelete(allergy.id);
+      debugPrint('[UserAllergiesScreen] Unexpected error, marked pending_delete: $e');
     }
   }
 
@@ -89,7 +147,7 @@ class _UserAllergiesScreenState extends State<UserAllergiesScreen> {
             content: Text('Đã thêm dị ứng "${newAllergy.ingredientName}" thành công!'),
             backgroundColor: const Color(0xFF008435),
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14.r)),
           ),
         );
       }
@@ -137,7 +195,7 @@ class _UserAllergiesScreenState extends State<UserAllergiesScreen> {
             children: [
               // Header
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding: EdgeInsets.symmetric(horizontal: 16.0.w, vertical: 8.0.h),
                 child: Row(
                   children: [
                     GestureDetector(
@@ -157,11 +215,11 @@ class _UserAllergiesScreenState extends State<UserAllergiesScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 14),
+                    SizedBox(width: 14.w),
                     Text(
                       isEn ? 'Food Allergies' : 'Dị ứng thực phẩm',
-                      style: GoogleFonts.outfit(
-                        fontSize: 22,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 22.sp,
                         fontWeight: FontWeight.w900,
                         color: titleColor,
                       ),
@@ -183,25 +241,25 @@ class _UserAllergiesScreenState extends State<UserAllergiesScreen> {
                                   size: 64,
                                   color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5D6A7),
                                 ),
-                                const SizedBox(height: 14),
+                                SizedBox(height: 14.h),
                                 Text(
                                   isEn ? 'No food allergies recorded' : 'Chưa ghi nhận dị ứng thực phẩm nào',
                                   style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 16,
+                                    fontSize: 16.sp,
                                     fontWeight: FontWeight.w700,
                                     color: isDark ? Colors.white70 : const Color(0xFF424242),
                                   ),
                                 ),
-                                const SizedBox(height: 6),
+                                SizedBox(height: 6.h),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                                  padding: EdgeInsets.symmetric(horizontal: 32.0),
                                   child: Text(
                                     isEn
                                         ? 'Add ingredients you are allergic to so Friggy can filter recipes for you!'
                                         : 'Bấm nút "Thêm dị ứng" bên dưới để chọn món dị ứng và được Friggy cảnh báo!',
                                     textAlign: TextAlign.center,
                                     style: GoogleFonts.plusJakartaSans(
-                                      fontSize: 13,
+                                      fontSize: 13.sp,
                                       color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF757575),
                                     ),
                                   ),
@@ -211,22 +269,22 @@ class _UserAllergiesScreenState extends State<UserAllergiesScreen> {
                           )
                         : ListView.builder(
                             physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+                            padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 12.0.h),
                             itemCount: _allergies.length,
                             itemBuilder: (context, index) {
                               final allergy = _allergies[index];
                               return Container(
-                                margin: const EdgeInsets.only(bottom: 12),
-                                padding: const EdgeInsets.all(16),
+                                margin: EdgeInsets.only(bottom: 12.h),
+                                padding: EdgeInsets.all(16.w),
                                 decoration: BoxDecoration(
                                   color: cardBg,
-                                  borderRadius: BorderRadius.circular(20),
+                                  borderRadius: BorderRadius.circular(20.r),
                                   border: Border.all(color: cardBorder, width: 1.2),
                                 ),
                                 child: Row(
                                   children: [
                                     Container(
-                                      padding: const EdgeInsets.all(10),
+                                      padding: EdgeInsets.all(10.w),
                                       decoration: BoxDecoration(
                                         color: isDark ? const Color(0xFF3E1E1E) : const Color(0xFFFFEBEE),
                                         shape: BoxShape.circle,
@@ -237,7 +295,7 @@ class _UserAllergiesScreenState extends State<UserAllergiesScreen> {
                                         size: 22,
                                       ),
                                     ),
-                                    const SizedBox(width: 14),
+                                    SizedBox(width: 14.w),
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -245,18 +303,18 @@ class _UserAllergiesScreenState extends State<UserAllergiesScreen> {
                                           Text(
                                             allergy.ingredientName,
                                             style: GoogleFonts.plusJakartaSans(
-                                              fontSize: 16,
+                                              fontSize: 16.sp,
                                               fontWeight: FontWeight.w800,
                                               color: isDark ? Colors.white : const Color(0xFF19221C),
                                             ),
                                           ),
                                           if (allergy.note != null && allergy.note!.isNotEmpty)
                                             Padding(
-                                              padding: const EdgeInsets.only(top: 4.0),
+                                              padding: EdgeInsets.only(top: 4.0.h),
                                               child: Text(
                                                 allergy.note!,
                                                 style: GoogleFonts.plusJakartaSans(
-                                                  fontSize: 13,
+                                                  fontSize: 13.sp,
                                                   color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF757575),
                                                 ),
                                               ),
@@ -294,12 +352,15 @@ class _AddAllergyModal extends StatefulWidget {
 
 class _AddAllergyModalState extends State<_AddAllergyModal> {
   final ApiService _apiService = ApiService();
+  final AllergyLocalService _allergyLocalService = AllergyLocalService();
+  final IngredientCatalogLocalService _catalogService = IngredientCatalogLocalService();
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
   Timer? _debounceTimer;
 
   bool _isLoadingIngredients = true;
   bool _isSubmitting = false;
+  bool _isOffline = false;
 
   List<dynamic> _allIngredients = [];
   List<dynamic> _filteredIngredients = [];
@@ -318,10 +379,36 @@ class _AddAllergyModalState extends State<_AddAllergyModal> {
         setState(() {
           _allIngredients = list;
           _filteredIngredients = list;
+          _isOffline = false;
         });
+        // Cache lên SQLite để dùng offline sau
+        _catalogService.saveCatalogCache(
+          list.cast<Map<String, dynamic>>().map((item) {
+            return LocalIngredientCatalogModel(
+              id: (item['id'] as num?)?.toInt() ?? 0,
+              name: item['name'] as String? ?? '',
+              englishName: item['englishName'] as String?,
+              defaultUnit: item['defaultUnit'] as String?,
+              category: item['category'] as String?,
+              imagePath: item['imagePath'] as String?,
+              updatedAt: DateTime.now().millisecondsSinceEpoch,
+            );
+          }).where((i) => i.id > 0 && i.name.isNotEmpty).toList(),
+        );
       }
     } catch (e) {
-      debugPrint('[_AddAllergyModal] Error loading ingredients: $e');
+      // Offline: load từ SQLite catalog
+      debugPrint('[_AddAllergyModal] Offline, loading from SQLite catalog: $e');
+      final cached = await _catalogService.getAllCatalog(limit: 200);
+      debugPrint('[_AddAllergyModal] SQLite catalog size: ${cached.length}');
+      if (mounted) {
+        final catalogList = cached.map((c) => c.toApiFormat()).toList();
+        setState(() {
+          _allIngredients = catalogList;
+          _filteredIngredients = catalogList;
+          _isOffline = true;
+        });
+      }
     } finally {
       if (mounted) {
         setState(() => _isLoadingIngredients = false);
@@ -338,15 +425,32 @@ class _AddAllergyModalState extends State<_AddAllergyModal> {
     }
 
     _debounceTimer = Timer(const Duration(milliseconds: 300), () async {
-      try {
-        final list = await _apiService.getIngredients(search: q, limit: 100);
+      if (_isOffline) {
+        // Offline: tìm trong SQLite catalog
+        final results = await _catalogService.searchCatalog(q);
         if (mounted) {
           setState(() {
-            _filteredIngredients = list;
+            _filteredIngredients = results.map((c) => c.toApiFormat()).toList();
           });
         }
-      } catch (e) {
-        debugPrint('[_AddAllergyModal] Error searching ingredients: $e');
+      } else {
+        try {
+          final list = await _apiService.getIngredients(search: q, limit: 100);
+          if (mounted) {
+            setState(() {
+              _filteredIngredients = list;
+            });
+          }
+        } catch (e) {
+          // Mạng bị mất giữa chừng → fallback SQLite
+          final results = await _catalogService.searchCatalog(q);
+          if (mounted) {
+            setState(() {
+              _filteredIngredients = results.map((c) => c.toApiFormat()).toList();
+              _isOffline = true;
+            });
+          }
+        }
       }
     });
   }
@@ -354,15 +458,53 @@ class _AddAllergyModalState extends State<_AddAllergyModal> {
   Future<void> _submit() async {
     if (_selectedIngredient == null) return;
     final int ingredientId = _selectedIngredient!['id'] as int;
+    final String ingredientName = _selectedIngredient!['name'] as String? ?? '';
+    final String note = _noteController.text.trim();
 
     setState(() => _isSubmitting = true);
 
+    if (_isOffline) {
+      // === OFFLINE: Lưu vào SQLite với sync_status = 'pending' ===
+      final localId = 'local_${const Uuid().v4()}';
+      final offlineAllergy = LocalAllergyModel(
+        id: localId,
+        ingredientId: ingredientId,
+        ingredientName: ingredientName,
+        note: note.isEmpty ? null : note,
+        updatedAt: DateTime.now().millisecondsSinceEpoch,
+        syncStatus: 'pending',
+      );
+      await _allergyLocalService.saveOfflineAllergy(offlineAllergy);
+
+      // Trả về AllergyModel để hiển thị ngay trên danh sách
+      final pendingAllergy = AllergyModel(
+        id: localId,
+        ingredientId: ingredientId,
+        ingredientName: ingredientName,
+        note: note.isEmpty ? null : note,
+      );
+      if (mounted) {
+        Navigator.pop(context, pendingAllergy);
+      }
+      return;
+    }
+
+    // === ONLINE: gọi API bình thường ===
     try {
       final result = await _apiService.addAllergy(
         ingredientId,
-        _noteController.text.trim(),
+        note,
       );
       final newAllergy = AllergyModel.fromJson(result);
+      // Lưu vào SQLite (synced)
+      await _allergyLocalService.saveOfflineAllergy(LocalAllergyModel(
+        id: newAllergy.id,
+        ingredientId: newAllergy.ingredientId,
+        ingredientName: newAllergy.ingredientName,
+        note: newAllergy.note,
+        updatedAt: DateTime.now().millisecondsSinceEpoch,
+        syncStatus: 'synced',
+      ));
       if (mounted) {
         Navigator.pop(context, newAllergy);
       }
@@ -379,7 +521,7 @@ class _AddAllergyModalState extends State<_AddAllergyModal> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text('Không thể thêm dị ứng nguyên liệu. Vui lòng thử lại!'),
             backgroundColor: Color(0xFFD32F2F),
             behavior: SnackBarBehavior.floating,
@@ -410,14 +552,14 @@ class _AddAllergyModalState extends State<_AddAllergyModal> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.78 + bottomPadding,
       padding: EdgeInsets.only(
-        left: 20,
-        right: 20,
-        top: 20,
+        left: 20.w,
+        right: 20.w,
+        top: 20.h,
         bottom: bottomPadding + 20,
       ),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28.r)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -429,29 +571,29 @@ class _AddAllergyModalState extends State<_AddAllergyModal> {
               height: 4,
               decoration: BoxDecoration(
                 color: isDark ? Colors.white30 : Colors.black26,
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(2.r),
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
 
           Text(
             'Thêm dị ứng nguyên liệu',
-            style: GoogleFonts.outfit(
-              fontSize: 20,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 20.sp,
               fontWeight: FontWeight.bold,
               color: isDark ? Colors.white : const Color(0xFF006428),
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4.h),
           Text(
             'Chọn nguyên liệu gây dị ứng từ danh sách bên dưới:',
             style: GoogleFonts.plusJakartaSans(
-              fontSize: 13,
+              fontSize: 13.sp,
               color: isDark ? Colors.white70 : Colors.black54,
             ),
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14.h),
 
           // Search Bar
           TextField(
@@ -464,22 +606,22 @@ class _AddAllergyModalState extends State<_AddAllergyModal> {
               prefixIcon: const Icon(Icons.search_rounded, color: Color(0xFF4CAF50)),
               filled: true,
               fillColor: isDark ? const Color(0xFF0E1611) : const Color(0xFFF5FCF4),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
                 borderSide: BorderSide(color: cardBorder),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
                 borderSide: BorderSide(color: cardBorder),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
                 borderSide: const BorderSide(color: Color(0xFF4CAF50), width: 1.8),
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
 
           // Ingredients List View
           Expanded(
@@ -487,9 +629,41 @@ class _AddAllergyModalState extends State<_AddAllergyModal> {
                 ? const Center(child: CircularProgressIndicator(color: Color(0xFF4CAF50)))
                 : _filteredIngredients.isEmpty
                     ? Center(
-                        child: Text(
-                          'Không tìm thấy nguyên liệu phù hợp',
-                          style: TextStyle(color: isDark ? Colors.white60 : Colors.black54),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 24.w),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                _isOffline ? Icons.wifi_off_rounded : Icons.search_off_rounded,
+                                size: 48,
+                                color: isDark ? Colors.white30 : Colors.black26,
+                              ),
+                              SizedBox(height: 12.h),
+                              Text(
+                                _isOffline
+                                    ? 'Chưa có danh sách nguyên liệu offline'
+                                    : 'Không tìm thấy nguyên liệu phù hợp',
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: isDark ? Colors.white60 : Colors.black54,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              if (_isOffline) ...[
+                                SizedBox(height: 8.h),
+                                Text(
+                                  'Vui lòng kết nối mạng một lần để tải danh sách nguyên liệu vào bộ nhớ máy',
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 12.sp,
+                                    color: isDark ? Colors.white38 : Colors.black38,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ],
+                          ),
                         ),
                       )
                     : ListView.builder(
@@ -508,13 +682,13 @@ class _AddAllergyModalState extends State<_AddAllergyModal> {
                             },
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 180),
-                              margin: const EdgeInsets.only(bottom: 8),
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                              margin: EdgeInsets.only(bottom: 8.h),
+                              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                               decoration: BoxDecoration(
                                 color: isSelected
                                     ? (isDark ? const Color(0xFF1E3A26) : const Color(0xFFE8F5E9))
                                     : (isDark ? const Color(0xFF0E1611) : const Color(0xFFF9FBF9)),
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(16.r),
                                 border: Border.all(
                                   color: isSelected ? const Color(0xFF4CAF50) : cardBorder,
                                   width: isSelected ? 2 : 1,
@@ -523,12 +697,12 @@ class _AddAllergyModalState extends State<_AddAllergyModal> {
                               child: Row(
                                 children: [
                                   const Icon(Icons.restaurant_rounded, color: Color(0xFF4CAF50), size: 20),
-                                  const SizedBox(width: 12),
+                                  SizedBox(width: 12.w),
                                   Expanded(
                                     child: Text(
                                       name,
                                       style: GoogleFonts.plusJakartaSans(
-                                        fontSize: 15,
+                                        fontSize: 15.sp,
                                         fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
                                         color: isDark ? Colors.white : const Color(0xFF19221C),
                                       ),
@@ -538,12 +712,12 @@ class _AddAllergyModalState extends State<_AddAllergyModal> {
                                     Text(
                                       '($unit)',
                                       style: TextStyle(
-                                        fontSize: 12,
+                                        fontSize: 12.sp,
                                         color: isDark ? Colors.white38 : Colors.black38,
                                       ),
                                     ),
                                   if (isSelected) ...[
-                                    const SizedBox(width: 10),
+                                    SizedBox(width: 10.w),
                                     const Icon(Icons.check_circle_rounded, color: Color(0xFF4CAF50), size: 22),
                                   ],
                                 ],
@@ -554,7 +728,7 @@ class _AddAllergyModalState extends State<_AddAllergyModal> {
                       ),
           ),
 
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
 
           // Note input
           TextField(
@@ -565,19 +739,19 @@ class _AddAllergyModalState extends State<_AddAllergyModal> {
               hintStyle: TextStyle(color: isDark ? Colors.white38 : Colors.black38, fontSize: 13),
               filled: true,
               fillColor: isDark ? const Color(0xFF0E1611) : const Color(0xFFF5FCF4),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
                 borderSide: BorderSide(color: cardBorder),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
                 borderSide: BorderSide(color: cardBorder),
               ),
             ),
           ),
 
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
 
           // Submit Button
           SizedBox(
@@ -589,10 +763,10 @@ class _AddAllergyModalState extends State<_AddAllergyModal> {
                 backgroundColor: const Color(0xFF008435),
                 disabledBackgroundColor: Colors.grey.withValues(alpha: 0.3),
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
               ),
               child: _isSubmitting
-                  ? const SizedBox(
+                  ? SizedBox(
                       width: 22,
                       height: 22,
                       child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.5),
@@ -602,7 +776,7 @@ class _AddAllergyModalState extends State<_AddAllergyModal> {
                           ? 'Thêm dị ứng: ${_selectedIngredient!['name']}'
                           : 'Vui lòng chọn một nguyên liệu',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 15,
+                        fontSize: 15.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

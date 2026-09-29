@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../theme/app_theme.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -36,12 +37,12 @@ class CustomTextField extends StatelessWidget {
           Text(
             labelText!,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w600,
               color: isDark ? Colors.white : AppColors.textPrimary,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
         ],
         TextFormField(
           controller: controller,
@@ -50,7 +51,7 @@ class CustomTextField extends StatelessWidget {
           validator: validator,
           onChanged: onChanged,
           style: TextStyle(
-            fontSize: 15,
+            fontSize: 15.sp,
             color: isDark ? Colors.white : AppColors.textPrimary,
             fontWeight: FontWeight.w500,
           ),
@@ -58,11 +59,11 @@ class CustomTextField extends StatelessWidget {
             hintText: hintText,
             hintStyle: TextStyle(
               color: isDark ? const Color(0xFF9DA8A0) : AppColors.hintText,
-              fontSize: 14,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w400,
             ),
             prefixIcon: Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 4.0),
+              padding: EdgeInsets.only(left: 8.0.w, right: 4.0.w),
               child: Icon(
                 prefixIcon,
                 color: isDark ? const Color(0xFF81C784) : const Color(0xFF8C9890),
@@ -71,39 +72,39 @@ class CustomTextField extends StatelessWidget {
             ),
             suffixIcon: suffixIcon != null
                 ? Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
+                    padding: EdgeInsets.only(right: 8.0.w),
                     child: suffixIcon,
                   )
                 : null,
             filled: true,
             fillColor: isDark ? const Color(0xFF19271E) : const Color(0xFFF2F5F3),
-            contentPadding: const EdgeInsets.symmetric(
+            contentPadding: EdgeInsets.symmetric(
               horizontal: 24,
               vertical: 18,
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(28), // Pill shape
+              borderRadius: BorderRadius.circular(28.r), // Pill shape
               borderSide: BorderSide(
                 color: isDark ? const Color(0xFF2E4D36) : Colors.transparent,
                 width: 1,
               ),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(28),
+              borderRadius: BorderRadius.circular(28.r),
               borderSide: BorderSide(
                 color: isDark ? const Color(0xFF81C784) : AppColors.primary,
                 width: 1.5,
               ),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(28),
+              borderRadius: BorderRadius.circular(28.r),
               borderSide: const BorderSide(
                 color: AppColors.error,
                 width: 1.5,
               ),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(28),
+              borderRadius: BorderRadius.circular(28.r),
               borderSide: const BorderSide(
                 color: AppColors.error,
                 width: 1.5,

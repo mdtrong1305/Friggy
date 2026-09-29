@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../l10n/app_localizations.dart';
 
@@ -38,7 +39,7 @@ class PremiumBanner extends StatelessWidget {
                 ],
           stops: const [0.0, 0.55, 1.0],
         ),
-        borderRadius: BorderRadius.circular(26),
+        borderRadius: BorderRadius.circular(26.r),
         border: Border.all(
           color: isDark ? const Color(0xFF2E4D36) : Colors.white.withValues(alpha: 0.90),
           width: isDark ? 1.0 : 1.4,
@@ -47,20 +48,20 @@ class PremiumBanner extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withValues(alpha: isDark ? 0.25 : 0.08),
             blurRadius: 16,
-            offset: const Offset(0, 6),
+            offset: Offset(0, 6),
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(26),
+        borderRadius: BorderRadius.circular(26.r),
         child: Stack(
           clipBehavior: Clip.none,
           children: [
             // Right Side: Mascot 3D Image Asset
             Positioned(
-              right: 25,
-              top: 6,
-              bottom: 40,
+              right: 25.w,
+              top: 6.h,
+              bottom: 40.h,
               width: 175,
               child: Image.asset(
                 'assets/images/premium_banner_mascot.png',
@@ -71,13 +72,13 @@ class PremiumBanner extends StatelessWidget {
 
             // Left Side Content Area
             Positioned.fill(
-              right: 145,
+              right: 145.w,
               child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 22.0,
-                  right: 12.0,
-                  top: 14.0,
-                  bottom: 14.0,
+                padding: EdgeInsets.only(
+                  left: 22.0.w,
+                  right: 12.0.w,
+                  top: 14.0.h,
+                  bottom: 14.0.h,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,8 +93,8 @@ class PremiumBanner extends StatelessWidget {
                           children: [
                             RichText(
                               text: TextSpan(
-                                style: GoogleFonts.outfit(
-                                  fontSize: 20,
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 20.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 children: [
@@ -110,17 +111,17 @@ class PremiumBanner extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            const SizedBox(width: 2),
-                            const Icon(
+                            SizedBox(width: 2.w),
+                            Icon(
                               Icons.eco_rounded,
                               color: Color(0xFF4CAF50),
                               size: 15,
                             ),
-                            const SizedBox(width: 6),
+                            SizedBox(width: 6.w),
 
                             // Badge: GÓI GIA ĐÌNH vs PREMIUM
                             Container(
-                              padding: const EdgeInsets.symmetric(
+                              padding: EdgeInsets.symmetric(
                                 horizontal: 8,
                                 vertical: 2.5,
                               ),
@@ -128,7 +129,7 @@ class PremiumBanner extends StatelessWidget {
                                 color: isFamilyPlan
                                     ? const Color(0xFF2E7D32)
                                     : const Color(0xFFF5B025),
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(12.r),
                                 boxShadow: [
                                   BoxShadow(
                                     color: (isFamilyPlan
@@ -136,7 +137,7 @@ class PremiumBanner extends StatelessWidget {
                                             : const Color(0xFFF5B025))
                                         .withValues(alpha: 0.30),
                                     blurRadius: 5,
-                                    offset: const Offset(0, 2),
+                                    offset: Offset(0, 2),
                                   ),
                                 ],
                               ),
@@ -150,13 +151,13 @@ class PremiumBanner extends StatelessWidget {
                                     color: Colors.white,
                                     size: 11,
                                   ),
-                                  const SizedBox(width: 3),
+                                  SizedBox(width: 3.w),
                                   Text(
                                     isFamilyPlan
                                         ? (isEn ? 'FAMILY PLAN' : 'GÓI GIA ĐÌNH')
                                         : 'PREMIUM',
                                     style: GoogleFonts.plusJakartaSans(
-                                      fontSize: 9.0,
+                                      fontSize: 9.0.sp,
                                       fontWeight: FontWeight.w900,
                                       color: Colors.white,
                                       letterSpacing: 0.4,
@@ -167,7 +168,7 @@ class PremiumBanner extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8.h),
 
                         // Main Headline
                         Text(
@@ -176,27 +177,27 @@ class PremiumBanner extends StatelessWidget {
                                   ? 'Family Account !\nActive Premium !'
                                   : 'Tài khoản Gia Đình !\nĐã kích hoạt !')
                               : (isEn ? 'Cook better!\nSave more!' : 'Nấu ngon hơn !\ntiết kiệm hơn !'),
-                          style: GoogleFonts.outfit(
-                            fontSize: 17.5,
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 17.5.sp,
                             fontWeight: FontWeight.w800,
                             color: isDark ? Colors.white : const Color(0xFF0F5A24),
                             height: 1.12,
                           ),
                         ),
-                        const SizedBox(height: 6),
+                        SizedBox(height: 6.h),
 
                         // Stars Graphic Cluster
                         Padding(
-                          padding: const EdgeInsets.only(left: 44.0),
+                          padding: EdgeInsets.only(left: 44.0.w),
                           child: SizedBox(
                             width: 104,
                             height: 58,
                             child: Stack(
                               clipBehavior: Clip.none,
-                              children: const [
+                              children: [
                                 Positioned(
-                                  left: 0,
-                                  top: 0,
+                                  left: 0.w,
+                                  top: 0.h,
                                   child: Icon(
                                     Icons.star_rounded,
                                     color: Color(0xFFFFB300),
@@ -204,8 +205,8 @@ class PremiumBanner extends StatelessWidget {
                                   ),
                                 ),
                                 Positioned(
-                                  left: 52,
-                                  top: 0,
+                                  left: 52.w,
+                                  top: 0.h,
                                   child: Icon(
                                     Icons.star_rounded,
                                     color: Color(0xFFFFB300),
@@ -213,8 +214,8 @@ class PremiumBanner extends StatelessWidget {
                                   ),
                                 ),
                                 Positioned(
-                                  left: 40,
-                                  bottom: 0,
+                                  left: 40.w,
+                                  bottom: 0.h,
                                   child: Icon(
                                     Icons.star_rounded,
                                     color: Color(0xFFFFB300),
@@ -238,7 +239,7 @@ class PremiumBanner extends StatelessWidget {
                               ? 'Unlock exclusive recipes\nand smart features!'
                               : 'Mở khóa công thức độc quyền\nvà các tính năng thông minh!'),
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 12.0,
+                        fontSize: 12.0.sp,
                         fontWeight: FontWeight.w700,
                         color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF0F5A24),
                         height: 1.2,
@@ -251,14 +252,14 @@ class PremiumBanner extends StatelessWidget {
 
             // Bottom Right Action / Active Status
             Positioned(
-              right: 16,
-              bottom: 12,
+              right: 16.w,
+              bottom: 12.h,
               child: isFamilyPlan
                   ? InkWell(
                       onTap: onTryNowTap,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(20.r),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
+                        padding: EdgeInsets.symmetric(
                           horizontal: 14,
                           vertical: 7,
                         ),
@@ -266,7 +267,7 @@ class PremiumBanner extends StatelessWidget {
                           color: isDark
                               ? const Color(0xFF233629)
                               : const Color(0xFFE8F5E9),
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(20.r),
                           border: Border.all(
                             color: isDark
                                 ? const Color(0xFF2E4D36)
@@ -277,16 +278,16 @@ class PremiumBanner extends StatelessWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.check_circle_rounded,
                               color: Color(0xFF2E7D32),
                               size: 16,
                             ),
-                            const SizedBox(width: 5),
+                            SizedBox(width: 5.w),
                             Text(
                               isEn ? 'Active Plan' : 'Đang sử dụng',
                               style: GoogleFonts.plusJakartaSans(
-                                fontSize: 12.5,
+                                fontSize: 12.5.sp,
                                 fontWeight: FontWeight.w800,
                                 color: isDark
                                     ? const Color(0xFF81C784)
@@ -299,9 +300,9 @@ class PremiumBanner extends StatelessWidget {
                     )
                   : InkWell(
                       onTap: onTryNowTap,
-                      borderRadius: BorderRadius.circular(24),
+                      borderRadius: BorderRadius.circular(24.r),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(
+                        padding: EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 9,
                         ),
@@ -309,7 +310,7 @@ class PremiumBanner extends StatelessWidget {
                           color: isDark
                               ? const Color(0xFF81C784)
                               : const Color(0xFF0F853B),
-                          borderRadius: BorderRadius.circular(24),
+                          borderRadius: BorderRadius.circular(24.r),
                           boxShadow: [
                             BoxShadow(
                               color: (isDark
@@ -317,14 +318,14 @@ class PremiumBanner extends StatelessWidget {
                                       : const Color(0xFF0F853B))
                                   .withValues(alpha: 0.35),
                               blurRadius: 10,
-                              offset: const Offset(0, 3),
+                              offset: Offset(0, 3),
                             ),
                           ],
                         ),
                         child: Text(
                           isEn ? 'Try now' : 'Dùng thử ngay',
                           style: GoogleFonts.plusJakartaSans(
-                            fontSize: 13.0,
+                            fontSize: 13.0.sp,
                             fontWeight: FontWeight.w800,
                             color: isDark ? const Color(0xFF0E1611) : Colors.white,
                           ),

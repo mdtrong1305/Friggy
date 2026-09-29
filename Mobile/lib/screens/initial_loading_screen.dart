@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'splash_screen.dart';
 import 'login_success_video_screen.dart';
 import '../data/services/auth_service.dart';
+import '../sqlite/services/background_sync_service.dart';
 
 class InitialLoadingScreen extends StatefulWidget {
   const InitialLoadingScreen({super.key});
@@ -52,14 +54,14 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen>
     _imageFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: const Interval(0.14, 0.38, curve: Curves.easeOut),
+        curve: Interval(0.14, 0.38, curve: Curves.easeOut),
       ),
     );
 
     _imageScaleAnimation = Tween<double>(begin: 0.25, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: const Interval(0.14, 0.41, curve: Curves.easeOutBack),
+        curve: Interval(0.14, 0.41, curve: Curves.easeOutBack),
       ),
     );
 
@@ -67,7 +69,7 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen>
     _titleFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: const Interval(0.44, 0.65, curve: Curves.easeOut),
+        curve: Interval(0.44, 0.65, curve: Curves.easeOut),
       ),
     );
 
@@ -77,7 +79,7 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen>
     ).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: const Interval(0.44, 0.65, curve: Curves.easeOutCubic),
+        curve: Interval(0.44, 0.65, curve: Curves.easeOutCubic),
       ),
     );
 
@@ -85,7 +87,7 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen>
     _progressFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: const Interval(0.67, 0.74, curve: Curves.easeIn),
+        curve: Interval(0.67, 0.74, curve: Curves.easeIn),
       ),
     );
 
@@ -93,7 +95,7 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen>
     _progressValueAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: const Interval(0.68, 0.89, curve: Curves.easeInOutCubic),
+        curve: Interval(0.68, 0.89, curve: Curves.easeInOutCubic),
       ),
     );
 
@@ -123,6 +125,10 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen>
   Future<void> _startAutoLoginCheck() async {
     try {
       final isValid = await AuthService().checkAndRefreshToken();
+      if (isValid) {
+        // Bắt đầu sync SQLite ngay sau khi xác nhận token hợp lệ
+        BackgroundSyncService().syncAll();
+      }
       if (mounted) {
         setState(() {
           _isAutoLoginValid = isValid;
@@ -222,7 +228,7 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen>
                         : const SizedBox.shrink(),
                   ),
 
-                  const SizedBox(height: 18),
+                  SizedBox(height: 18.h),
 
                   // ================= STEP 2: "Friggy" Text (Slides Up) =================
                   SizedBox(
@@ -233,7 +239,7 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen>
                             child: SlideTransition(
                               position: _titleSlideAnimation,
                               child: Padding(
-                                padding: const EdgeInsets.only(left: 35.0),
+                                padding: EdgeInsets.only(left: 35.0.w),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,7 +247,7 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen>
                                     RichText(
                                       text: TextSpan(
                                         style: GoogleFonts.quicksand(
-                                          fontSize: 48,
+                                          fontSize: 48.sp,
                                           fontWeight: FontWeight.w800,
                                           letterSpacing: 2.5,
                                           height: 1.0,
@@ -266,9 +272,9 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen>
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(width: 4),
+                                    SizedBox(width: 4.w),
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 4.0),
+                                      padding: EdgeInsets.only(top: 4.0.h),
                                       child: Transform.rotate(
                                         angle: 0.35,
                                         child: Icon(
@@ -288,7 +294,7 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen>
                         : const SizedBox.shrink(),
                   ),
 
-                  const SizedBox(height: 32),
+                  SizedBox(height: 32.h),
 
                   // ================= STEP 3 & 4: Progress Bar (Faster Fill 0% -> 100%) =================
                   SizedBox(
@@ -305,7 +311,7 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen>
                                     color: isDark
                                         ? const Color(0xFF233629)
                                         : const Color(0xFFE9F4DA),
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(10.r),
                                   ),
                                   child: Stack(
                                     children: [
@@ -317,7 +323,7 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen>
                                                 ? const Color(0xFF81C784)
                                                 : const Color(0xFF4CAF50),
                                             borderRadius:
-                                                BorderRadius.circular(10),
+                                                BorderRadius.circular(10.r),
                                             boxShadow: [
                                               BoxShadow(
                                                 color: (isDark
@@ -334,11 +340,11 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen>
                                     ],
                                   ),
                                 ),
-                                const SizedBox(height: 8),
+                                SizedBox(height: 8.h),
                                 Text(
                                   '${(progressValue * 100).toInt()}%',
                                   style: GoogleFonts.quicksand(
-                                    fontSize: 14,
+                                    fontSize: 14.sp,
                                     fontWeight: FontWeight.bold,
                                     color: isDark
                                         ? const Color(0xFF81C784)

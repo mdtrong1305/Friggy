@@ -1,6 +1,7 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../data/services/auth_service.dart';
 import '../l10n/app_localizations.dart';
@@ -150,8 +151,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               centerTitle: false,
               title: RichText(
                 text: TextSpan(
-                  style: const TextStyle(
-                    fontSize: 22,
+                  style: TextStyle(
+                    fontSize: 22.sp,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 0.5,
                   ),
@@ -174,27 +175,27 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ),
             body: SafeArea(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
                   children: [
                     const Spacer(),
 
                     // Animated Particle Sparkle Burst Checkmark (Matching reference video recording)
                     const _SparkleBurstCheckmark(),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
 
                     // Title "Welcome to Friggy." (Matching reference image #2)
                     Text(
                       isEn ? 'Welcome to Friggy.' : 'Chào mừng đến với Friggy.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 26,
+                        fontSize: 26.sp,
                         fontWeight: FontWeight.bold,
                         color: isDark ? Colors.white : AppColors.textPrimary,
                         letterSpacing: -0.5,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12.h),
 
                     // Subtitle
                     Text(
@@ -203,7 +204,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           : 'Tài khoản của bạn đã sẵn sàng.\nHãy bắt đầu trải nghiệm ngay.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 15.sp,
                         color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF7A867E),
                         height: 1.5,
                       ),
@@ -237,20 +238,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           foregroundColor: isDark ? const Color(0xFF0E1611) : Colors.white,
                           elevation: 0,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16.r),
                           ),
                         ),
                         child: Text(
                           isEn ? 'Get Started' : 'Bắt đầu ngay',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
                             color: isDark ? const Color(0xFF0E1611) : Colors.white,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
                   ],
                 ),
               ),
@@ -278,8 +279,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         centerTitle: false,
         title: RichText(
           text: TextSpan(
-            style: const TextStyle(
-              fontSize: 22,
+            style: TextStyle(
+              fontSize: 22.sp,
               fontWeight: FontWeight.w900,
               letterSpacing: 0.5,
             ),
@@ -314,22 +315,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 });
               },
             ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
         ],
       ),
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 12),
+            SizedBox(height: 12.h),
             // 1. Top Step Progress Bar Indicator
             _buildProgressBar(),
 
-            const SizedBox(height: 24),
+            SizedBox(height: 24.h),
 
             // 2. Main Content Body per Step
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: EdgeInsets.symmetric(horizontal: 24),
                 child: _buildCurrentStepContent(),
               ),
             ),
@@ -350,7 +351,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     final isEn = loc?.locale.languageCode == 'en';
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32),
+      padding: EdgeInsets.symmetric(horizontal: 32),
       child: Row(
         children: [
           _buildStepCircle(step: 1, label: isEn ? 'PHONE' : 'SỐ ĐT'),
@@ -397,11 +398,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ),
           ),
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6.h),
         Text(
           label,
           style: TextStyle(
-            fontSize: 10,
+            fontSize: 10.sp,
             fontWeight: FontWeight.bold,
             letterSpacing: 0.8,
             color: isActive || isCompleted
@@ -418,7 +419,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Expanded(
       child: Container(
         height: 2,
-        margin: const EdgeInsets.only(bottom: 18, left: 4, right: 4),
+        margin: EdgeInsets.only(bottom: 18.h, left: 4.w, right: 4.w),
         color: isCompleted
             ? (isDark ? const Color(0xFF81C784) : Colors.black)
             : (isDark ? const Color(0xFF233629) : const Color(0xFFE2E8E4)),
@@ -454,24 +455,24 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           Text(
             isEn ? 'Enter your email.' : 'Nhập email của bạn.',
             style: GoogleFonts.plusJakartaSans(
-              fontSize: 28,
+              fontSize: 28.sp,
               fontWeight: FontWeight.w900,
               color: isDark ? Colors.white : AppColors.textPrimary,
               letterSpacing: -0.5,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Text(
             isEn
                 ? "We will send a 6-digit verification code to your email."
                 : "Chúng tôi sẽ gửi mã xác thực 6 chữ số tới email của bạn.",
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 14.sp,
               color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF7A867E),
               height: 1.4,
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
 
           CustomTextField(
             controller: _emailController,
@@ -491,7 +492,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             },
           ),
 
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
 
           // Security privacy note
           Row(
@@ -501,14 +502,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 size: 14,
                 color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF9EA8A1),
               ),
-              const SizedBox(width: 6),
+              SizedBox(width: 6.w),
               Expanded(
                 child: Text(
                   isEn
                       ? 'Your information is strictly protected.'
                       : 'Thông tin của bạn được bảo mật tuyệt đối.',
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF9EA8A1),
                   ),
                 ),
@@ -535,18 +536,18 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           isEn ? 'Enter 6-digit code.' : 'Nhập mã xác thực 6 chữ số.',
           textAlign: TextAlign.center,
           style: GoogleFonts.plusJakartaSans(
-            fontSize: 28,
+            fontSize: 28.sp,
             fontWeight: FontWeight.w900,
             color: isDark ? Colors.white : AppColors.textPrimary,
             letterSpacing: -0.5,
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
         RichText(
           textAlign: TextAlign.center,
           text: TextSpan(
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 14.sp,
               color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF7A867E),
               height: 1.4,
             ),
@@ -564,7 +565,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ],
           ),
         ),
-        const SizedBox(height: 28),
+        SizedBox(height: 28.h),
 
         // 6 Visual OTP digit boxes
         Row(
@@ -581,10 +582,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             return Container(
               width: 44,
               height: 56,
-              margin: const EdgeInsets.symmetric(horizontal: 4),
+              margin: EdgeInsets.symmetric(horizontal: 4),
               decoration: BoxDecoration(
                 color: isDark ? const Color(0xFF19271E) : Colors.white,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
                 border: Border.all(
                   color: isFocused
                       ? (isDark ? const Color(0xFF81C784) : Colors.black)
@@ -596,7 +597,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 child: Text(
                   text,
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 22.sp,
                     fontWeight: FontWeight.bold,
                     color: isDark ? Colors.white : AppColors.textPrimary,
                   ),
@@ -606,7 +607,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           }),
         ),
 
-        const SizedBox(height: 20),
+        SizedBox(height: 20.h),
 
         // Resend Timer
         Center(
@@ -619,7 +620,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   child: Text(
                     isEn ? 'Resend code' : 'Gửi lại mã',
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 15.sp,
                       fontWeight: FontWeight.bold,
                       color: isDark ? const Color(0xFF81C784) : Colors.black,
                       decoration: TextDecoration.underline,
@@ -629,7 +630,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               : RichText(
                   text: TextSpan(
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF7A867E),
                     ),
                     children: [
@@ -658,7 +659,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     final isFilled = _otpSingleController.text.length == 6;
 
     return Container(
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 8),
+      padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 12.h, bottom: 8.h),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF0E1611) : Colors.white,
         border: Border(
@@ -690,13 +691,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     : (isDark ? const Color(0xFF5E6E63) : Colors.white),
                 elevation: 0,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(16.r),
                 ),
               ),
               child: Text(
                 isEn ? 'Next' : 'Tiếp theo',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.bold,
                   color: isFilled
                       ? (isDark ? const Color(0xFF0E1611) : Colors.white)
@@ -706,7 +707,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ),
           ),
 
-          const SizedBox(height: 6),
+          SizedBox(height: 6.h),
 
           // Built-in On-Screen Custom Numeric Keypad (Pinned to very bottom!)
           _buildNumericKeypad(),
@@ -737,11 +738,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     };
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.symmetric(vertical: 8),
       child: Column(
         children: keys.map((row) {
           return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
+            padding: EdgeInsets.symmetric(vertical: 4),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: row.map((key) {
@@ -769,7 +770,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         }
                       }
                     },
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12.r),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -783,7 +784,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           Text(
                             key,
                             style: TextStyle(
-                              fontSize: 22,
+                              fontSize: 22.sp,
                               fontWeight: FontWeight.w600,
                               color: isDark ? Colors.white : AppColors.textPrimary,
                             ),
@@ -792,7 +793,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             Text(
                               subLabels[key]!,
                               style: TextStyle(
-                                fontSize: 9,
+                                fontSize: 9.sp,
                                 fontWeight: FontWeight.bold,
                                 color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF9EA8A1),
                                 letterSpacing: 0.5,
@@ -825,34 +826,34 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           Text(
             isEn ? 'Create your password.' : 'Tạo mật khẩu của bạn.',
             style: GoogleFonts.plusJakartaSans(
-              fontSize: 28,
+              fontSize: 28.sp,
               fontWeight: FontWeight.w900,
               color: isDark ? Colors.white : AppColors.textPrimary,
               letterSpacing: -0.5,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Text(
             isEn
                 ? 'At least 6 characters. Combine letters,\nnumbers and symbols for better security.'
                 : 'Tối thiểu 6 ký tự. Kết hợp chữ cái,\nchữ số và ký hiệu để tăng độ bảo mật.',
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 14.sp,
               color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF9EA8A1),
               height: 1.4,
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
 
           Text(
             isEn ? 'Password' : 'Mật khẩu',
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w600,
               color: isDark ? Colors.white : AppColors.textPrimary,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
 
           // New Password Input Field
           CustomTextField(
@@ -889,17 +890,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           // 3-Segment Password Strength Indicator (Matching reference screenshot)
           _buildPasswordStrengthMeter(),
 
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
 
           Text(
             isEn ? 'Confirm Password' : 'Nhập lại Mật khẩu',
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w600,
               color: isDark ? Colors.white : AppColors.textPrimary,
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
 
           // Confirm Password Input Field
           CustomTextField(
@@ -927,7 +928,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       size: 14,
                     ),
                   ),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4.w),
                 ],
                 IconButton(
                   icon: Icon(
@@ -1010,7 +1011,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
         Row(
           children: List.generate(3, (index) {
             bool isFilled = index < strength;
@@ -1022,18 +1023,18 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   color: isFilled
                       ? color
                       : (isDark ? const Color(0xFF233629) : const Color(0xFFE2E8E4)),
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(2.r),
                 ),
               ),
             );
           }),
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6.h),
         if (password.isNotEmpty)
           Text(
             label,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 12.sp,
               fontWeight: FontWeight.bold,
               color: color,
             ),
@@ -1049,7 +1050,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     final isEn = loc?.locale.languageCode == 'en';
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF0E1611) : Colors.white,
         border: Border(
@@ -1073,13 +1074,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     width: 1.5,
                   ),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(16.r),
                   ),
                 ),
                 child: Text(
                   isEn ? 'Back' : 'Quay lại',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                     color: isDark ? Colors.white : AppColors.textPrimary,
                   ),
@@ -1087,7 +1088,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
             ),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: 16.w),
           Expanded(
             child: SizedBox(
               height: 52,
@@ -1098,13 +1099,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   foregroundColor: isDark ? const Color(0xFF0E1611) : Colors.white,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(16.r),
                   ),
                 ),
                 child: Text(
                   isEn ? 'Next' : 'Tiếp theo',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                     color: isDark ? const Color(0xFF0E1611) : Colors.white,
                   ),
@@ -1124,7 +1125,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     final isEn = loc?.locale.languageCode == 'en';
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF0E1611) : Colors.white,
         border: Border(
@@ -1144,13 +1145,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             foregroundColor: isDark ? const Color(0xFF0E1611) : Colors.white,
             elevation: 0,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16.r),
             ),
           ),
           child: Text(
             isEn ? 'Create Password' : 'Tạo mật khẩu',
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 16.sp,
               fontWeight: FontWeight.bold,
               color: isDark ? const Color(0xFF0E1611) : Colors.white,
             ),
@@ -1186,21 +1187,21 @@ class _SparkleBurstCheckmarkState extends State<_SparkleBurstCheckmark>
     _scaleAnimation = Tween<double>(begin: 0.3, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: const Interval(0.0, 0.55, curve: Curves.easeOutBack),
+        curve: Interval(0.0, 0.55, curve: Curves.easeOutBack),
       ),
     );
 
     _burstAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: const Interval(0.15, 0.9, curve: Curves.easeOutCubic),
+        curve: Interval(0.15, 0.9, curve: Curves.easeOutCubic),
       ),
     );
 
     _opacityAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: const Interval(0.5, 1.0, curve: Curves.easeOut),
+        curve: Interval(0.5, 1.0, curve: Curves.easeOut),
       ),
     );
 
@@ -1240,7 +1241,7 @@ class _SparkleBurstCheckmarkState extends State<_SparkleBurstCheckmark>
                     child: Container(
                       width: dotSize,
                       height: dotSize,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: Color(0xFF6B786F),
                         shape: BoxShape.circle,
                       ),
@@ -1255,7 +1256,7 @@ class _SparkleBurstCheckmarkState extends State<_SparkleBurstCheckmark>
                 child: Container(
                   width: 76,
                   height: 76,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     color: Color(0xFF1E211F),
                     shape: BoxShape.circle,
                     boxShadow: [
@@ -1266,7 +1267,7 @@ class _SparkleBurstCheckmarkState extends State<_SparkleBurstCheckmark>
                       ),
                     ],
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.check_rounded,
                     color: Colors.white,
                     size: 42,

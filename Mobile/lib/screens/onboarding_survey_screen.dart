@@ -1,5 +1,6 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../data/services/api_service.dart';
 import '../l10n/app_localizations.dart';
@@ -188,9 +189,9 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
-              children: const [
+              children: [
                 Icon(Icons.check_circle_rounded, color: Colors.white),
-                SizedBox(width: 10),
+                SizedBox(width: 10.w),
                 Expanded(
                   child: Text(
                     'Chào mừng bạn đến với Friggy!',
@@ -201,7 +202,7 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
             ),
             backgroundColor: const Color(0xFF008435),
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14.r)),
           ),
         );
 
@@ -254,7 +255,7 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
             children: [
               // Top Bar Header & Progress
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+                padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 12.0.h),
                 child: Row(
                   children: [
                     if (_currentStep > 0)
@@ -278,24 +279,24 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
                         ),
                       )
                     else
-                      const SizedBox(width: 38),
+                      SizedBox(width: 38.w),
 
                     Expanded(
                       child: Column(
                         children: [
                           Text(
                             isEn ? 'Personalize Friggy' : 'Tùy chỉnh khảo sát',
-                            style: GoogleFonts.outfit(
-                              fontSize: 16,
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 16.sp,
                               fontWeight: FontWeight.bold,
                               color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: 4.h),
                           Text(
                             'Bước ${_currentStep + 1} / 5',
                             style: GoogleFonts.plusJakartaSans(
-                              fontSize: 12,
+                              fontSize: 12.sp,
                               fontWeight: FontWeight.w600,
                               color: isDark ? Colors.white70 : Colors.black54,
                             ),
@@ -304,16 +305,16 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
                       ),
                     ),
 
-                    const SizedBox(width: 38),
+                    SizedBox(width: 38.w),
                   ],
                 ),
               ),
 
               // Progress Bar Indicator
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 4.0),
+                padding: EdgeInsets.symmetric(horizontal: 24.0.w, vertical: 4.0.h),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(10.r),
                   child: LinearProgressIndicator(
                     value: (_currentStep + 1) / 5,
                     minHeight: 6,
@@ -323,7 +324,7 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
                 ),
               ),
 
-              const SizedBox(height: 12),
+              SizedBox(height: 12.h),
 
               // Survey Steps View
               Expanded(
@@ -345,7 +346,7 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
 
               // Bottom Action Button
               Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(20.0.w),
                 child: SizedBox(
                   width: double.infinity,
                   height: 54,
@@ -356,11 +357,11 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
                       foregroundColor: Colors.white,
                       elevation: 4,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
+                        borderRadius: BorderRadius.circular(18.r),
                       ),
                     ),
                     child: _isSubmitting
-                        ? const SizedBox(
+                        ? SizedBox(
                             width: 24,
                             height: 24,
                             child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.5),
@@ -372,12 +373,12 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
                                 _currentStep == 4
                                     ? (isEn ? 'Complete Survey' : 'Hoàn tất & Khám phá Friggy')
                                     : (isEn ? 'Continue' : 'Tiếp tục'),
-                                style: GoogleFonts.outfit(
-                                  fontSize: 17,
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 17.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              const SizedBox(width: 8),
+                              SizedBox(width: 8.w),
                               Icon(
                                 _currentStep == 4
                                     ? Icons.rocket_launch_rounded
@@ -428,29 +429,29 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
     ];
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             isEn ? 'What is your primary goal?' : 'Mục tiêu chính của bạn là gì?',
-            style: GoogleFonts.outfit(
-              fontSize: 22,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 22.sp,
               fontWeight: FontWeight.bold,
               color: isDark ? Colors.white : const Color(0xFF006428),
             ),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6.h),
           Text(
             isEn
                 ? 'Friggy will customize AI meal plans & fridge alerts for you.'
                 : 'Friggy sẽ dựa vào mục tiêu này để đưa ra gợi ý AI phù hợp nhất.',
             style: GoogleFonts.plusJakartaSans(
-              fontSize: 13.5,
+              fontSize: 13.5.sp,
               color: isDark ? Colors.white70 : Colors.black87,
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
 
           ...goals.map((g) {
             final isSelected = _primaryGoal == g['id'];
@@ -458,13 +459,13 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
               onTap: () => setState(() => _primaryGoal = g['id'] as String),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                margin: const EdgeInsets.only(bottom: 12),
-                padding: const EdgeInsets.all(16),
+                margin: EdgeInsets.only(bottom: 12.h),
+                padding: EdgeInsets.all(16.w),
                 decoration: BoxDecoration(
                   color: isSelected
                       ? (isDark ? const Color(0xFF1E3A26) : const Color(0xFFE8F5E9))
                       : (isDark ? const Color(0xFF19271E) : Colors.white),
-                  borderRadius: BorderRadius.circular(18),
+                  borderRadius: BorderRadius.circular(18.r),
                   border: Border.all(
                     color: isSelected ? const Color(0xFF4CAF50) : (isDark ? const Color(0xFF2E4D36) : const Color(0xFFE0E0E0)),
                     width: isSelected ? 2 : 1,
@@ -472,25 +473,25 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
                 ),
                 child: Row(
                   children: [
-                    Text(g['icon'] as String, style: const TextStyle(fontSize: 28)),
-                    const SizedBox(width: 14),
+                    Text(g['icon'] as String, style: TextStyle(fontSize: 28)),
+                    SizedBox(width: 14.w),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             g['title'] as String,
-                            style: GoogleFonts.outfit(
-                              fontSize: 16,
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 16.sp,
                               fontWeight: FontWeight.bold,
                               color: isDark ? Colors.white : const Color(0xFF19221C),
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: 4.h),
                           Text(
                             g['desc'] as String,
                             style: GoogleFonts.plusJakartaSans(
-                              fontSize: 12.5,
+                              fontSize: 12.5.sp,
                               color: isDark ? Colors.white60 : Colors.black54,
                             ),
                           ),
@@ -498,7 +499,7 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
                       ),
                     ),
                     if (isSelected)
-                      const Icon(Icons.check_circle_rounded, color: Color(0xFF4CAF50), size: 24),
+                      Icon(Icons.check_circle_rounded, color: Color(0xFF4CAF50), size: 24),
                   ],
                 ),
               ),
@@ -521,39 +522,39 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
     ];
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             isEn ? 'Cooking & Household' : 'Tần suất nấu ăn & Gia đình',
-            style: GoogleFonts.outfit(
-              fontSize: 22,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 22.sp,
               fontWeight: FontWeight.bold,
               color: isDark ? Colors.white : const Color(0xFF006428),
             ),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6.h),
           Text(
             isEn
                 ? 'How often do you cook and for how many people?'
                 : 'Bạn thường nấu ăn với tần suất như thế nào và cho mấy người?',
             style: GoogleFonts.plusJakartaSans(
-              fontSize: 13.5,
+              fontSize: 13.5.sp,
               color: isDark ? Colors.white70 : Colors.black87,
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
 
           Text(
             isEn ? 'Cooking Frequency' : 'Tần suất nấu ăn',
-            style: GoogleFonts.outfit(
-              fontSize: 16,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 16.sp,
               fontWeight: FontWeight.bold,
               color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10.h),
 
           ...frequencies.map((f) {
             final isSelected = _cookingFrequency == f['id'];
@@ -561,13 +562,13 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
               onTap: () => setState(() => _cookingFrequency = f['id'] as String),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                margin: const EdgeInsets.only(bottom: 10),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                margin: EdgeInsets.only(bottom: 10.h),
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
                 decoration: BoxDecoration(
                   color: isSelected
                       ? (isDark ? const Color(0xFF1E3A26) : const Color(0xFFE8F5E9))
                       : (isDark ? const Color(0xFF19271E) : Colors.white),
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(16.r),
                   border: Border.all(
                     color: isSelected ? const Color(0xFF4CAF50) : (isDark ? const Color(0xFF2E4D36) : const Color(0xFFE0E0E0)),
                     width: isSelected ? 2 : 1,
@@ -575,43 +576,43 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
                 ),
                 child: Row(
                   children: [
-                    Text(f['icon'] as String, style: const TextStyle(fontSize: 22)),
-                    const SizedBox(width: 14),
+                    Text(f['icon'] as String, style: TextStyle(fontSize: 22)),
+                    SizedBox(width: 14.w),
                     Expanded(
                       child: Text(
                         f['title'] as String,
-                        style: GoogleFonts.outfit(
-                          fontSize: 15,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 15.sp,
                           fontWeight: FontWeight.bold,
                           color: isDark ? Colors.white : const Color(0xFF19221C),
                         ),
                       ),
                     ),
                     if (isSelected)
-                      const Icon(Icons.check_circle_rounded, color: Color(0xFF4CAF50), size: 22),
+                      Icon(Icons.check_circle_rounded, color: Color(0xFF4CAF50), size: 22),
                   ],
                 ),
               ),
             );
           }),
 
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
 
           // Household Size Picker
           Text(
             isEn ? 'Household Members' : 'Số người trong gia đình',
-            style: GoogleFonts.outfit(
-              fontSize: 16,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 16.sp,
               fontWeight: FontWeight.bold,
               color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10.h),
           Container(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16.w),
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF19271E) : Colors.white,
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(18.r),
               border: Border.all(color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFE0E0E0)),
             ),
             child: Row(
@@ -619,12 +620,12 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.people_alt_rounded, color: Color(0xFF4CAF50), size: 24),
-                    const SizedBox(width: 12),
+                    Icon(Icons.people_alt_rounded, color: Color(0xFF4CAF50), size: 24),
+                    SizedBox(width: 12.w),
                     Text(
                       '$_householdSize ${isEn ? 'people' : 'thành viên'}',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
                         color: isDark ? Colors.white : const Color(0xFF19221C),
                       ),
@@ -637,18 +638,18 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
                       onPressed: _householdSize > 1
                           ? () => setState(() => _householdSize--)
                           : null,
-                      icon: const Icon(Icons.remove_circle_outline_rounded),
+                      icon: Icon(Icons.remove_circle_outline_rounded),
                       color: const Color(0xFF4CAF50),
                     ),
                     Text(
                       '$_householdSize',
-                      style: GoogleFonts.outfit(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: GoogleFonts.plusJakartaSans(fontSize: 18.sp, fontWeight: FontWeight.bold),
                     ),
                     IconButton(
                       onPressed: _householdSize < 15
                           ? () => setState(() => _householdSize++)
                           : null,
-                      icon: const Icon(Icons.add_circle_outline_rounded),
+                      icon: Icon(Icons.add_circle_outline_rounded),
                       color: const Color(0xFF4CAF50),
                     ),
                   ],
@@ -680,39 +681,39 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
     ];
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             isEn ? 'Diet & Activity Level' : 'Chế độ ăn & Vận động',
-            style: GoogleFonts.outfit(
-              fontSize: 22,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 22.sp,
               fontWeight: FontWeight.bold,
               color: isDark ? Colors.white : const Color(0xFF006428),
             ),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6.h),
           Text(
             isEn
                 ? 'Select your dietary preferences and daily physical activity level.'
                 : 'Lựa chọn chế độ ăn thích hợp để Friggy đề xuất món ăn tối ưu.',
             style: GoogleFonts.plusJakartaSans(
-              fontSize: 13.5,
+              fontSize: 13.5.sp,
               color: isDark ? Colors.white70 : Colors.black87,
             ),
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: 18.h),
 
           Text(
             isEn ? 'Dietary Preference' : 'Chế độ ăn chính',
-            style: GoogleFonts.outfit(
-              fontSize: 16,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 16.sp,
               fontWeight: FontWeight.bold,
               color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
 
           Wrap(
             spacing: 8,
@@ -735,17 +736,17 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
             }).toList(),
           ),
 
-          const SizedBox(height: 22),
+          SizedBox(height: 22.h),
 
           Text(
             isEn ? 'Daily Activity Level' : 'Mức độ vận động hàng ngày',
-            style: GoogleFonts.outfit(
-              fontSize: 16,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 16.sp,
               fontWeight: FontWeight.bold,
               color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10.h),
 
           ...activities.map((a) {
             final isSelected = _activityLevel == a['id'];
@@ -753,13 +754,13 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
               onTap: () => setState(() => _activityLevel = a['id'] as String),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                margin: const EdgeInsets.only(bottom: 10),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                margin: EdgeInsets.only(bottom: 10.h),
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                 decoration: BoxDecoration(
                   color: isSelected
                       ? (isDark ? const Color(0xFF1E3A26) : const Color(0xFFE8F5E9))
                       : (isDark ? const Color(0xFF19271E) : Colors.white),
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(16.r),
                   border: Border.all(
                     color: isSelected ? const Color(0xFF4CAF50) : (isDark ? const Color(0xFF2E4D36) : const Color(0xFFE0E0E0)),
                     width: isSelected ? 2 : 1,
@@ -767,20 +768,20 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
                 ),
                 child: Row(
                   children: [
-                    Text(a['icon'] as String, style: const TextStyle(fontSize: 20)),
-                    const SizedBox(width: 12),
+                    Text(a['icon'] as String, style: TextStyle(fontSize: 20)),
+                    SizedBox(width: 12.w),
                     Expanded(
                       child: Text(
                         a['title'] as String,
-                        style: GoogleFonts.outfit(
-                          fontSize: 14.5,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 14.5.sp,
                           fontWeight: FontWeight.bold,
                           color: isDark ? Colors.white : const Color(0xFF19221C),
                         ),
                       ),
                     ),
                     if (isSelected)
-                      const Icon(Icons.check_circle_rounded, color: Color(0xFF4CAF50), size: 20),
+                      Icon(Icons.check_circle_rounded, color: Color(0xFF4CAF50), size: 20),
                   ],
                 ),
               ),
@@ -807,7 +808,7 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
     ];
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -816,24 +817,24 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
               Expanded(
                 child: Text(
                   isEn ? 'Food & Ingredient Allergies' : 'Dị ứng món ăn & nguyên liệu',
-                  style: GoogleFonts.outfit(
-                    fontSize: 22,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 22.sp,
                     fontWeight: FontWeight.bold,
                     color: isDark ? Colors.white : const Color(0xFF006428),
                   ),
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF233629) : const Color(0xFFE8F5E9),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                   border: Border.all(color: const Color(0xFF4CAF50).withValues(alpha: 0.5)),
                 ),
                 child: Text(
                   isEn ? 'Optional' : 'Tùy chọn',
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.bold,
                     color: const Color(0xFF4CAF50),
                   ),
@@ -841,29 +842,29 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6.h),
           Text(
             isEn
                 ? 'Select ingredients you are allergic to so Friggy AI can exclude them from your recipe recommendations.'
                 : 'Chọn các nguyên liệu gây dị ứng để Friggy tự động loại trừ khỏi thực đơn và cảnh báo cho bạn.',
             style: GoogleFonts.plusJakartaSans(
-              fontSize: 13.5,
+              fontSize: 13.5.sp,
               color: isDark ? Colors.white70 : Colors.black87,
             ),
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: 18.h),
 
           // Selected Allergies Chip List
           if (_selectedAllergies.isNotEmpty) ...[
             Text(
               isEn ? 'Selected Allergies (${_selectedAllergies.length}):' : 'Danh sách đã chọn (${_selectedAllergies.length}):',
-              style: GoogleFonts.outfit(
-                fontSize: 15,
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 15.sp,
                 fontWeight: FontWeight.bold,
                 color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -871,43 +872,43 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
                 final int id = allergy['id'] as int;
                 final String name = allergy['name'] as String;
                 return Chip(
-                  avatar: const Icon(Icons.warning_amber_rounded, color: Colors.white, size: 18),
+                  avatar: Icon(Icons.warning_amber_rounded, color: Colors.white, size: 18),
                   label: Text(
                     name,
                     style: GoogleFonts.plusJakartaSans(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
-                      fontSize: 13,
+                      fontSize: 13.sp,
                     ),
                   ),
                   backgroundColor: const Color(0xFFD32F2F),
-                  deleteIcon: const Icon(Icons.cancel_rounded, color: Colors.white70, size: 18),
+                  deleteIcon: Icon(Icons.cancel_rounded, color: Colors.white70, size: 18),
                   onDeleted: () => _toggleAllergyIngredient(id, name),
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
                 );
               }).toList(),
             ),
-            const SizedBox(height: 18),
+            SizedBox(height: 18.h),
           ] else ...[
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(12.w),
               decoration: BoxDecoration(
                 color: isDark ? const Color(0xFF19271E) : const Color(0xFFF5FCF4),
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(14.r),
                 border: Border.all(color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5E69C)),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.check_circle_outline_rounded, color: Color(0xFF4CAF50), size: 20),
-                  const SizedBox(width: 10),
+                  Icon(Icons.check_circle_outline_rounded, color: Color(0xFF4CAF50), size: 20),
+                  SizedBox(width: 10.w),
                   Expanded(
                     child: Text(
                       isEn
                           ? 'No allergies selected (You can skip this if you have none).'
                           : 'Chưa chọn dị ứng nào (Bỏ qua nếu bạn không có dị ứng thực phẩm).',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 12.5,
+                        fontSize: 12.5.sp,
                         color: isDark ? Colors.white70 : const Color(0xFF2E7D32),
                         fontWeight: FontWeight.w600,
                       ),
@@ -916,19 +917,19 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 18),
+            SizedBox(height: 18.h),
           ],
 
           // Quick Popular Allergen Badges
           Text(
             isEn ? 'Common Allergens:' : 'Nguyên liệu dị ứng phổ biến:',
-            style: GoogleFonts.outfit(
-              fontSize: 15,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 15.sp,
               fontWeight: FontWeight.bold,
               color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -941,15 +942,15 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
 
               return InkWell(
                 onTap: () => _toggleQuickTag(name),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20.r),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
                   decoration: BoxDecoration(
                     color: isSelected
                         ? const Color(0xFFD32F2F)
                         : (isDark ? const Color(0xFF19271E) : Colors.white),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(20.r),
                     border: Border.all(
                       color: isSelected
                           ? const Color(0xFFD32F2F)
@@ -960,19 +961,19 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(icon, style: const TextStyle(fontSize: 16)),
-                      const SizedBox(width: 6),
+                      Text(icon, style: TextStyle(fontSize: 16)),
+                      SizedBox(width: 6.w),
                       Text(
                         name,
                         style: GoogleFonts.plusJakartaSans(
-                          fontSize: 13,
+                          fontSize: 13.sp,
                           fontWeight: FontWeight.bold,
                           color: isSelected ? Colors.white : (isDark ? Colors.white70 : Colors.black87),
                         ),
                       ),
                       if (isSelected) ...[
-                        const SizedBox(width: 4),
-                        const Icon(Icons.check_rounded, color: Colors.white, size: 16),
+                        SizedBox(width: 4.w),
+                        Icon(Icons.check_rounded, color: Colors.white, size: 16),
                       ],
                     ],
                   ),
@@ -981,18 +982,18 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
             }).toList(),
           ),
 
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
 
           // Search Field for Any Ingredient
           Text(
             isEn ? 'Search Other Ingredients:' : 'Tìm nguyên liệu khác:',
-            style: GoogleFonts.outfit(
-              fontSize: 15,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 15.sp,
               fontWeight: FontWeight.bold,
               color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           TextField(
             controller: _allergySearchController,
             onChanged: _onAllergySearchChanged,
@@ -1000,10 +1001,10 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
             decoration: InputDecoration(
               hintText: isEn ? 'Type ingredient name (e.g. Peanut, Shrimp...)' : 'Gõ tên nguyên liệu (VD: Nấm, Mực, Đậu...)',
               hintStyle: TextStyle(color: isDark ? Colors.white38 : Colors.black38, fontSize: 13),
-              prefixIcon: const Icon(Icons.search_rounded, color: Color(0xFF4CAF50)),
+              prefixIcon: Icon(Icons.search_rounded, color: Color(0xFF4CAF50)),
               suffixIcon: _allergySearchController.text.isNotEmpty
                   ? IconButton(
-                      icon: const Icon(Icons.clear_rounded, size: 18),
+                      icon: Icon(Icons.clear_rounded, size: 18),
                       onPressed: () {
                         _allergySearchController.clear();
                         _onAllergySearchChanged('');
@@ -1012,33 +1013,33 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
                   : null,
               filled: true,
               fillColor: isDark ? const Color(0xFF19271E) : Colors.white,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
                 borderSide: BorderSide(color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFE0E0E0)),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
                 borderSide: BorderSide(color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFE0E0E0)),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
                 borderSide: const BorderSide(color: Color(0xFF4CAF50), width: 1.8),
               ),
             ),
           ),
 
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
 
           // Ingredient Search Results List
           if (_isLoadingIngredients)
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(vertical: 20),
               child: Center(child: CircularProgressIndicator(color: Color(0xFF4CAF50))),
             )
           else if (_searchedIngredients.isEmpty)
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
+              padding: EdgeInsets.symmetric(vertical: 16),
               child: Center(
                 child: Text(
                   isEn ? 'No ingredients found' : 'Không tìm thấy nguyên liệu phù hợp',
@@ -1058,12 +1059,12 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
                 final isSelected = _selectedAllergies.any((a) => a['id'] == id);
 
                 return Container(
-                  margin: const EdgeInsets.only(bottom: 6),
+                  margin: EdgeInsets.only(bottom: 6.h),
                   decoration: BoxDecoration(
                     color: isSelected
                         ? (isDark ? const Color(0xFF2D1B1B) : const Color(0xFFFFEBEE))
                         : (isDark ? const Color(0xFF19271E) : Colors.white),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12.r),
                     border: Border.all(
                       color: isSelected
                           ? const Color(0xFFE53935)
@@ -1072,11 +1073,11 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
                   ),
                   child: ListTile(
                     dense: true,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 2.h),
                     title: Text(
                       name,
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
                         color: isSelected
                             ? const Color(0xFFE53935)
@@ -1084,8 +1085,8 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
                       ),
                     ),
                     trailing: isSelected
-                        ? const Icon(Icons.check_circle_rounded, color: Color(0xFFE53935), size: 22)
-                        : const Icon(Icons.add_circle_outline_rounded, color: Color(0xFF4CAF50), size: 22),
+                        ? Icon(Icons.check_circle_rounded, color: Color(0xFFE53935), size: 22)
+                        : Icon(Icons.add_circle_outline_rounded, color: Color(0xFF4CAF50), size: 22),
                     onTap: () => _toggleAllergyIngredient(id, name),
                   ),
                 );
@@ -1101,119 +1102,119 @@ class _OnboardingSurveyScreenState extends State<OnboardingSurveyScreen> {
   // --------------------------------------------------------------------------
   Widget _buildStep5Health(bool isDark, bool isEn) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             isEn ? 'Body Metrics (Optional)' : 'Chỉ số sức khỏe (Tùy chọn)',
-            style: GoogleFonts.outfit(
-              fontSize: 22,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 22.sp,
               fontWeight: FontWeight.bold,
               color: isDark ? Colors.white : const Color(0xFF006428),
             ),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6.h),
           Text(
             isEn
                 ? 'Providing your height and weight helps AI compute accurate daily calories.'
                 : 'Chiều cao & cân nặng giúp AI tính toán chính xác lượng calo phù hợp mỗi ngày cho bạn.',
             style: GoogleFonts.plusJakartaSans(
-              fontSize: 13.5,
+              fontSize: 13.5.sp,
               color: isDark ? Colors.white70 : Colors.black87,
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
 
           // Height Field
           Text(
             isEn ? 'Height (cm)' : 'Chiều cao (cm)',
-            style: GoogleFonts.outfit(
-              fontSize: 15,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 15.sp,
               fontWeight: FontWeight.bold,
               color: isDark ? Colors.white : const Color(0xFF006428),
             ),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6.h),
           TextField(
             controller: _heightController,
             keyboardType: TextInputType.number,
             style: TextStyle(color: isDark ? Colors.white : Colors.black87, fontWeight: FontWeight.bold),
             decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.height_rounded, color: Color(0xFF4CAF50)),
+              prefixIcon: Icon(Icons.height_rounded, color: Color(0xFF4CAF50)),
               filled: true,
               fillColor: isDark ? const Color(0xFF19271E) : Colors.white,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
                 borderSide: BorderSide(color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFE0E0E0)),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
                 borderSide: BorderSide(color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFE0E0E0)),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
                 borderSide: const BorderSide(color: Color(0xFF4CAF50), width: 2),
               ),
             ),
           ),
 
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
 
           // Weight Field
           Text(
             isEn ? 'Weight (kg)' : 'Cân nặng (kg)',
-            style: GoogleFonts.outfit(
-              fontSize: 15,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 15.sp,
               fontWeight: FontWeight.bold,
               color: isDark ? Colors.white : const Color(0xFF006428),
             ),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6.h),
           TextField(
             controller: _weightController,
             keyboardType: TextInputType.number,
             style: TextStyle(color: isDark ? Colors.white : Colors.black87, fontWeight: FontWeight.bold),
             decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.monitor_weight_rounded, color: Color(0xFF4CAF50)),
+              prefixIcon: Icon(Icons.monitor_weight_rounded, color: Color(0xFF4CAF50)),
               filled: true,
               fillColor: isDark ? const Color(0xFF19271E) : Colors.white,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
                 borderSide: BorderSide(color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFE0E0E0)),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
                 borderSide: BorderSide(color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFE0E0E0)),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
                 borderSide: const BorderSide(color: Color(0xFF4CAF50), width: 2),
               ),
             ),
           ),
 
-          const SizedBox(height: 30),
+          SizedBox(height: 30.h),
 
           Center(
             child: Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.w),
               decoration: BoxDecoration(
                 color: isDark ? const Color(0xFF19271E) : const Color(0xFFE8F5E9),
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
                 border: Border.all(color: const Color(0xFF4CAF50).withValues(alpha: 0.4)),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.auto_awesome_rounded, color: Color(0xFF4CAF50)),
-                  const SizedBox(width: 12),
+                  Icon(Icons.auto_awesome_rounded, color: Color(0xFF4CAF50)),
+                  SizedBox(width: 12.w),
                   Expanded(
                     child: Text(
                       isEn
                           ? 'All set! Tap the button below to finish onboarding.'
                           : 'Tất cả đã sẵn sàng! Bấm nút bên dưới để hoàn tất khảo sát.',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 13,
+                        fontSize: 13.sp,
                         fontWeight: FontWeight.w600,
                         color: isDark ? Colors.white70 : const Color(0xFF1B5E20),
                       ),

@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../l10n/app_localizations.dart';
 import 'friggy_app_bar.dart';
@@ -24,7 +25,7 @@ class HomeHeader extends StatelessWidget {
     final isEn = loc?.locale.languageCode == 'en';
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+      padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 12.0.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -35,14 +36,14 @@ class HomeHeader extends StatelessWidget {
             onNotificationTap: onNotificationTap,
           ),
 
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
 
           // Search Bar Input Field
           Container(
             height: 52,
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF19271E) : Colors.white,
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(18.r),
               border: Border.all(
                 color: isDark
                     ? const Color(0xFF2E4D36)
@@ -62,23 +63,23 @@ class HomeHeader extends StatelessWidget {
               onChanged: onSearchChanged,
               textAlignVertical: TextAlignVertical.center,
               style: GoogleFonts.plusJakartaSans(
-                fontSize: 15,
+                fontSize: 15.sp,
                 color: isDark ? Colors.white : const Color(0xFF19221C),
                 fontWeight: FontWeight.w600,
               ),
               decoration: InputDecoration(
                 isCollapsed: true,
-                contentPadding: const EdgeInsets.symmetric(vertical: 14.0),
+                contentPadding: EdgeInsets.symmetric(vertical: 14.0),
                 hintText: isEn
                     ? 'Search ingredients, dishes, recipes...'
                     : 'Tìm nguyên liệu, món ăn, công thức...',
                 hintStyle: GoogleFonts.plusJakartaSans(
-                  fontSize: 14.5,
+                  fontSize: 14.5.sp,
                   color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF757575),
                   fontWeight: FontWeight.w400,
                 ),
                 prefixIcon: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                  padding: EdgeInsets.symmetric(horizontal: 14.0),
                   child: Icon(
                     Icons.search_rounded,
                     color: isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32),

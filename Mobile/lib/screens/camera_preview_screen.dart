@@ -1,5 +1,6 @@
-import 'dart:io';
+﻿import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -55,38 +56,38 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
               child: Container(
                 width: double.infinity,
                 height: double.infinity,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: Color(0xFF19221C),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(24),
+                      padding: EdgeInsets.all(24.w),
                       decoration: BoxDecoration(
                         color: const Color(0xFF4CAF50).withValues(alpha: 0.15),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.camera_alt_rounded,
                         color: Color(0xFF4CAF50),
                         size: 64,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16.h),
                     Text(
                       'Camera Ống Kính Thực Tế',
-                      style: GoogleFonts.outfit(
-                        fontSize: 20,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 20.sp,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6.h),
                     Text(
                       'Bấm nút bên dưới để chụp ảnh gửi vào cuộc trò chuyện',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 13,
+                        fontSize: 13.sp,
                         color: Colors.white70,
                       ),
                       textAlign: TextAlign.center,
@@ -98,9 +99,9 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
 
             // Top Header: Close X Button & Flash Toggle
             Positioned(
-              top: 16,
-              left: 16,
-              right: 16,
+              top: 16.h,
+              left: 16.w,
+              right: 16.w,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -108,13 +109,13 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
                   GestureDetector(
                     onTap: () => Navigator.pop(context, null),
                     child: Container(
-                      padding: const EdgeInsets.all(10),
+                      padding: EdgeInsets.all(10.w),
                       decoration: BoxDecoration(
                         color: Colors.black.withValues(alpha: 0.5),
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.white24, width: 1),
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.close_rounded,
                         color: Colors.white,
                         size: 26,
@@ -130,7 +131,7 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
                       });
                     },
                     child: Container(
-                      padding: const EdgeInsets.all(10),
+                      padding: EdgeInsets.all(10.w),
                       decoration: BoxDecoration(
                         color: Colors.black.withValues(alpha: 0.5),
                         shape: BoxShape.circle,
@@ -153,9 +154,9 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
 
             // Bottom Shutter Action Bar
             Positioned(
-              bottom: 30,
-              left: 0,
-              right: 0,
+              bottom: 30.h,
+              left: 0.w,
+              right: 0.w,
               child: Column(
                 children: [
                   Row(
@@ -163,7 +164,7 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
                     children: [
                       // Exit Text / Hint
                       IconButton(
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.photo_library_outlined,
                           color: Colors.white,
                           size: 28,
@@ -177,7 +178,7 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
                         child: Container(
                           width: 76,
                           height: 76,
-                          padding: const EdgeInsets.all(4),
+                          padding: EdgeInsets.all(4.w),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
@@ -186,13 +187,13 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
                             ),
                           ),
                           child: Container(
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                               color: Colors.white,
                               shape: BoxShape.circle,
                             ),
                             child: _isCapturing
-                                ? const Padding(
-                                    padding: EdgeInsets.all(16.0),
+                                ? Padding(
+                                    padding: EdgeInsets.all(16.0.w),
                                     child: CircularProgressIndicator(
                                       color: Color(0xFF4CAF50),
                                       strokeWidth: 3,
@@ -205,7 +206,7 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
 
                       // Flip Camera Button
                       IconButton(
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.flip_camera_ios_outlined,
                           color: Colors.white,
                           size: 28,
@@ -218,11 +219,11 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16.h),
                   Text(
                     'Chạm nút tròn để chụp • Chạm ✕ góc trên để thoát',
                     style: GoogleFonts.plusJakartaSans(
-                      fontSize: 12,
+                      fontSize: 12.sp,
                       fontWeight: FontWeight.w500,
                       color: Colors.white60,
                     ),

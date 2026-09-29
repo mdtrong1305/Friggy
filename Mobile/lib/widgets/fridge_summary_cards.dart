@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../data/models/fridge_summary_model.dart';
 import '../l10n/app_localizations.dart';
@@ -58,7 +59,7 @@ class FridgeSummaryCards extends StatelessWidget {
     final availableButtonBg = isDark ? const Color(0xFF233629) : const Color(0xFFC8E6C9).withValues(alpha: 0.90);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: IntrinsicHeight(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -79,7 +80,7 @@ class FridgeSummaryCards extends StatelessWidget {
                 onTap: onExpiringTap,
               ),
             ),
-            const SizedBox(width: 14),
+            SizedBox(width: 14.w),
 
             // Right Card: Available Ingredients
             Expanded(
@@ -138,18 +139,18 @@ class _SummaryCard extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(24),
+      borderRadius: BorderRadius.circular(24.r),
       splashColor: titleColor.withValues(alpha: 0.10),
       highlightColor: titleColor.withValues(alpha: 0.05),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 12.0),
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: gradientColors,
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(24.r),
           border: Border.all(
             color: borderColor,
             width: 1.2,
@@ -165,35 +166,35 @@ class _SummaryCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Mascot 3D Image Asset (76px for optimal fitting)
+            // Mascot 3D Image Asset
             SizedBox(
-              height: 76,
+              height: 76.h,
               child: Image.asset(
                 imagePath,
                 fit: BoxFit.contain,
               ),
             ),
 
-            const SizedBox(height: 4),
+            SizedBox(height: 4.h),
 
             // Content Block
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Card Title (13.5px)
+                // Card Title
                 Text(
                   title,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 13.5,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w800,
                     color: titleColor,
                     height: 1.15,
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2.h),
 
-                // Count Metric + Unit (26px)
+                // Count Metric + Unit
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -202,16 +203,16 @@ class _SummaryCard extends StatelessWidget {
                     Text(
                       '$count',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 26,
+                        fontSize: 24.sp,
                         fontWeight: FontWeight.w900,
                         color: titleColor,
                       ),
                     ),
-                    const SizedBox(width: 4),
+                    SizedBox(width: 4.w),
                     Text(
                       isEn ? 'items' : 'món',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 13,
+                        fontSize: 11.sp,
                         fontWeight: FontWeight.w600,
                         color: countUnitColor,
                       ),
@@ -221,30 +222,35 @@ class _SummaryCard extends StatelessWidget {
               ],
             ),
 
-            const SizedBox(height: 6),
+            SizedBox(height: 6.h),
 
-            // Pill Action Button (Centered at bottom)
+            // Pill Action Button - full width để 2 cards đồng đều
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7.5),
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 7.h),
               decoration: BoxDecoration(
                 color: buttonBgColor,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20.r),
               ),
               child: Row(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text(
-                    buttonText,
-                    style: GoogleFonts.plusJakartaSans(
-                      fontSize: 12.5,
-                      fontWeight: FontWeight.w800,
-                      color: buttonTextColor,
+                  Flexible(
+                    child: Text(
+                      buttonText,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 11.sp,
+                        fontWeight: FontWeight.w800,
+                        color: buttonTextColor,
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 3),
+                  SizedBox(width: 2.w),
                   Icon(
                     Icons.chevron_right_rounded,
-                    size: 16,
+                    size: 14.sp,
                     color: buttonTextColor,
                   ),
                 ],

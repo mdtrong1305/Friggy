@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../config/app_constants.dart';
 import '../data/models/recipe_model.dart';
@@ -103,7 +104,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
       return Image.asset(
         cleanPath,
         width: double.infinity,
-        height: 220,
+        height: 220.h,
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
       );
@@ -113,7 +114,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
       return Image.network(
         fullUrl,
         width: double.infinity,
-        height: 220,
+        height: 220.h,
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
       );
@@ -184,32 +185,32 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4.h),
                       if (hasImage) ...[
                         Stack(
                           children: [
                             ClipRRect(
-                              borderRadius: BorderRadius.circular(24),
+                              borderRadius: BorderRadius.circular(24.r),
                               child: _buildRecipeImage(_recipe.imagePath, isDark),
                             ),
                             if (matchText.isNotEmpty)
                               Positioned(
-                                top: 14,
-                                right: 14,
+                                top: 14.h,
+                                right: 14.w,
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 6,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 12.w,
+                                    vertical: 6.h,
                                   ),
                                   decoration: BoxDecoration(
                                     color: isDark
                                         ? const Color(0xFF233629)
                                         : const Color(0xFFDCEDC8),
-                                    borderRadius: BorderRadius.circular(20),
+                                    borderRadius: BorderRadius.circular(20.r),
                                     border: isDark
                                         ? Border.all(
                                             color: const Color(0xFF2E4D36),
@@ -232,13 +233,13 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                         color: isDark
                                             ? const Color(0xFF81C784)
                                             : const Color(0xFF006428),
-                                        size: 18,
+                                        size: 18.sp,
                                       ),
-                                      const SizedBox(width: 5),
+                                      SizedBox(width: 5.w),
                                       Text(
                                         matchText,
-                                        style: GoogleFonts.outfit(
-                                          fontSize: 13.5,
+                                        style: GoogleFonts.plusJakartaSans(
+                                          fontSize: 13.5.sp,
                                           fontWeight: FontWeight.w900,
                                           color: isDark
                                               ? const Color(0xFF81C784)
@@ -251,7 +252,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                               ),
                           ],
                         ),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16.h),
                       ],
                       // Title
                       Row(
@@ -260,25 +261,25 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                           Expanded(
                             child: Text(
                               _recipe.safeTitle,
-                              style: GoogleFonts.outfit(
-                                fontSize: 24,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 24.sp,
                                 fontWeight: FontWeight.w900,
                                 color: isDark ? Colors.white : const Color(0xFF006428),
                               ),
                             ),
                           ),
                           if (!hasImage && matchText.isNotEmpty) ...[
-                            const SizedBox(width: 10),
+                            SizedBox(width: 10.w),
                             Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 6,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 12.w,
+                                vertical: 6.h,
                               ),
                               decoration: BoxDecoration(
                                 color: isDark
                                     ? const Color(0xFF233629)
                                     : const Color(0xFFDCEDC8),
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(20.r),
                                 border: isDark
                                     ? Border.all(
                                         color: const Color(0xFF2E4D36),
@@ -293,13 +294,13 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                     color: isDark
                                         ? const Color(0xFF81C784)
                                         : const Color(0xFF006428),
-                                    size: 18,
+                                    size: 18.sp,
                                   ),
-                                  const SizedBox(width: 5),
+                                  SizedBox(width: 5.w),
                                   Text(
                                     matchText,
-                                    style: GoogleFonts.outfit(
-                                      fontSize: 13.5,
+                                    style: GoogleFonts.plusJakartaSans(
+                                      fontSize: 13.5.sp,
                                       fontWeight: FontWeight.w900,
                                       color: isDark
                                           ? const Color(0xFF81C784)
@@ -312,16 +313,16 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                           ],
                         ],
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 16,
-                          horizontal: 12,
+                        padding: EdgeInsets.symmetric(
+                          vertical: 16.h,
+                          horizontal: 12.w,
                         ),
                         decoration: BoxDecoration(
                           color:
                               isDark ? const Color(0xFF19271E) : Colors.white,
-                          borderRadius: BorderRadius.circular(24),
+                          borderRadius: BorderRadius.circular(24.r),
                           border: isDark
                               ? Border.all(
                                   color: const Color(0xFF2E4D36), width: 1)
@@ -346,24 +347,27 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                     color: isDark
                                         ? const Color(0xFF81C784)
                                         : const Color(0xFF2E7D32),
-                                    size: 22,
+                                    size: 22.sp,
                                   ),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    timeText,
-                                    style: GoogleFonts.plusJakartaSans(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w700,
-                                      color: isDark
-                                          ? const Color(0xFF81C784)
-                                          : const Color(0xFF2E7D32),
+                                  SizedBox(width: 6.w),
+                                  Flexible(
+                                    child: Text(
+                                      timeText,
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 13.sp,
+                                        fontWeight: FontWeight.w700,
+                                        color: isDark
+                                            ? const Color(0xFF81C784)
+                                            : const Color(0xFF2E7D32),
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                             Container(
-                              height: 28,
+                              height: 28.h,
                               width: 1,
                               color: isDark
                                   ? const Color(0xFF2E4D36)
@@ -378,24 +382,27 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                     color: isDark
                                         ? const Color(0xFF81C784)
                                         : const Color(0xFF2E7D32),
-                                    size: 22,
+                                    size: 22.sp,
                                   ),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    diffText,
-                                    style: GoogleFonts.plusJakartaSans(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w700,
-                                      color: isDark
-                                          ? const Color(0xFF81C784)
-                                          : const Color(0xFF2E7D32),
+                                  SizedBox(width: 6.w),
+                                  Flexible(
+                                    child: Text(
+                                      diffText,
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 13.sp,
+                                        fontWeight: FontWeight.w700,
+                                        color: isDark
+                                            ? const Color(0xFF81C784)
+                                            : const Color(0xFF2E7D32),
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                             Container(
-                              height: 28,
+                              height: 28.h,
                               width: 1,
                               color: isDark
                                   ? const Color(0xFF2E4D36)
@@ -410,17 +417,20 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                     color: isDark
                                         ? const Color(0xFF81C784)
                                         : const Color(0xFF2E7D32),
-                                    size: 22,
+                                    size: 22.sp,
                                   ),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    servingsText,
-                                    style: GoogleFonts.plusJakartaSans(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w700,
-                                      color: isDark
-                                          ? const Color(0xFF81C784)
-                                          : const Color(0xFF2E7D32),
+                                  SizedBox(width: 6.w),
+                                  Flexible(
+                                    child: Text(
+                                      servingsText,
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 13.sp,
+                                        fontWeight: FontWeight.w700,
+                                        color: isDark
+                                            ? const Color(0xFF81C784)
+                                            : const Color(0xFF2E7D32),
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ],
@@ -429,18 +439,18 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16.h),
                       Container(
                         width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14.0,
-                          vertical: 12.0,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 14.w,
+                          vertical: 12.h,
                         ),
                         decoration: BoxDecoration(
                           color: isDark
                               ? const Color(0xFF19271E)
                               : const Color(0xFFEAF5E1),
-                          borderRadius: BorderRadius.circular(24),
+                          borderRadius: BorderRadius.circular(24.r),
                           border: Border.all(
                             color: isDark
                                 ? const Color(0xFF2E4D36)
@@ -452,8 +462,8 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             SizedBox(
-                              width: 76,
-                              height: 76,
+                              width: 76.w,
+                              height: 76.h,
                               child: ClipRect(
                                 child: Transform.scale(
                                   scale: 1.85,
@@ -463,7 +473,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                     errorBuilder: (context, error, stackTrace) {
                                       return Icon(
                                         Icons.face_rounded,
-                                        size: 60,
+                                        size: 60.sp,
                                         color: isDark
                                             ? const Color(0xFF81C784)
                                             : const Color(0xFF4CAF50),
@@ -473,12 +483,12 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 12),
+                            SizedBox(width: 12.w),
                             Expanded(
                               child: Text(
                                 '"$friggyTip"',
                                 style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 14.5,
+                                  fontSize: 13.5.sp,
                                   fontWeight: FontWeight.w700,
                                   color: isDark
                                       ? const Color(0xFFD0D7D1)
@@ -490,14 +500,14 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             isEn ? 'Ingredients' : 'Nguyên liệu',
-                            style: GoogleFonts.outfit(
-                              fontSize: 20,
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 20.sp,
                               fontWeight: FontWeight.w900,
                               color: isDark
                                   ? Colors.white
@@ -517,15 +527,15 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                     : (isDark
                                         ? const Color(0xFFFFB74D)
                                         : const Color(0xFFE65100)),
-                                size: 18,
+                                size: 18.sp,
                               ),
-                              const SizedBox(width: 6),
+                              SizedBox(width: 6.w),
                               Text(
                                 allAvailable
                                     ? (isEn ? 'You have enough' : 'Bạn đã có đủ')
                                     : (isEn ? 'Some missing' : 'Còn thiếu nguyên liệu'),
                                 style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 13.5,
+                                  fontSize: 12.sp,
                                   fontWeight: FontWeight.w700,
                                   color: allAvailable
                                       ? (isDark
@@ -540,19 +550,19 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
                       ...detailedIngredients.map((ingredient) {
                         final ingName = _translateIngredientName(ingredient.name, isEn);
                         final ingQty = _translateQuantity(ingredient.quantity, isEn);
                         final isAvail = ingredient.isAvailable;
 
                         return Container(
-                          margin: const EdgeInsets.only(bottom: 12),
+                          margin: EdgeInsets.only(bottom: 12.h),
                           decoration: BoxDecoration(
                             color: isDark
                                 ? const Color(0xFF19271E)
                                 : Colors.white,
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(20.r),
                             border: isDark
                                 ? Border.all(
                                     color: const Color(0xFF2E4D36), width: 1)
@@ -567,7 +577,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                             ],
                           ),
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(20.r),
                             child: Container(
                               decoration: BoxDecoration(
                                 border: ingredient.isExpiringSoon
@@ -579,20 +589,20 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                       )
                                     : null,
                               ),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 14,
-                                vertical: 12,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 14.w,
+                                vertical: 12.h,
                               ),
                               child: Row(
                                 children: [
                                   Container(
-                                    width: 42,
-                                    height: 42,
+                                    width: 42.w,
+                                    height: 42.w,
                                     decoration: BoxDecoration(
                                       color: isDark
                                           ? const Color(0xFF233629)
                                           : const Color(0xFFF5F8F2),
-                                      borderRadius: BorderRadius.circular(14),
+                                      borderRadius: BorderRadius.circular(14.r),
                                     ),
                                     child: Icon(
                                       _getIngredientIcon(ingredient.name),
@@ -607,10 +617,10 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                               : (isDark
                                                   ? const Color(0xFF9DA8A0)
                                                   : const Color(0xFF757575))),
-                                      size: 22,
+                                      size: 22.sp,
                                     ),
                                   ),
-                                  const SizedBox(width: 14),
+                                  SizedBox(width: 14.w),
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
@@ -618,19 +628,19 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                       children: [
                                         Text(
                                           ingName,
-                                          style: GoogleFonts.outfit(
-                                            fontSize: 16,
+                                          style: GoogleFonts.plusJakartaSans(
+                                            fontSize: 15.sp,
                                             fontWeight: FontWeight.w800,
                                             color: isDark
                                                 ? Colors.white
                                                 : const Color(0xFF19221C),
                                           ),
                                         ),
-                                        const SizedBox(height: 2),
+                                        SizedBox(height: 2.h),
                                         Text(
                                           ingQty,
                                           style: GoogleFonts.plusJakartaSans(
-                                            fontSize: 13,
+                                            fontSize: 12.sp,
                                             fontWeight: FontWeight.w600,
                                             color: isDark
                                                 ? const Color(0xFF9DA8A0)
@@ -644,9 +654,9 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 10,
-                                          vertical: 4,
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 10.w,
+                                          vertical: 4.h,
                                         ),
                                         decoration: BoxDecoration(
                                           color: isAvail
@@ -657,14 +667,14 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                                   ? const Color(0xFF332B1E)
                                                   : const Color(0xFFFFF3E0)),
                                           borderRadius:
-                                              BorderRadius.circular(12),
+                                              BorderRadius.circular(12.r),
                                         ),
                                         child: Text(
                                           isAvail
                                               ? (isEn ? 'In stock' : 'Đã có')
                                               : (isEn ? 'Missing' : 'Còn thiếu'),
                                           style: GoogleFonts.plusJakartaSans(
-                                            fontSize: 12,
+                                            fontSize: 11.sp,
                                             fontWeight: FontWeight.w800,
                                             color: isAvail
                                                 ? (isDark
@@ -677,11 +687,11 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                         ),
                                       ),
                                       if (ingredient.isExpiringSoon) ...[
-                                        const SizedBox(height: 3),
+                                        SizedBox(height: 3.h),
                                         Text(
                                           isEn ? 'Expiring soon' : 'Sắp hết hạn',
                                           style: GoogleFonts.plusJakartaSans(
-                                            fontSize: 11,
+                                            fontSize: 11.sp,
                                             fontWeight: FontWeight.w800,
                                             color: isDark
                                                 ? const Color(0xFFFF8A80)
@@ -697,18 +707,18 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                           ),
                         );
                       }),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20.h),
                       Text(
                         isEn ? 'Instructions' : 'Cách chế biến',
-                        style: GoogleFonts.outfit(
-                          fontSize: 20,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 20.sp,
                           fontWeight: FontWeight.w900,
                           color: isDark
                               ? Colors.white
                               : const Color(0xFF006428),
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16.h),
                       ...List.generate(steps.length, (index) {
                         final isLast = index == steps.length - 1;
                         final stepText = _translateStep(steps[index], isEn);
@@ -719,8 +729,8 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                               Column(
                                 children: [
                                   Container(
-                                    width: 32,
-                                    height: 32,
+                                    width: 32.w,
+                                    height: 32.w,
                                     decoration: BoxDecoration(
                                       color: isDark
                                           ? const Color(0xFF233629)
@@ -730,8 +740,8 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                     child: Center(
                                       child: Text(
                                         '${index + 1}',
-                                        style: GoogleFonts.outfit(
-                                          fontSize: 15,
+                                        style: GoogleFonts.plusJakartaSans(
+                                          fontSize: 15.sp,
                                           fontWeight: FontWeight.w900,
                                           color: isDark
                                               ? const Color(0xFF81C784)
@@ -751,17 +761,17 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                     ),
                                 ],
                               ),
-                              const SizedBox(width: 14),
+                              SizedBox(width: 14.w),
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 16.0),
+                                  padding: EdgeInsets.only(bottom: 16.h),
                                   child: Container(
-                                    padding: const EdgeInsets.all(14),
+                                    padding: EdgeInsets.all(14.w),
                                     decoration: BoxDecoration(
                                       color: isDark
                                           ? const Color(0xFF19271E)
                                           : Colors.white,
-                                      borderRadius: BorderRadius.circular(18),
+                                      borderRadius: BorderRadius.circular(18.r),
                                       border: isDark
                                           ? Border.all(
                                               color: const Color(0xFF2E4D36),
@@ -779,7 +789,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                                     child: Text(
                                       stepText,
                                       style: GoogleFonts.plusJakartaSans(
-                                        fontSize: 14,
+                                        fontSize: 13.5.sp,
                                         fontWeight: FontWeight.w600,
                                         color: isDark
                                             ? Colors.white
@@ -794,7 +804,7 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                           ),
                         );
                       }),
-                      const SizedBox(height: 30),
+                      SizedBox(height: 30.h),
                     ],
                   ),
                 ),

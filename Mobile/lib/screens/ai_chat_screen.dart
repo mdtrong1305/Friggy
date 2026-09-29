@@ -1,5 +1,6 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../data/models/ai_chat_model.dart';
 import '../data/services/ai_chat_service.dart';
@@ -155,7 +156,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
         final isDark = Theme.of(ctx).brightness == Brightness.dark;
         return AlertDialog(
           backgroundColor: isDark ? const Color(0xFF19271E) : Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
           title: Text(
             'Xóa phiên trò chuyện?',
             style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.bold),
@@ -175,7 +176,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red[600],
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
               ),
               onPressed: () => Navigator.of(ctx).pop(true),
               child: Text(
@@ -395,12 +396,12 @@ class _AiChatScreenState extends State<AiChatScreen> {
               color: const Color(0xFFFFD54F),
               size: 20,
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8.w),
             Expanded(
               child: Text(
                 message,
                 style: GoogleFonts.plusJakartaSans(
-                  fontSize: 13,
+                  fontSize: 13.sp,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
                 ),
@@ -410,8 +411,8 @@ class _AiChatScreenState extends State<AiChatScreen> {
         ),
         backgroundColor: const Color(0xFF006428),
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        margin: const EdgeInsets.all(16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        margin: EdgeInsets.all(16.w),
         action: isLimitError
             ? SnackBarAction(
                 label: 'Nâng cấp',
@@ -466,7 +467,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
 
   Widget _buildHeader(bool isDark, bool isEn) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
       decoration: BoxDecoration(
         color: Colors.transparent, // Seamless green background!
         border: Border(
@@ -482,8 +483,8 @@ class _AiChatScreenState extends State<AiChatScreen> {
           Container(
             width: 44,
             height: 44,
-            padding: const EdgeInsets.all(2),
-            decoration: const BoxDecoration(
+            padding: EdgeInsets.all(2.w),
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: LinearGradient(
                 colors: [Color(0xFF81C784), Color(0xFF008435)],
@@ -492,7 +493,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
             child: CircleAvatar(
               backgroundColor: isDark ? const Color(0xFF19271E) : Colors.white,
               child: Padding(
-                padding: const EdgeInsets.all(2.0),
+                padding: EdgeInsets.all(2.0.w),
                 child: Image.asset(
                   'assets/images/cute_mascot.png',
                   fit: BoxFit.contain,
@@ -504,7 +505,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
 
           // Title & Status
           Expanded(
@@ -514,7 +515,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
                 RichText(
                   text: TextSpan(
                     style: GoogleFonts.plusJakartaSans(
-                      fontSize: 20,
+                      fontSize: 20.sp,
                       fontWeight: FontWeight.bold,
                     ),
                     children: [
@@ -540,7 +541,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     color: isDark ? Colors.grey[400] : const Color(0xFF55775A),
                   ),
                 ),
@@ -573,10 +574,10 @@ class _AiChatScreenState extends State<AiChatScreen> {
   Widget _buildWelcomeState(bool isDark) {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
       child: Column(
         children: [
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
           // Giant Mascot Card
           Container(
             width: 100,
@@ -585,7 +586,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
               shape: BoxShape.circle,
               color: const Color(0xFF008435).withValues(alpha: 0.12),
             ),
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(16.w),
             child: Image.asset(
               'assets/images/cute_mascot.png',
               fit: BoxFit.contain,
@@ -596,27 +597,27 @@ class _AiChatScreenState extends State<AiChatScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           Text(
             'Xin chào! Tớ là Đầu Bếp AI Friggy 🧑‍🍳',
             textAlign: TextAlign.center,
             style: GoogleFonts.plusJakartaSans(
-              fontSize: 18,
+              fontSize: 18.sp,
               fontWeight: FontWeight.bold,
               color: isDark ? Colors.white : const Color(0xFF19221C),
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Text(
             'Hỏi tớ bất kỳ món ăn nào, gợi ý thực đơn tuần hoặc cách tận dụng thực phẩm còn trong tủ lạnh nhé!',
             textAlign: TextAlign.center,
             style: GoogleFonts.plusJakartaSans(
-              fontSize: 13.5,
+              fontSize: 13.5.sp,
               color: isDark ? Colors.grey[400] : const Color(0xFF4A684F),
               height: 1.4,
             ),
           ),
-          const SizedBox(height: 28),
+          SizedBox(height: 28.h),
 
           // Suggested Prompt Chips Header
           Align(
@@ -624,27 +625,27 @@ class _AiChatScreenState extends State<AiChatScreen> {
             child: Text(
               'Gợi ý câu hỏi phổ biến:',
               style: GoogleFonts.plusJakartaSans(
-                fontSize: 13,
+                fontSize: 13.sp,
                 fontWeight: FontWeight.w700,
                 color: const Color(0xFF008435),
               ),
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
 
           // Chips List
           ..._suggestedPrompts.map(
             (prompt) => Container(
               width: double.infinity,
-              margin: const EdgeInsets.only(bottom: 10),
+              margin: EdgeInsets.only(bottom: 10.h),
               child: InkWell(
                 onTap: () => _sendMessage(prompt),
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                   decoration: BoxDecoration(
                     color: isDark ? const Color(0xFF19271E) : Colors.white,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(16.r),
                     border: Border.all(
                       color: isDark ? const Color(0xFF2E4D36) : const Color(0xFF81C784),
                       width: 1.2,
@@ -663,7 +664,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
                         child: Text(
                           prompt,
                           style: GoogleFonts.plusJakartaSans(
-                            fontSize: 13.5,
+                            fontSize: 13.5.sp,
                             fontWeight: FontWeight.w600,
                             color: isDark ? Colors.white : const Color(0xFF19221C),
                           ),
@@ -688,7 +689,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
   Widget _buildMessagesList(bool isDark) {
     return ListView.builder(
       controller: _scrollController,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       physics: const BouncingScrollPhysics(),
       itemCount: _messages.length,
       itemBuilder: (ctx, index) {
@@ -701,7 +702,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
 
   Widget _buildMessageItem(AiMessageModel msg, bool isUser, bool isDark) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: EdgeInsets.only(bottom: 16.h),
       child: Row(
         mainAxisAlignment: isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -711,7 +712,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
               radius: 16,
               backgroundColor: const Color(0xFF008435).withValues(alpha: 0.15),
               child: Padding(
-                padding: const EdgeInsets.all(2.0),
+                padding: EdgeInsets.all(2.0.w),
                 child: Image.asset(
                   'assets/images/cute_mascot.png',
                   fit: BoxFit.contain,
@@ -723,14 +724,14 @@ class _AiChatScreenState extends State<AiChatScreen> {
                 ),
               ),
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8.w),
           ],
           Flexible(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
               decoration: BoxDecoration(
                 gradient: isUser
-                    ? const LinearGradient(
+                    ? LinearGradient(
                         colors: [Color(0xFF008435), Color(0xFF0F5A24)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -740,8 +741,8 @@ class _AiChatScreenState extends State<AiChatScreen> {
                     ? null
                     : (isDark ? const Color(0xFF19271E) : Colors.white),
                 borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(18),
-                  topRight: const Radius.circular(18),
+                  topLeft: Radius.circular(18.r),
+                  topRight: Radius.circular(18.r),
                   bottomLeft: Radius.circular(isUser ? 18 : 4),
                   bottomRight: Radius.circular(isUser ? 4 : 18),
                 ),
@@ -767,7 +768,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
                         ? 'AI Friggy đang suy nghĩ...'
                         : msg.content,
                     style: GoogleFonts.plusJakartaSans(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       height: 1.45,
                       color: isUser
                           ? Colors.white
@@ -775,7 +776,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
                     ),
                   ),
                   if (msg.isStreaming) ...[
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6.h),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -787,11 +788,11 @@ class _AiChatScreenState extends State<AiChatScreen> {
                             color: Color(0xFF008435),
                           ),
                         ),
-                        const SizedBox(width: 6),
+                        SizedBox(width: 6.w),
                         Text(
                           'Đang trả lời...',
                           style: GoogleFonts.plusJakartaSans(
-                            fontSize: 11,
+                            fontSize: 11.sp,
                             fontStyle: FontStyle.italic,
                             color: const Color(0xFF008435),
                           ),
@@ -803,7 +804,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
               ),
             ),
           ),
-          if (isUser) const SizedBox(width: 8),
+          if (isUser) SizedBox(width: 8.w),
         ],
       ),
     );
@@ -811,8 +812,8 @@ class _AiChatScreenState extends State<AiChatScreen> {
 
   Widget _buildInputBar(bool isDark) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      decoration: const BoxDecoration(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+      decoration: BoxDecoration(
         color: Colors.transparent,
       ),
       child: Row(
@@ -821,7 +822,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
             child: Container(
               decoration: BoxDecoration(
                 color: isDark ? const Color(0xFF19271E) : Colors.white,
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(24.r),
                 border: Border.all(
                   color: isDark ? const Color(0xFF2E4D36) : const Color(0xFF81C784),
                   width: 1.2,
@@ -838,17 +839,17 @@ class _AiChatScreenState extends State<AiChatScreen> {
                 controller: _inputController,
                 onSubmitted: (_) => _sendMessage(),
                 style: GoogleFonts.plusJakartaSans(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   color: isDark ? Colors.white : const Color(0xFF19221C),
                 ),
                 decoration: InputDecoration(
                   hintText: 'Hỏi Đầu Bếp AI Friggy...',
                   hintStyle: GoogleFonts.plusJakartaSans(
-                    fontSize: 13.5,
+                    fontSize: 13.5.sp,
                     color: isDark ? Colors.grey[500] : const Color(0xFF7A9E7F),
                   ),
                   border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(
+                  contentPadding: EdgeInsets.symmetric(
                     horizontal: 18,
                     vertical: 11,
                   ),
@@ -856,12 +857,12 @@ class _AiChatScreenState extends State<AiChatScreen> {
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10.w),
 
           // Send Button
           InkWell(
             onTap: _isGenerating ? null : () => _sendMessage(),
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(24.r),
             child: Container(
               width: 44,
               height: 44,
@@ -869,7 +870,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
                 shape: BoxShape.circle,
                 gradient: _isGenerating
                     ? LinearGradient(colors: [Colors.grey[400]!, Colors.grey[600]!])
-                    : const LinearGradient(
+                    : LinearGradient(
                         colors: [Color(0xFF81C784), Color(0xFF008435)],
                       ),
                 boxShadow: [
@@ -897,12 +898,12 @@ class _AiChatScreenState extends State<AiChatScreen> {
     showModalBottomSheet(
       context: context,
       backgroundColor: isDark ? const Color(0xFF142419) : Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
       ),
       builder: (ctx) {
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
           height: 380,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -913,11 +914,11 @@ class _AiChatScreenState extends State<AiChatScreen> {
                   height: 4,
                   decoration: BoxDecoration(
                     color: Colors.grey[400],
-                    borderRadius: BorderRadius.circular(2),
+                    borderRadius: BorderRadius.circular(2.r),
                   ),
                 ),
               ),
-              const SizedBox(height: 14),
+              SizedBox(height: 14.h),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -925,7 +926,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
                   Text(
                     'Lịch sử trò chuyện',
                     style: GoogleFonts.plusJakartaSans(
-                      fontSize: 18,
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                       color: isDark ? Colors.white : const Color(0xFF19221C),
                     ),
@@ -946,7 +947,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10.h),
 
               Expanded(
                 child: _sessions.isEmpty
@@ -965,12 +966,12 @@ class _AiChatScreenState extends State<AiChatScreen> {
                           final isSelected = _currentSession?.id == session.id;
 
                           return Container(
-                            margin: const EdgeInsets.only(bottom: 8),
+                            margin: EdgeInsets.only(bottom: 8.h),
                             decoration: BoxDecoration(
                               color: isSelected
                                   ? const Color(0xFF008435).withValues(alpha: 0.12)
                                   : (isDark ? const Color(0xFF19271E) : const Color(0xFFF5F5F5)),
-                              borderRadius: BorderRadius.circular(14),
+                              borderRadius: BorderRadius.circular(14.r),
                               border: Border.all(
                                 color: isSelected
                                     ? const Color(0xFF008435)
@@ -997,7 +998,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
                               subtitle: Text(
                                 '${session.messageCount} tin nhắn',
                                 style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 12,
+                                  fontSize: 12.sp,
                                   color: Colors.grey[500],
                                 ),
                               ),

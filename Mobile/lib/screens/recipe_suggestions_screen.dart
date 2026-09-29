@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/cooking_suggestions_section.dart';
@@ -48,30 +49,30 @@ class RecipeSuggestionsScreen extends StatelessWidget {
                 showBackButton: true,
               ),
 
-              const SizedBox(height: 12),
+              SizedBox(height: 12.h),
 
               // Title Section
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       isEn ? 'AI Recipe Suggestions' : 'Gợi Ý Món Ăn AI',
-                      style: GoogleFonts.outfit(
-                        fontSize: 28,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 28.sp,
                         fontWeight: FontWeight.w900,
                         color: isDark ? Colors.white : const Color(0xFF006428),
                         letterSpacing: -0.3,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2.h),
                     Text(
                       isEn
                           ? 'Prioritizing expiring ingredients'
                           : 'Ưu tiên giải cứu nguyên liệu sắp hết hạn',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 13.5,
+                        fontSize: 13.5.sp,
                         fontWeight: FontWeight.w600,
                         color: isDark
                             ? const Color(0xFF81C784)
@@ -82,13 +83,13 @@ class RecipeSuggestionsScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
 
               // Reusable Cooking Suggestions Section (Exact same widget as Home Screen)
-              const Expanded(
+              Expanded(
                 child: SingleChildScrollView(
                   physics: BouncingScrollPhysics(),
-                  padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                  padding: EdgeInsets.symmetric(horizontal: 16.0.w, vertical: 4.0.h),
                   child: CookingSuggestionsSection(
                     showHeaderTitle: false,
                   ),

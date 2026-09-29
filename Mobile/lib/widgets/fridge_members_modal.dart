@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../data/models/user_models.dart';
 import '../data/services/api_service.dart';
@@ -232,7 +233,7 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
         content: Text(message),
         backgroundColor: isError ? const Color(0xFFD32F2F) : const Color(0xFF008435),
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14.r)),
         duration: const Duration(seconds: 2),
       ),
     );
@@ -251,10 +252,10 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
         constraints: BoxConstraints(
           maxHeight: MediaQuery.of(context).size.height * 0.85,
         ),
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(24.w),
         decoration: BoxDecoration(
           color: isDark ? const Color(0xFF19271E) : Colors.white,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
           border: isDark
               ? const Border(top: BorderSide(color: Color(0xFF2E4D36), width: 1.2))
               : null,
@@ -272,18 +273,18 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                   height: 5,
                   decoration: BoxDecoration(
                     color: isDark ? const Color(0xFF2E4D36) : Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(10.r),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 18),
+              SizedBox(height: 18.h),
 
               // Header Title & Manage Button
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(10),
+                    padding: EdgeInsets.all(10.w),
                     decoration: BoxDecoration(
                       color: isDark ? const Color(0xFF233629) : const Color(0xFFE8F5E9),
                       shape: BoxShape.circle,
@@ -294,7 +295,7 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                       size: 24,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12.w),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -302,7 +303,7 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                         Text(
                           'Thành viên dùng chung',
                           style: GoogleFonts.plusJakartaSans(
-                            fontSize: 20,
+                            fontSize: 20.sp,
                             fontWeight: FontWeight.w900,
                             color: isDark ? Colors.white : const Color(0xFF006428),
                           ),
@@ -310,7 +311,7 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                         Text(
                           widget.fridgeName,
                           style: GoogleFonts.plusJakartaSans(
-                            fontSize: 13,
+                            fontSize: 13.sp,
                             fontWeight: FontWeight.w600,
                             color: isDark ? const Color(0xFF81C784) : const Color(0xFF558B2F),
                           ),
@@ -328,8 +329,8 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                         ),
                       );
                     },
-                    icon: const Icon(Icons.settings_outlined, size: 16),
-                    label: const Text('Quản lý'),
+                    icon: Icon(Icons.settings_outlined, size: 16),
+                    label: Text('Quản lý'),
                     style: TextButton.styleFrom(
                       foregroundColor: isDark ? const Color(0xFF81C784) : const Color(0xFF008435),
                     ),
@@ -337,12 +338,12 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                 ],
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
 
               // Loading State
               if (_isLoading)
-                const Padding(
-                  padding: EdgeInsets.all(30.0),
+                Padding(
+                  padding: EdgeInsets.all(30.0.w),
                   child: Center(child: CircularProgressIndicator()),
                 )
               else ...[
@@ -353,7 +354,7 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                     Text(
                       'Danh sách thành viên',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w800,
                         color: isDark ? Colors.white : const Color(0xFF006428),
                       ),
@@ -362,19 +363,19 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                       Text(
                         '${_familyRole!.group!.activeCount}/${_familyRole!.group!.maxMembers} người',
                         style: GoogleFonts.plusJakartaSans(
-                          fontSize: 13,
+                          fontSize: 13.sp,
                           fontWeight: FontWeight.bold,
                           color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
                         ),
                       ),
                   ],
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10.h),
 
                 Container(
                   decoration: BoxDecoration(
                     color: isDark ? const Color(0xFF0E1611) : const Color(0xFFF5FCF4),
-                    borderRadius: BorderRadius.circular(22),
+                    borderRadius: BorderRadius.circular(22.r),
                     border: Border.all(
                       color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5E69C),
                       width: 1.2,
@@ -385,7 +386,7 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: _displayMembers.length,
                     separatorBuilder: (context, index) => Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      margin: EdgeInsets.symmetric(horizontal: 16),
                       height: 1,
                       color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFE8F5E9),
                     ),
@@ -393,7 +394,7 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                       final member = _displayMembers[index];
                       final isPending = member.role == 'Đang chờ';
                       return ListTile(
-                        contentPadding: const EdgeInsets.symmetric(
+                        contentPadding: EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 4,
                         ),
@@ -407,7 +408,7 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                                     ? 'U'
                                     : member.name.characters.first.toUpperCase(),
                                 style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 18,
+                                  fontSize: 18.sp,
                                   fontWeight: FontWeight.w900,
                                   color: Colors.white,
                                 ),
@@ -418,12 +419,12 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                                 right: -2,
                                 top: -2,
                                 child: Container(
-                                  padding: const EdgeInsets.all(2),
-                                  decoration: const BoxDecoration(
+                                  padding: EdgeInsets.all(2.w),
+                                  decoration: BoxDecoration(
                                     color: Color(0xFFFFB74D),
                                     shape: BoxShape.circle,
                                   ),
-                                  child: const Icon(
+                                  child: Icon(
                                     Icons.star_rounded,
                                     size: 12,
                                     color: Colors.white,
@@ -439,15 +440,15 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                                 member.name,
                                 overflow: TextOverflow.ellipsis,
                                 style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 14.5,
+                                  fontSize: 14.5.sp,
                                   fontWeight: FontWeight.w800,
                                   color: isDark ? Colors.white : const Color(0xFF19221C),
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8.w),
                             Container(
-                              padding: const EdgeInsets.symmetric(
+                              padding: EdgeInsets.symmetric(
                                 horizontal: 8,
                                 vertical: 2,
                               ),
@@ -457,7 +458,7 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                                     : (isPending
                                         ? const Color(0xFFFFF3E0)
                                         : (isDark ? const Color(0xFF233629) : const Color(0xFFE8F5E9))),
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(10.r),
                                 border: Border.all(
                                   color: member.isOwner
                                       ? const Color(0xFFFFB74D)
@@ -469,7 +470,7 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                               child: Text(
                                 member.role,
                                 style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 11,
+                                  fontSize: 11.sp,
                                   fontWeight: FontWeight.w800,
                                   color: member.isOwner
                                       ? (isDark ? const Color(0xFFFFB74D) : const Color(0xFFE65100))
@@ -484,7 +485,7 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                         subtitle: Text(
                           member.emailOrPhone,
                           style: GoogleFonts.plusJakartaSans(
-                            fontSize: 12.5,
+                            fontSize: 12.5.sp,
                             color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF757575),
                           ),
                         ),
@@ -505,18 +506,18 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                   ),
                 ),
 
-                const SizedBox(height: 22),
+                SizedBox(height: 22.h),
 
                 // Section 2: Add New Member Form
                 Text(
                   'Thêm thành viên mới',
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w800,
                     color: isDark ? Colors.white : const Color(0xFF006428),
                   ),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10.h),
 
                 // Input Field & Direct Add Button Row
                 Row(
@@ -525,7 +526,7 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                       child: Container(
                         decoration: BoxDecoration(
                           color: isDark ? const Color(0xFF0E1611) : const Color(0xFFF5FCF4),
-                          borderRadius: BorderRadius.circular(18),
+                          borderRadius: BorderRadius.circular(18.r),
                           border: Border.all(
                             color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5E69C),
                             width: 1.2,
@@ -535,14 +536,14 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                           controller: _inviteController,
                           keyboardType: TextInputType.emailAddress,
                           style: GoogleFonts.plusJakartaSans(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w700,
                             color: isDark ? Colors.white : const Color(0xFF19221C),
                           ),
                           decoration: InputDecoration(
                             hintText: 'Nhập Email thành viên...',
                             hintStyle: GoogleFonts.plusJakartaSans(
-                              fontSize: 13,
+                              fontSize: 13.sp,
                               color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF9E9E9E),
                             ),
                             prefixIcon: Icon(
@@ -551,7 +552,7 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                               size: 20,
                             ),
                             border: InputBorder.none,
-                            contentPadding: const EdgeInsets.symmetric(
+                            contentPadding: EdgeInsets.symmetric(
                               horizontal: 14,
                               vertical: 13,
                             ),
@@ -560,24 +561,24 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                       ),
                     ),
 
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10.w),
 
                     // Direct Add Button
                     ElevatedButton(
                       onPressed: _isActionLoading ? null : _handleAddMember,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: isDark ? const Color(0xFF81C784) : const Color(0xFF4CAF50),
-                        padding: const EdgeInsets.symmetric(
+                        padding: EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 14,
                         ),
                         elevation: 2,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18),
+                          borderRadius: BorderRadius.circular(18.r),
                         ),
                       ),
                       child: _isActionLoading
-                          ? const SizedBox(
+                          ? SizedBox(
                               width: 18,
                               height: 18,
                               child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
@@ -589,11 +590,11 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                                   color: isDark ? const Color(0xFF0E1611) : Colors.white,
                                   size: 20,
                                 ),
-                                const SizedBox(width: 4),
+                                SizedBox(width: 4.w),
                                 Text(
                                   'Thêm',
                                   style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 14,
+                                    fontSize: 14.sp,
                                     fontWeight: FontWeight.w900,
                                     color: isDark ? const Color(0xFF0E1611) : Colors.white,
                                   ),
@@ -604,7 +605,7 @@ class _FridgeMembersModalContentState extends State<_FridgeMembersModalContent> 
                   ],
                 ),
 
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
               ],
             ],
           ),

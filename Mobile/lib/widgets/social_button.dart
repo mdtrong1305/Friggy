@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../theme/app_theme.dart';
 
 enum SocialType { google, apple }
@@ -23,12 +24,12 @@ class SocialButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(vertical: 16),
+          padding: EdgeInsets.symmetric(vertical: 16),
           backgroundColor: isDark ? const Color(0xFF19271E) : const Color(0xFFF2F5F3),
           foregroundColor: isDark ? Colors.white : AppColors.textPrimary,
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(28), // Pill shape
+            borderRadius: BorderRadius.circular(28.r), // Pill shape
             side: BorderSide(
               color: isDark ? const Color(0xFF2E4D36) : Colors.transparent,
               width: 1,
@@ -45,11 +46,11 @@ class SocialButton extends StatelessWidget {
                     color: isDark ? Colors.white : AppColors.appleBlack,
                     size: 24,
                   ),
-            const SizedBox(width: 10),
+            SizedBox(width: 10.w),
             Text(
               label,
               style: TextStyle(
-                fontSize: 15,
+                fontSize: 15.sp,
                 fontWeight: FontWeight.bold,
                 color: isDark ? Colors.white : AppColors.textPrimary,
               ),

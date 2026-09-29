@@ -1,5 +1,6 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:video_player/video_player.dart';
@@ -270,8 +271,8 @@ class _LoginSuccessVideoScreenState extends State<LoginSuccessVideoScreen>
                   // 2. Clean "Friggy" Text & Eco Leaf (Floating gracefully)
                   Positioned(
                     top: topPadding + 16,
-                    left: 0,
-                    right: 0,
+                    left: 0.w,
+                    right: 0.w,
                     child: FadeTransition(
                       opacity: _textFadeAnim,
                       child: SlideTransition(
@@ -283,7 +284,7 @@ class _LoginSuccessVideoScreenState extends State<LoginSuccessVideoScreen>
                             RichText(
                               text: TextSpan(
                                 style: GoogleFonts.quicksand(
-                                  fontSize: 42,
+                                  fontSize: 42.sp,
                                   fontWeight: FontWeight.w900,
                                   letterSpacing: 2.0,
                                   height: 1.0,
@@ -304,7 +305,7 @@ class _LoginSuccessVideoScreenState extends State<LoginSuccessVideoScreen>
                                 ],
                               ),
                             ),
-                            const SizedBox(width: 4),
+                            SizedBox(width: 4.w),
                             Transform.rotate(
                               angle: 0.35,
                               child: Icon(

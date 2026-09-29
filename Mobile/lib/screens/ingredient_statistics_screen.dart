@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../config/app_constants.dart';
 import '../l10n/app_localizations.dart';
@@ -203,31 +204,31 @@ class _IngredientStatisticsScreenState
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4.h),
 
                       // Screen Title
                       Text(
                         isEn ? 'Ingredient Statistics' : 'Thống kê nguyên liệu',
-                        style: GoogleFonts.outfit(
-                          fontSize: 28,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 28.sp,
                           fontWeight: FontWeight.w900,
                           color: isDark ? Colors.white : const Color(0xFF006428),
                           letterSpacing: -0.3,
                         ),
                       ),
 
-                      const SizedBox(height: 14),
+                      SizedBox(height: 14.h),
 
                       // 3. Segmented Control Toggle (Tuần / Tháng)
                       Container(
-                        padding: const EdgeInsets.all(4),
+                        padding: EdgeInsets.all(4.w),
                         decoration: BoxDecoration(
                           color: isDark ? const Color(0xFF19271E) : Colors.white,
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(16.r),
                           border: isDark
                               ? Border.all(color: const Color(0xFF2E4D36), width: 1)
                               : null,
@@ -251,18 +252,18 @@ class _IngredientStatisticsScreenState
                                 },
                                 child: Container(
                                   padding:
-                                      const EdgeInsets.symmetric(vertical: 10),
+                                      EdgeInsets.symmetric(vertical: 10),
                                   decoration: BoxDecoration(
                                     color: _selectedTab == 0
                                         ? const Color(0xFF2E7D32)
                                         : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(12.r),
                                   ),
                                   child: Center(
                                     child: Text(
                                       isEn ? 'Week' : 'Tuần',
                                       style: GoogleFonts.plusJakartaSans(
-                                        fontSize: 15,
+                                        fontSize: 15.sp,
                                         fontWeight: FontWeight.w800,
                                         color: _selectedTab == 0
                                             ? Colors.white
@@ -283,18 +284,18 @@ class _IngredientStatisticsScreenState
                                 },
                                 child: Container(
                                   padding:
-                                      const EdgeInsets.symmetric(vertical: 10),
+                                      EdgeInsets.symmetric(vertical: 10),
                                   decoration: BoxDecoration(
                                     color: _selectedTab == 1
                                         ? const Color(0xFF2E7D32)
                                         : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(12.r),
                                   ),
                                   child: Center(
                                     child: Text(
                                       isEn ? 'Month' : 'Tháng',
                                       style: GoogleFonts.plusJakartaSans(
-                                        fontSize: 15,
+                                        fontSize: 15.sp,
                                         fontWeight: FontWeight.w800,
                                         color: _selectedTab == 1
                                             ? Colors.white
@@ -309,14 +310,14 @@ class _IngredientStatisticsScreenState
                         ),
                       ),
 
-                      const SizedBox(height: 18),
+                      SizedBox(height: 18.h),
 
                       // Render body based on selected tab (0 = Tuần, 1 = Tháng)
                       _selectedTab == 0
                           ? _buildWeeklyTabContent(isDark, isEn)
                           : _buildMonthlyTabContent(isDark, isEn),
 
-                      const SizedBox(height: 40),
+                      SizedBox(height: 40.h),
                     ],
                   ),
                 ),
@@ -338,10 +339,10 @@ class _IngredientStatisticsScreenState
         // 1. Top Card: Đã sử dụng (18 món)
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16.w),
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF19271E) : const Color(0xFFEAF5E1),
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(20.r),
             border: Border.all(
                 color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFC8E6C9),
                 width: 1),
@@ -361,23 +362,23 @@ class _IngredientStatisticsScreenState
                   size: 24,
                 ),
               ),
-              const SizedBox(width: 14),
+              SizedBox(width: 14.w),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     isEn ? 'Meals Cooked' : 'Bữa đã nấu',
                     style: GoogleFonts.plusJakartaSans(
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
                       color: isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32),
                     ),
                   ),
-                  const SizedBox(height: 2),
+                  SizedBox(height: 2.h),
                   Text(
                     isEn ? '${_stats?.mealsCooked ?? 0} meals' : '${_stats?.mealsCooked ?? 0} bữa',
-                    style: GoogleFonts.outfit(
-                      fontSize: 22,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 22.sp,
                       fontWeight: FontWeight.w900,
                       color: isDark ? Colors.white : const Color(0xFF006428),
                     ),
@@ -388,7 +389,7 @@ class _IngredientStatisticsScreenState
           ),
         ),
 
-        const SizedBox(height: 14),
+        SizedBox(height: 14.h),
 
         // Row of 2 Cards: Bị bỏ phí (2 món) & Lãng phí (% / đ)
         Row(
@@ -396,10 +397,10 @@ class _IngredientStatisticsScreenState
             // Left Card: Bị bỏ phí
             Expanded(
               child: Container(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16.w),
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF2D1C1C) : const Color(0xFFFEEBEE),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                   border: Border.all(
                       color: isDark ? const Color(0xFF5C2525) : const Color(0xFFFFCDD2),
                       width: 1),
@@ -410,7 +411,7 @@ class _IngredientStatisticsScreenState
                     Container(
                       width: 38,
                       height: 38,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: Color(0xFFEF5350),
                         shape: BoxShape.circle,
                       ),
@@ -420,20 +421,20 @@ class _IngredientStatisticsScreenState
                         size: 20,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12.h),
                     Text(
                       isEn ? 'Expiring soon' : 'Sắp hết hạn',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 13.5,
+                        fontSize: 13.5.sp,
                         fontWeight: FontWeight.w700,
                         color: isDark ? const Color(0xFFFF8A80) : const Color(0xFFD32F2F),
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2.h),
                     Text(
                       isEn ? '${_stats?.expiringSoonCount ?? 0} items' : '${_stats?.expiringSoonCount ?? 0} món',
-                      style: GoogleFonts.outfit(
-                        fontSize: 20,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 20.sp,
                         fontWeight: FontWeight.w900,
                         color: isDark ? const Color(0xFFFF8A80) : const Color(0xFFB71C1C),
                       ),
@@ -442,14 +443,14 @@ class _IngredientStatisticsScreenState
                 ),
               ),
             ),
-            const SizedBox(width: 14),
+            SizedBox(width: 14.w),
             // Right Card: Lãng phí (% / VND)
             Expanded(
               child: Container(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16.w),
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF2D281C) : const Color(0xFFFFF8E1),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                   border: Border.all(
                       color: isDark ? const Color(0xFF5C4E25) : const Color(0xFFFFE082),
                       width: 1),
@@ -460,7 +461,7 @@ class _IngredientStatisticsScreenState
                     Container(
                       width: 38,
                       height: 38,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: Color(0xFFFFB74D),
                         shape: BoxShape.circle,
                       ),
@@ -470,20 +471,20 @@ class _IngredientStatisticsScreenState
                         size: 20,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12.h),
                     Text(
                       isEn ? 'Wasted' : 'Lãng phí',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 13.5,
+                        fontSize: 13.5.sp,
                         fontWeight: FontWeight.w700,
                         color: isDark ? const Color(0xFFFFD54F) : const Color(0xFFE65100),
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2.h),
                     Text(
                       '${_stats?.wastePercent ?? 0}%',
-                      style: GoogleFonts.outfit(
-                        fontSize: 20,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 20.sp,
                         fontWeight: FontWeight.w900,
                         color: isDark ? const Color(0xFFFFD54F) : const Color(0xFFBF360C),
                       ),
@@ -495,17 +496,17 @@ class _IngredientStatisticsScreenState
           ],
         ),
 
-        const SizedBox(height: 18),
+        SizedBox(height: 18.h),
 
         // 2. Insight từ Friggy Card (Dark Green Box)
         _buildFriggyInsightCard(isDark, isEn),
 
-        const SizedBox(height: 22),
+        SizedBox(height: 22.h),
 
         // 3. Section: Được sử dụng nhiều (Top 4)
         _buildTopUsedSection(isDark, isEn),
 
-        const SizedBox(height: 22),
+        SizedBox(height: 22.h),
 
         // 4. Section: Bị bỏ quên nhiều (Cần chú ý)
         _buildNeglectedSection(isDark, isEn),
@@ -541,10 +542,10 @@ class _IngredientStatisticsScreenState
         // 1. Monthly Usage Trend Bar Chart Card (Xu hướng dùng)
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(20.w),
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF19271E) : Colors.white,
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(24.r),
             border: isDark
                 ? Border.all(color: const Color(0xFF2E4D36), width: 1)
                 : null,
@@ -570,16 +571,16 @@ class _IngredientStatisticsScreenState
                       Text(
                         monthTitle,
                         style: GoogleFonts.plusJakartaSans(
-                          fontSize: 13,
+                          fontSize: 13.sp,
                           fontWeight: FontWeight.w700,
                           color: isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32),
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(height: 2.h),
                       Text(
                         isEn ? 'Usage Trend' : 'Xu hướng dùng',
-                        style: GoogleFonts.outfit(
-                          fontSize: 22,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 22.sp,
                           fontWeight: FontWeight.w900,
                           color: isDark ? Colors.white : const Color(0xFF006428),
                         ),
@@ -593,11 +594,11 @@ class _IngredientStatisticsScreenState
                         color: isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32),
                         size: 18,
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4.w),
                       Text(
                         '${_stats?.wastePercent ?? 0}%',
                         style: GoogleFonts.plusJakartaSans(
-                          fontSize: 14,
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w800,
                           color: isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32),
                         ),
@@ -607,7 +608,7 @@ class _IngredientStatisticsScreenState
                 ],
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
 
               // Dynamic Bar Chart Representation from _chartData
               _buildMonthlyChart(isDark, isEn),
@@ -615,7 +616,7 @@ class _IngredientStatisticsScreenState
           ),
         ),
 
-        const SizedBox(height: 16),
+        SizedBox(height: 16.h),
 
         // 2. Grid of 2 Cards: Đã sử dụng & Lãng phí
         Row(
@@ -623,10 +624,10 @@ class _IngredientStatisticsScreenState
             // Left Card: Đã sử dụng
             Expanded(
               child: Container(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16.w),
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF19271E) : const Color(0xFFEAF5E1),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                   border: Border.all(
                       color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFC8E6C9),
                       width: 1),
@@ -647,20 +648,20 @@ class _IngredientStatisticsScreenState
                         size: 22,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12.h),
                     Text(
                       isEn ? 'Meals Cooked' : 'Bữa đã nấu',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 13.5,
+                        fontSize: 13.5.sp,
                         fontWeight: FontWeight.w700,
                         color: isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32),
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2.h),
                     Text(
                       isEn ? '${_stats?.mealsCooked ?? 0} meals' : '${_stats?.mealsCooked ?? 0} bữa',
-                      style: GoogleFonts.outfit(
-                        fontSize: 22,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 22.sp,
                         fontWeight: FontWeight.w900,
                         color: isDark ? Colors.white : const Color(0xFF006428),
                       ),
@@ -669,14 +670,14 @@ class _IngredientStatisticsScreenState
                 ),
               ),
             ),
-            const SizedBox(width: 14),
+            SizedBox(width: 14.w),
             // Right Card: Lãng phí
             Expanded(
               child: Container(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(16.w),
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF2D1C1C) : const Color(0xFFFEEBEE),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                   border: Border.all(
                       color: isDark ? const Color(0xFF5C2525) : const Color(0xFFFFCDD2),
                       width: 1),
@@ -697,20 +698,20 @@ class _IngredientStatisticsScreenState
                         size: 22,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12.h),
                     Text(
                       isEn ? 'Expiring soon' : 'Sắp hết hạn',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 13.5,
+                        fontSize: 13.5.sp,
                         fontWeight: FontWeight.w700,
                         color: isDark ? const Color(0xFFFF8A80) : const Color(0xFFD32F2F),
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2.h),
                     Text(
                       isEn ? '${_stats?.expiringSoonCount ?? 0} items' : '${_stats?.expiringSoonCount ?? 0} món',
-                      style: GoogleFonts.outfit(
-                        fontSize: 22,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 22.sp,
                         fontWeight: FontWeight.w900,
                         color: isDark ? const Color(0xFFFF8A80) : const Color(0xFFB71C1C),
                       ),
@@ -722,15 +723,15 @@ class _IngredientStatisticsScreenState
           ],
         ),
 
-        const SizedBox(height: 16),
+        SizedBox(height: 16.h),
 
         // 3. Savings / Monthly Expense Banner
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(18),
+          padding: EdgeInsets.all(18.w),
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF19271E) : Colors.white,
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(24.r),
             border: isDark
                 ? Border.all(color: const Color(0xFF2E4D36), width: 1)
                 : null,
@@ -751,25 +752,25 @@ class _IngredientStatisticsScreenState
                     Text(
                       isEn ? 'Total monthly food spending' : 'Tổng chi tiêu mua sắm tháng này',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 13.5,
+                        fontSize: 13.5.sp,
                         fontWeight: FontWeight.w700,
                         color: isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32),
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6.h),
                     Text(
                       totalSpentFormatted,
-                      style: GoogleFonts.outfit(
-                        fontSize: 26,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 26.sp,
                         fontWeight: FontWeight.w900,
                         color: isDark ? const Color(0xFFFFD54F) : const Color(0xFF4A3800),
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4.h),
                     Text(
                       isEn ? 'ⓘ Based on purchased shopping items' : 'ⓘ Dựa trên sản phẩm đã mua từ danh sách',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 11.5,
+                        fontSize: 11.5.sp,
                         fontWeight: FontWeight.w600,
                         color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF888888),
                       ),
@@ -777,7 +778,7 @@ class _IngredientStatisticsScreenState
                   ],
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12.w),
               Container(
                 width: 58,
                 height: 58,
@@ -795,26 +796,26 @@ class _IngredientStatisticsScreenState
           ),
         ),
 
-        const SizedBox(height: 22),
+        SizedBox(height: 22.h),
 
         // 4. Section: So với tháng trước
         Text(
           isEn ? 'Compared to last month' : 'So với tháng trước',
-          style: GoogleFonts.outfit(
-            fontSize: 20,
+          style: GoogleFonts.plusJakartaSans(
+            fontSize: 20.sp,
             fontWeight: FontWeight.w900,
             color: isDark ? Colors.white : const Color(0xFF006428),
           ),
         ),
 
-        const SizedBox(height: 14),
+        SizedBox(height: 14.h),
 
         // Card 1: Chỉ số "Sống Xanh"
         Container(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16.w),
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF19271E) : Colors.white,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(20.r),
             border: isDark
                 ? Border.all(color: const Color(0xFF2E4D36), width: 1)
                 : null,
@@ -833,7 +834,7 @@ class _IngredientStatisticsScreenState
                 height: 44,
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF233629) : const Color(0xFFE8EAF6),
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(14.r),
                 ),
                 child: Icon(
                   Icons.eco_rounded,
@@ -841,22 +842,22 @@ class _IngredientStatisticsScreenState
                   size: 24,
                 ),
               ),
-              const SizedBox(width: 14),
+              SizedBox(width: 14.w),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       isEn ? '"Eco Living" Score' : 'Chỉ số "Sống Xanh"',
-                      style: GoogleFonts.outfit(
-                        fontSize: 16,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w800,
                         color: isDark ? Colors.white : const Color(0xFF006428),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(10.r),
                       child: LinearProgressIndicator(
                         value: 0.75,
                         minHeight: 8,
@@ -868,11 +869,11 @@ class _IngredientStatisticsScreenState
                   ],
                 ),
               ),
-              const SizedBox(width: 14),
+              SizedBox(width: 14.w),
               Text(
                 '+15%',
-                style: GoogleFonts.outfit(
-                  fontSize: 16,
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.w900,
                   color: isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32),
                 ),
@@ -881,14 +882,14 @@ class _IngredientStatisticsScreenState
           ),
         ),
 
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
 
         // Card 2: Tần suất mua sắm
         Container(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16.w),
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF19271E) : Colors.white,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(20.r),
             border: isDark
                 ? Border.all(color: const Color(0xFF2E4D36), width: 1)
                 : null,
@@ -907,7 +908,7 @@ class _IngredientStatisticsScreenState
                 height: 44,
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF382E1C) : const Color(0xFFEFEBE9),
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(14.r),
                 ),
                 child: Icon(
                   Icons.shopping_bag_outlined,
@@ -915,22 +916,22 @@ class _IngredientStatisticsScreenState
                   size: 24,
                 ),
               ),
-              const SizedBox(width: 14),
+              SizedBox(width: 14.w),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       isEn ? 'Shopping Frequency' : 'Tần suất mua sắm',
-                      style: GoogleFonts.outfit(
-                        fontSize: 16,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w800,
                         color: isDark ? Colors.white : const Color(0xFF006428),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(10.r),
                       child: LinearProgressIndicator(
                         value: 0.4,
                         minHeight: 8,
@@ -942,11 +943,11 @@ class _IngredientStatisticsScreenState
                   ],
                 ),
               ),
-              const SizedBox(width: 14),
+              SizedBox(width: 14.w),
               Text(
                 '-8%',
-                style: GoogleFonts.outfit(
-                  fontSize: 16,
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.w900,
                   color: isDark ? const Color(0xFFFFB74D) : const Color(0xFF8D6E63),
                 ),
@@ -955,17 +956,17 @@ class _IngredientStatisticsScreenState
           ),
         ),
 
-        const SizedBox(height: 22),
+        SizedBox(height: 22.h),
 
         // 5. Insight từ Friggy Card (Dark Green Box)
         _buildFriggyInsightCard(isDark, isEn),
 
-        const SizedBox(height: 22),
+        SizedBox(height: 22.h),
 
         // 6. Section: Được sử dụng nhiều (Top 4)
         _buildTopUsedSection(isDark, isEn),
 
-        const SizedBox(height: 22),
+        SizedBox(height: 22.h),
 
         // 7. Section: Bị bỏ quên nhiều (Cần chú ý)
         _buildNeglectedSection(isDark, isEn),
@@ -1034,10 +1035,10 @@ class _IngredientStatisticsScreenState
       children: [
         if (tooltip != null) ...[
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(8.r),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.15),
@@ -1049,15 +1050,15 @@ class _IngredientStatisticsScreenState
             child: Text(
               tooltip,
               style: GoogleFonts.plusJakartaSans(
-                fontSize: 11.5,
+                fontSize: 11.5.sp,
                 fontWeight: FontWeight.w800,
                 color: isDark ? const Color(0xFF19271E) : Colors.white,
               ),
             ),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6.h),
         ] else ...[
-          const SizedBox(height: 27),
+          SizedBox(height: 27.h),
         ],
         Container(
           width: 54,
@@ -1066,7 +1067,7 @@ class _IngredientStatisticsScreenState
             color: isSelected
                 ? (isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32))
                 : (isDark ? const Color(0xFF233629) : const Color(0xFFDCEDC8)),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
             boxShadow: isSelected
                 ? [
                     BoxShadow(
@@ -1079,11 +1080,11 @@ class _IngredientStatisticsScreenState
                 : null,
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
         Text(
           label,
           style: GoogleFonts.plusJakartaSans(
-            fontSize: 13,
+            fontSize: 13.sp,
             fontWeight: isSelected ? FontWeight.w900 : FontWeight.w700,
             color: isSelected
                 ? (isDark ? const Color(0xFF81C784) : const Color(0xFF006428))
@@ -1101,10 +1102,10 @@ class _IngredientStatisticsScreenState
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF19271E) : Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(24.r),
         border: Border.all(
           color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5E69C),
           width: 1.4,
@@ -1124,10 +1125,10 @@ class _IngredientStatisticsScreenState
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(7),
+                padding: EdgeInsets.all(7.w),
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF233629) : const Color(0xFFE8F5E9),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Icon(
                   Icons.smart_toy_rounded,
@@ -1135,11 +1136,11 @@ class _IngredientStatisticsScreenState
                   size: 22,
                 ),
               ),
-              const SizedBox(width: 10),
+              SizedBox(width: 10.w),
               Text(
                 isEn ? 'Friggy Insights' : 'Insight từ Friggy',
-                style: GoogleFonts.outfit(
-                  fontSize: 19,
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 19.sp,
                   fontWeight: FontWeight.w900,
                   color: isDark ? Colors.white : const Color(0xFF006428),
                 ),
@@ -1147,13 +1148,13 @@ class _IngredientStatisticsScreenState
             ],
           ),
 
-          const SizedBox(height: 14),
+          SizedBox(height: 14.h),
 
           // Body Text with High-Contrast Dark Text & Highlighted Green Words
           RichText(
             text: TextSpan(
               style: GoogleFonts.plusJakartaSans(
-                fontSize: 15.0,
+                fontSize: 15.0.sp,
                 color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF2C3E35),
                 height: 1.5,
                 fontWeight: FontWeight.w500,
@@ -1284,7 +1285,7 @@ class _IngredientStatisticsScreenState
             ),
           ),
 
-          const SizedBox(height: 18),
+          SizedBox(height: 18.h),
 
           // Action Button: Solid Green Button with Crisp White Text
           GestureDetector(
@@ -1298,10 +1299,10 @@ class _IngredientStatisticsScreenState
             },
             child: Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 13),
+              padding: EdgeInsets.symmetric(vertical: 13),
               decoration: BoxDecoration(
                 color: const Color(0xFF008435),
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
                 boxShadow: [
                   BoxShadow(
                     color: const Color(0xFF008435).withValues(alpha: 0.25),
@@ -1315,13 +1316,13 @@ class _IngredientStatisticsScreenState
                 children: [
                   Text(
                     isEn ? 'Explore now!' : 'Cùng khám phá nhé!',
-                    style: GoogleFonts.outfit(
-                      fontSize: 15.5,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 15.5.sp,
                       fontWeight: FontWeight.w800,
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(width: 6),
+                  SizedBox(width: 6.w),
                   const Icon(
                     Icons.arrow_forward_rounded,
                     color: Colors.white,
@@ -1348,8 +1349,8 @@ class _IngredientStatisticsScreenState
           children: [
             Text(
               isEn ? 'Most Used' : 'Được sử dụng nhiều',
-              style: GoogleFonts.outfit(
-                fontSize: 20,
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 20.sp,
                 fontWeight: FontWeight.w900,
                 color: isDark ? Colors.white : const Color(0xFF006428),
               ),
@@ -1358,19 +1359,19 @@ class _IngredientStatisticsScreenState
               Text(
                 'Top ${displayItems.length}',
                 style: GoogleFonts.plusJakartaSans(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.w700,
                   color: isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32),
                 ),
               ),
           ],
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
         Container(
-          padding: const EdgeInsets.all(18),
+          padding: EdgeInsets.all(18.w),
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF19271E) : Colors.white,
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(24.r),
             border: isDark
                 ? Border.all(color: const Color(0xFF2E4D36), width: 1)
                 : null,
@@ -1384,14 +1385,14 @@ class _IngredientStatisticsScreenState
           ),
           child: displayItems.isEmpty
               ? Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: EdgeInsets.symmetric(vertical: 12),
                   child: Center(
                     child: Text(
                       isEn
                           ? 'No ingredient usage data available yet'
                           : 'Chưa có dữ liệu nguyên liệu trong tủ lạnh',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                         color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF666666),
                       ),
@@ -1428,8 +1429,8 @@ class _IngredientStatisticsScreenState
           children: [
             Text(
               isEn ? 'Most Neglected' : 'Bị bỏ quên nhiều',
-              style: GoogleFonts.outfit(
-                fontSize: 20,
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 20.sp,
                 fontWeight: FontWeight.w900,
                 color: isDark ? Colors.white : const Color(0xFF006428),
               ),
@@ -1437,21 +1438,21 @@ class _IngredientStatisticsScreenState
             Text(
               isEn ? 'Needs Attention' : 'Cần chú ý',
               style: GoogleFonts.plusJakartaSans(
-                fontSize: 14,
+                fontSize: 14.sp,
                 fontWeight: FontWeight.w700,
                 color: isDark ? const Color(0xFFFF8A80) : const Color(0xFFD32F2F),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
         if (_expiringItems.isEmpty)
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(20.w),
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF19271E) : Colors.white,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(20.r),
               border: isDark
                   ? Border.all(color: const Color(0xFF2E4D36), width: 1)
                   : null,
@@ -1478,26 +1479,26 @@ class _IngredientStatisticsScreenState
                     size: 24,
                   ),
                 ),
-                const SizedBox(width: 14),
+                SizedBox(width: 14.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         isEn ? 'No Neglected Items' : 'Không có nguyên liệu bị bỏ quên',
-                        style: GoogleFonts.outfit(
-                          fontSize: 16,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w800,
                           color: isDark ? Colors.white : const Color(0xFF19221C),
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(height: 2.h),
                       Text(
                         isEn
                             ? 'All ingredients in your fridge are fresh!'
                             : 'Tất cả thực phẩm trong tủ của bạn đều còn hạn dùng tốt.',
                         style: GoogleFonts.plusJakartaSans(
-                          fontSize: 13,
+                          fontSize: 13.sp,
                           fontWeight: FontWeight.w600,
                           color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF666666),
                         ),
@@ -1565,8 +1566,8 @@ class _IngredientStatisticsScreenState
           children: [
             Text(
               title,
-              style: GoogleFonts.outfit(
-                fontSize: 16,
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w800,
                 color: isDark ? Colors.white : const Color(0xFF006428),
               ),
@@ -1574,16 +1575,16 @@ class _IngredientStatisticsScreenState
             Text(
               countText,
               style: GoogleFonts.plusJakartaSans(
-                fontSize: 13.5,
+                fontSize: 13.5.sp,
                 fontWeight: FontWeight.w700,
                 color: isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6.h),
         ClipRRect(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10.r),
           child: LinearProgressIndicator(
             value: progress,
             minHeight: 10,
@@ -1633,10 +1634,10 @@ class _IngredientStatisticsScreenState
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF19271E) : Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
         border: isDark
             ? Border.all(color: const Color(0xFF2E4D36), width: 1)
             : null,
@@ -1651,27 +1652,27 @@ class _IngredientStatisticsScreenState
       child: Row(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(14.r),
             child: imageWidget,
           ),
-          const SizedBox(width: 14),
+          SizedBox(width: 14.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   name,
-                  style: GoogleFonts.outfit(
-                    fontSize: 16,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w800,
                     color: isDark ? Colors.white : const Color(0xFF19221C),
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2.h),
                 Text(
                   subtitle,
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 13,
+                    fontSize: 13.sp,
                     fontWeight: FontWeight.w600,
                     color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF666666),
                   ),
@@ -1680,15 +1681,15 @@ class _IngredientStatisticsScreenState
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
             decoration: BoxDecoration(
               color: tagBgColor,
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(14.r),
             ),
             child: Text(
               tagText,
               style: GoogleFonts.plusJakartaSans(
-                fontSize: 12.5,
+                fontSize: 12.5.sp,
                 fontWeight: FontWeight.w800,
                 color: tagTextColor,
               ),

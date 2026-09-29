@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../l10n/app_localizations.dart';
 import '../utils/greeting_helper.dart';
@@ -40,9 +41,9 @@ class GreetingBanner extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      height: 180,
+      height: 170.h,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(26),
+        borderRadius: BorderRadius.circular(26.r),
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -64,17 +65,17 @@ class GreetingBanner extends StatelessWidget {
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(26),
+        borderRadius: BorderRadius.circular(26.r),
         child: Stack(
           clipBehavior: Clip.none,
           children: [
             // Ambient light glow behind character
             Positioned(
-              right: 10,
-              top: 10,
+              right: 10.w,
+              top: 10.h,
               child: Container(
-                width: 130,
-                height: 130,
+                width: 120.w,
+                height: 120.w,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: (isDark ? Colors.white : Colors.white).withValues(alpha: isDark ? 0.08 : 0.35),
@@ -84,10 +85,10 @@ class GreetingBanner extends StatelessWidget {
 
             // Transparent Mascot Character Asset on the right
             Positioned(
-              right: -4,
-              top: -8,
-              bottom: -8,
-              width: 165,
+              right: 0,
+              top: 0,
+              bottom: 0,
+              width: 148.w,
               child: Image.asset(
                 imageAsset,
                 fit: BoxFit.contain,
@@ -104,9 +105,9 @@ class GreetingBanner extends StatelessWidget {
 
             // Left Side Text Overlay
             Positioned.fill(
-              right: 145, // Leave room for mascot character
+              right: 140.w, // Leave room for mascot character
               child: Padding(
-                padding: const EdgeInsets.only(left: 20.0, top: 18.0, bottom: 18.0),
+                padding: EdgeInsets.only(left: 16.w, top: 12.h, bottom: 12.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -117,26 +118,28 @@ class GreetingBanner extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 32.sp,
+                        fontWeight: FontWeight.w800,
                         color: textColorPrimary,
-                        height: 1.15,
+                        height: 1.1,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 6.h),
 
                     // Description
-                    Text(
-                      isEn
-                          ? 'Friggy is ready to help you cook delicious meals & save food!'
-                          : 'Friggy đã sẵn sàng giúp bạn nấu những món ăn ngon và tiết kiệm thực phẩm!',
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: textColorSecondary,
-                        height: 1.35,
+                    Expanded(
+                      child: Text(
+                        isEn
+                            ? 'Friggy is ready to help you cook delicious meals & save food!'
+                            : 'Friggy đã sẵn sàng giúp bạn nấu những món ăn ngon và tiết kiệm thực phẩm!',
+                        maxLines: 4,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.w600,
+                          color: textColorSecondary,
+                          height: 1.35,
+                        ),
                       ),
                     ),
                   ],

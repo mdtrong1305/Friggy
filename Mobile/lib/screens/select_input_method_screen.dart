@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../l10n/app_localizations.dart';
 
@@ -50,7 +51,7 @@ class SelectInputMethodScreen extends StatelessWidget {
                 ],
           stops: isDark ? const [0.0, 0.5, 1.0] : const [0.0, 0.6, 1.0],
         ),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
         border: isDark
             ? const Border(
                 top: BorderSide(color: Color(0xFF2E4D36), width: 1.2),
@@ -61,9 +62,9 @@ class SelectInputMethodScreen extends StatelessWidget {
         top: false,
         child: Padding(
           padding: EdgeInsets.only(
-            left: 20.0,
-            right: 20.0,
-            top: 16.0,
+            left: 20.0.w,
+            right: 20.0.w,
+            top: 16.0.h,
             bottom: bottomPadding > 0 ? bottomPadding + 12 : 24.0,
           ),
           child: Column(
@@ -78,36 +79,36 @@ class SelectInputMethodScreen extends StatelessWidget {
                     color: isDark
                         ? const Color(0xFF2E4D36)
                         : const Color(0xFF2E7D32).withValues(alpha: 0.3),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(10.r),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
 
               // Title
               Text(
                 isEn ? 'Select Input Method' : 'Chọn Phương Thức Nhập',
-                style: GoogleFonts.outfit(
-                  fontSize: 27,
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 27.sp,
                   fontWeight: FontWeight.w800,
                   color: isDark ? Colors.white : const Color(0xFF006428),
                   letterSpacing: -0.2,
                 ),
               ),
 
-              const SizedBox(height: 8),
+              SizedBox(height: 8.h),
 
               // Subtitle
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: Text(
                   isEn
                       ? 'Choose the most convenient way to add food to your fridge.'
                       : 'Chọn phương thức thuận tiện nhất để thêm thực phẩm vào tủ.',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
                     color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF1B5E20),
                     height: 1.35,
@@ -115,7 +116,7 @@ class SelectInputMethodScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
 
               // 4 Input Method Cards
               // 1. Manual Entry
@@ -129,7 +130,7 @@ class SelectInputMethodScreen extends StatelessWidget {
                 iconBgColor: isDark ? const Color(0xFF163832) : const Color(0xFFE0F2F1),
               ),
 
-              const SizedBox(height: 14),
+              SizedBox(height: 14.h),
 
               // 2. Scan Food Photo
               _buildMethodCard(
@@ -142,7 +143,7 @@ class SelectInputMethodScreen extends StatelessWidget {
                 iconBgColor: isDark ? const Color(0xFF3E2C17) : const Color(0xFFFFF3E0),
               ),
 
-              const SizedBox(height: 14),
+              SizedBox(height: 14.h),
 
               // 3. Scan Receipt
               _buildMethodCard(
@@ -155,7 +156,7 @@ class SelectInputMethodScreen extends StatelessWidget {
                 iconBgColor: isDark ? const Color(0xFF233629) : const Color(0xFFE8F5E9),
               ),
 
-              const SizedBox(height: 14),
+              SizedBox(height: 14.h),
 
               // 4. Scan Barcode / QR
               _buildMethodCard(
@@ -192,10 +193,10 @@ class SelectInputMethodScreen extends StatelessWidget {
       },
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
           color: isDark ? const Color(0xFF19271E) : Colors.white,
-          borderRadius: BorderRadius.circular(22),
+          borderRadius: BorderRadius.circular(22.r),
           border: isDark
               ? Border.all(color: const Color(0xFF2E4D36), width: 1.2)
               : null,
@@ -215,7 +216,7 @@ class SelectInputMethodScreen extends StatelessWidget {
               height: 58,
               decoration: BoxDecoration(
                 color: iconBgColor,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
               ),
               child: Icon(
                 icon,
@@ -224,7 +225,7 @@ class SelectInputMethodScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(width: 16),
+            SizedBox(width: 16.w),
 
             // Center Title & Subtitle Column
             Expanded(
@@ -234,17 +235,17 @@ class SelectInputMethodScreen extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.outfit(
-                      fontSize: 18,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.w800,
                       color: isDark ? Colors.white : const Color(0xFF00752B),
                     ),
                   ),
-                  const SizedBox(height: 3),
+                  SizedBox(height: 3.h),
                   Text(
                     subtitle,
                     style: GoogleFonts.plusJakartaSans(
-                      fontSize: 13.5,
+                      fontSize: 13.5.sp,
                       fontWeight: FontWeight.w600,
                       color: isDark ? const Color(0xFF81C784) : const Color(0xFF55A44B),
                     ),
