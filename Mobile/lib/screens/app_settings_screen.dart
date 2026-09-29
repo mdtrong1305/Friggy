@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -82,12 +83,12 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
         return Container(
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF19271E) : Colors.white,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
             border: isDark
                 ? const Border(top: BorderSide(color: Color(0xFF2E4D36), width: 1.2))
                 : null,
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -98,18 +99,18 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                   height: 4.5,
                   decoration: BoxDecoration(
                     color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFC8E6C9),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(10.r),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 18),
+              SizedBox(height: 18.h),
 
               // Title
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(10),
+                    padding: EdgeInsets.all(10.w),
                     decoration: BoxDecoration(
                       color: isDark ? const Color(0xFF233629) : const Color(0xFFE8F5E9),
                       shape: BoxShape.circle,
@@ -120,11 +121,11 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                       size: 22,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12.w),
                   Text(
                     loc?.selectLanguage ?? 'Chọn ngôn ngữ ứng dụng',
-                    style: GoogleFonts.outfit(
-                      fontSize: 20,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 20.sp,
                       fontWeight: FontWeight.w800,
                       color: isDark ? Colors.white : const Color(0xFF006428),
                     ),
@@ -132,7 +133,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                 ],
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
 
               // Option 1: Tiếng Việt
               _buildLanguageOption(
@@ -148,7 +149,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                 },
               ),
 
-              const SizedBox(height: 10),
+              SizedBox(height: 10.h),
 
               // Option 2: English
               _buildLanguageOption(
@@ -164,7 +165,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                 },
               ),
 
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
             ],
           ),
         );
@@ -184,12 +185,12 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
         decoration: BoxDecoration(
           color: isSelected
               ? (isDark ? const Color(0xFF233629) : const Color(0xFFE8F5E9))
               : (isDark ? const Color(0xFF0E1611) : const Color(0xFFF7FAF8)),
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(18.r),
           border: Border.all(
             color: isSelected
                 ? (isDark ? const Color(0xFF81C784) : const Color(0xFF008435))
@@ -201,9 +202,9 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
           children: [
             Text(
               flag,
-              style: const TextStyle(fontSize: 26),
+              style: TextStyle(fontSize: 26),
             ),
-            const SizedBox(width: 14),
+            SizedBox(width: 14.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,7 +212,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                   Text(
                     title,
                     style: GoogleFonts.plusJakartaSans(
-                      fontSize: 15,
+                      fontSize: 15.sp,
                       fontWeight: FontWeight.w700,
                       color: isDark ? Colors.white : const Color(0xFF19221C),
                     ),
@@ -219,7 +220,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                   Text(
                     subtitle,
                     style: GoogleFonts.plusJakartaSans(
-                      fontSize: 12.5,
+                      fontSize: 12.5.sp,
                       color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF757575),
                     ),
                   ),
@@ -277,7 +278,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
               // Top Bar Header
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    EdgeInsets.symmetric(horizontal: 16.0.w, vertical: 8.0.h),
                 child: Row(
                   children: [
                     GestureDetector(
@@ -303,11 +304,11 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 14),
+                    SizedBox(width: 14.w),
                     Text(
                       loc?.settings ?? 'Cài đặt',
-                      style: GoogleFonts.outfit(
-                        fontSize: 24,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 24.sp,
                         fontWeight: FontWeight.w900,
                         color: titleColor,
                       ),
@@ -321,8 +322,8 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                     ? const Center(child: CircularProgressIndicator(color: Color(0xFF4CAF50)))
                     : SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0, vertical: 16.0),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 20.0.w, vertical: 16.0.h),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -331,7 +332,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                         loc?.notificationsReminders ?? 'Thông báo & Nhắc nhở',
                         titleColor,
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8.h),
                       _buildCard(cardBg, cardBorder, [
                         _buildSwitchTile(
                           icon: Icons.notifications_rounded,
@@ -370,14 +371,14 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                         ),
                       ]),
 
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20.h),
 
                       // Section 2: Appearance & Dark Mode
                       _buildSectionTitle(
                         loc?.appearanceDarkMode ?? 'Giao diện & Chế độ tối',
                         titleColor,
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8.h),
                       _buildCard(cardBg, cardBorder, [
                         _buildSwitchTile(
                           icon: Icons.dark_mode_rounded,
@@ -396,20 +397,20 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                         ),
                       ]),
 
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20.h),
 
                       // Section 3: Language
                       _buildSectionTitle(loc?.language ?? 'Ngôn ngữ', titleColor),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8.h),
                       _buildCard(cardBg, cardBorder, [
                         ListTile(
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 4),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 16.w, vertical: 4.h),
                           leading: Container(
-                            padding: const EdgeInsets.all(10),
+                            padding: EdgeInsets.all(10.w),
                             decoration: BoxDecoration(
                               color: iconBgColor,
-                              borderRadius: BorderRadius.circular(14),
+                              borderRadius: BorderRadius.circular(14.r),
                             ),
                             child: Icon(
                               Icons.language_rounded,
@@ -420,7 +421,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                           title: Text(
                             loc?.appLanguage ?? 'Ngôn ngữ ứng dụng',
                             style: GoogleFonts.plusJakartaSans(
-                              fontSize: 15,
+                              fontSize: 15.sp,
                               fontWeight: FontWeight.w700,
                               color: itemTextColor,
                             ),
@@ -428,7 +429,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                           subtitle: Text(
                             languageProvider.currentLanguageName,
                             style: GoogleFonts.plusJakartaSans(
-                              fontSize: 13,
+                              fontSize: 13.sp,
                               color: isDark
                                   ? const Color(0xFF81C784)
                                   : const Color(0xFF558B2F),
@@ -436,16 +437,16 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                             ),
                           ),
                           trailing: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 6),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 12.w, vertical: 6.h),
                             decoration: BoxDecoration(
                               color: iconBgColor,
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(12.r),
                             ),
                             child: Text(
                               loc?.change ?? 'Đổi',
                               style: GoogleFonts.plusJakartaSans(
-                                fontSize: 13,
+                                fontSize: 13.sp,
                                 fontWeight: FontWeight.w800,
                                 color: iconColor,
                               ),
@@ -455,7 +456,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                         ),
                       ]),
 
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24.h),
                     ],
                   ),
                 ),
@@ -470,8 +471,8 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   Widget _buildSectionTitle(String title, Color color) {
     return Text(
       title,
-      style: GoogleFonts.outfit(
-        fontSize: 16,
+      style: GoogleFonts.plusJakartaSans(
+        fontSize: 16.sp,
         fontWeight: FontWeight.w900,
         color: color,
       ),
@@ -482,7 +483,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     return Container(
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(22.r),
         border: Border.all(color: borderColor, width: 1.2),
         boxShadow: [
           BoxShadow(
@@ -498,7 +499,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
 
   Widget _buildDivider(bool isDark) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+      margin: EdgeInsets.symmetric(horizontal: 16),
       height: 1,
       color: isDark ? const Color(0xFF253B2D) : const Color(0xFFE8F5E9),
     );
@@ -516,20 +517,20 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
     required Color itemSubtextColor,
   }) {
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
       onTap: () => onChanged(!value),
       leading: Container(
-        padding: const EdgeInsets.all(10),
+        padding: EdgeInsets.all(10.w),
         decoration: BoxDecoration(
           color: iconBgColor,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(14.r),
         ),
         child: Icon(icon, color: iconColor, size: 22),
       ),
       title: Text(
         title,
         style: GoogleFonts.plusJakartaSans(
-          fontSize: 15,
+          fontSize: 15.sp,
           fontWeight: FontWeight.w700,
           color: itemTextColor,
         ),
@@ -537,7 +538,7 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
       subtitle: Text(
         subtitle,
         style: GoogleFonts.plusJakartaSans(
-          fontSize: 12.5,
+          fontSize: 12.5.sp,
           color: itemSubtextColor,
         ),
       ),

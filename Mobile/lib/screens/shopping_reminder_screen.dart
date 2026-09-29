@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../data/services/api_service.dart';
 import '../l10n/app_localizations.dart';
@@ -155,7 +156,7 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
+            SnackBar(
               content: Text('Chưa có thực đơn tuần. Vui lòng tạo thực đơn trước!'),
             ),
           );
@@ -205,7 +206,7 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
         backgroundColor: const Color(0xFF008435),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(14.r),
         ),
         duration: const Duration(seconds: 2),
       ),
@@ -283,28 +284,28 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 6),
+                      SizedBox(height: 6.h),
 
                       Text(
                         isEn ? 'Shopping Reminder' : 'Nhắc đi chợ',
-                        style: GoogleFonts.outfit(
-                          fontSize: 32,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 32.sp,
                           fontWeight: FontWeight.w900,
                           color: isDark ? Colors.white : const Color(0xFF006428),
                           letterSpacing: -0.5,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(height: 2.h),
                       Text(
                         isEn
                             ? 'Create your shopping list for next week with Friggy!'
                             : 'Lên danh sách mua sắm cho tuần tới cùng Friggy nhé!',
                         style: GoogleFonts.plusJakartaSans(
-                          fontSize: 13.5,
+                          fontSize: 13.5.sp,
                           fontWeight: FontWeight.w600,
                           fontStyle: FontStyle.italic,
                           color: isDark
@@ -313,7 +314,7 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
                         ),
                       ),
 
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
 
                       Stack(
                         clipBehavior: Clip.none,
@@ -321,21 +322,21 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const SizedBox(height: 12),
+                              SizedBox(height: 12.h),
 
                               Container(
                                 width: double.infinity,
-                                padding: const EdgeInsets.only(
-                                  left: 18,
-                                  right: 105,
-                                  top: 22,
-                                  bottom: 22,
+                                padding: EdgeInsets.only(
+                                  left: 18.w,
+                                  right: 105.w,
+                                  top: 22.h,
+                                  bottom: 22.h,
                                 ),
                                 decoration: BoxDecoration(
                                   color: isDark
                                       ? const Color(0xFF1E3A25)
                                       : const Color(0xFF52B756),
-                                  borderRadius: BorderRadius.circular(24),
+                                  borderRadius: BorderRadius.circular(24.r),
                                   border: isDark
                                       ? Border.all(
                                           color: const Color(0xFF2E4D36),
@@ -355,7 +356,7 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
                                       ? 'Friggy prepared a few\nshopping suggestions for you!'
                                       : 'Friggy đã chuẩn bị danh sách\nmua sắm từ thực đơn AI nè!',
                                   style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 14.5,
+                                    fontSize: 14.5.sp,
                                     fontWeight: FontWeight.w800,
                                     color: Colors.white,
                                     height: 1.35,
@@ -363,28 +364,28 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
                                 ),
                               ),
 
-                              const SizedBox(height: 16),
+                              SizedBox(height: 16.h),
 
                               Text(
                                 isEn ? 'Add to update' : 'Nhập thêm để cập nhật',
-                                style: GoogleFonts.outfit(
-                                  fontSize: 14.5,
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 14.5.sp,
                                   fontWeight: FontWeight.w800,
                                   color: isDark ? Colors.white : const Color(0xFF006428),
                                 ),
                               ),
-                              const SizedBox(height: 8),
+                              SizedBox(height: 8.h),
 
                               Padding(
-                                padding: const EdgeInsets.only(right: 96.0),
+                                padding: EdgeInsets.only(right: 96.0.w),
                                 child: Container(
                                   height: 48,
-                                  padding: const EdgeInsets.only(left: 14, right: 4),
+                                  padding: EdgeInsets.only(left: 14.w, right: 4.w),
                                   decoration: BoxDecoration(
                                     color: isDark
                                         ? const Color(0xFF19271E)
                                         : Colors.white,
-                                    borderRadius: BorderRadius.circular(28),
+                                    borderRadius: BorderRadius.circular(28.r),
                                     border: Border.all(
                                       color: isDark
                                           ? const Color(0xFF2E4D36)
@@ -407,7 +408,7 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
                                           controller: _addItemController,
                                           onSubmitted: _addNewItem,
                                           style: GoogleFonts.plusJakartaSans(
-                                            fontSize: 13.5,
+                                            fontSize: 13.5.sp,
                                             fontWeight: FontWeight.w600,
                                             color: isDark ? Colors.white : const Color(0xFF19221C),
                                           ),
@@ -416,13 +417,13 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
                                                 ? 'Enter item you want to buy'
                                                 : 'Nhập thực phẩm bạn muốn mua',
                                             hintStyle: GoogleFonts.plusJakartaSans(
-                                              fontSize: 12.5,
+                                              fontSize: 12.5.sp,
                                               color: isDark
                                                   ? const Color(0xFF9DA8A0)
                                                   : const Color(0xFFA5D6A7),
                                             ),
                                             border: InputBorder.none,
-                                            contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                                            contentPadding: EdgeInsets.symmetric(vertical: 10),
                                           ),
                                         ),
                                       ),
@@ -430,11 +431,11 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
                                         color: Colors.transparent,
                                         child: InkWell(
                                           onTap: () => _addNewItem(_addItemController.text),
-                                          borderRadius: BorderRadius.circular(20),
+                                          borderRadius: BorderRadius.circular(20.r),
                                           child: Container(
                                             width: 40,
                                             height: 40,
-                                            decoration: const BoxDecoration(
+                                            decoration: BoxDecoration(
                                               color: Color(0xFF4CAF50),
                                               shape: BoxShape.circle,
                                             ),
@@ -472,15 +473,15 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
                         ],
                       ),
 
-                      const SizedBox(height: 22),
+                      SizedBox(height: 22.h),
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             isEn ? 'Shopping List' : 'Danh sách cần mua',
-                            style: GoogleFonts.outfit(
-                              fontSize: 22,
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 22.sp,
                               fontWeight: FontWeight.w900,
                               color: isDark ? Colors.white : const Color(0xFF006428),
                             ),
@@ -490,19 +491,19 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
                             icon: const Icon(Icons.auto_awesome, size: 16),
                             label: Text(
                               isEn ? 'Sync Plan' : 'Tạo từ AI',
-                              style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold),
+                              style: GoogleFonts.plusJakartaSans(fontSize: 12.sp, fontWeight: FontWeight.bold),
                             ),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF008435),
                               foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
                             ),
                           ),
                         ],
                       ),
 
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
 
                       if (_isLoading)
                         const Padding(
@@ -514,10 +515,10 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
                       else if (_shoppingList.isEmpty)
                         Container(
                           width: double.infinity,
-                          padding: const EdgeInsets.all(24),
+                          padding: EdgeInsets.all(24.w),
                           decoration: BoxDecoration(
                             color: isDark ? const Color(0xFF19271E) : Colors.white,
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(20.r),
                           ),
                           child: Column(
                             children: [
@@ -526,14 +527,14 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
                                 size: 48,
                                 color: isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32),
                               ),
-                              const SizedBox(height: 12),
+                              SizedBox(height: 12.h),
                               Text(
                                 isEn
                                     ? 'No shopping list yet. Tap "Sync Plan" to generate!'
                                     : 'Chưa có danh sách cần mua. Bấm "Tạo từ AI" để tổng hợp!',
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 14,
+                                  fontSize: 14.sp,
                                   fontWeight: FontWeight.w600,
                                   color: isDark ? Colors.white70 : const Color(0xFF2E7D32),
                                 ),
@@ -546,14 +547,14 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: _shoppingList.length,
-                          separatorBuilder: (context, index) => const SizedBox(height: 10),
+                          separatorBuilder: (context, index) => SizedBox(height: 10.h),
                           itemBuilder: (context, index) {
                             final item = _shoppingList[index];
                             return _buildShoppingItemCard(item, isDark);
                           },
                         ),
 
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24.h),
 
                       Center(
                         child: Image.asset(
@@ -569,7 +570,7 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
                         ),
                       ),
 
-                      const SizedBox(height: 18),
+                      SizedBox(height: 18.h),
                     ],
                   ),
                 ),
@@ -583,10 +584,10 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
 
   Widget _buildShoppingItemCard(ShoppingItemModel item, bool isDark) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF19271E) : Colors.white,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(22.r),
         border: Border.all(
           color: isDark
               ? const Color(0xFF2E4D36)
@@ -627,13 +628,13 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
                   : null,
             ),
           ),
-          const SizedBox(width: 14),
+          SizedBox(width: 14.w),
 
           Expanded(
             child: Text(
               item.name,
-              style: GoogleFonts.outfit(
-                fontSize: 16,
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 16.sp,
                 fontWeight: FontWeight.w700,
                 color: item.isChecked
                     ? (isDark ? const Color(0xFF6B786F) : const Color(0xFF757575))
@@ -645,21 +646,21 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
 
           if (item.quantity != null && item.quantity!.isNotEmpty) ...[
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
               decoration: BoxDecoration(
                 color: isDark ? const Color(0xFF233629) : const Color(0xFFE8F5E9),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
               ),
               child: Text(
                 item.quantity!,
                 style: GoogleFonts.plusJakartaSans(
-                  fontSize: 12.5,
+                  fontSize: 12.5.sp,
                   fontWeight: FontWeight.w700,
                   color: isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32),
                 ),
               ),
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8.w),
           ],
 
           IconButton(

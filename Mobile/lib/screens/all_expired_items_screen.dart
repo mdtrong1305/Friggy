@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../data/models/ingredient_model.dart';
 import '../l10n/app_localizations.dart';
@@ -104,7 +105,7 @@ class _AllExpiredItemsScreenState extends State<AllExpiredItemsScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -121,11 +122,11 @@ class _AllExpiredItemsScreenState extends State<AllExpiredItemsScreen> {
             children: [
               // 1. Top Header with Back Chevron
               Padding(
-                padding: const EdgeInsets.only(
-                  left: 8.0,
-                  right: 16.0,
-                  top: 8.0,
-                  bottom: 8.0,
+                padding: EdgeInsets.only(
+                  left: 8.0.w,
+                  right: 16.0.w,
+                  top: 8.0.h,
+                  bottom: 8.0.h,
                 ),
                 child: Row(
                   children: [
@@ -140,7 +141,7 @@ class _AllExpiredItemsScreenState extends State<AllExpiredItemsScreen> {
                     Text(
                       isEn ? 'Expired Ingredients' : 'Nguyên Liệu Hết Hạn',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 22,
+                        fontSize: 22.sp,
                         fontWeight: FontWeight.w900,
                         color: const Color(0xFFB71C1C),
                       ),
@@ -149,11 +150,11 @@ class _AllExpiredItemsScreenState extends State<AllExpiredItemsScreen> {
                 ),
               ),
 
-              const SizedBox(height: 8),
+              SizedBox(height: 8.h),
 
               // Title Section
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -164,18 +165,18 @@ class _AllExpiredItemsScreenState extends State<AllExpiredItemsScreen> {
                           Text(
                             isEn ? 'All Expired Items' : 'Tất cả thực phẩm hết hạn',
                             style: GoogleFonts.plusJakartaSans(
-                              fontSize: 21,
+                              fontSize: 21.sp,
                               fontWeight: FontWeight.w900,
                               color: const Color(0xFFB71C1C),
                               letterSpacing: -0.3,
                               height: 1.15,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: 4.h),
                           Text(
                             isEn ? 'Combined from all your fridges' : 'Tổng hợp từ tất cả các tủ lạnh của bạn',
                             style: GoogleFonts.plusJakartaSans(
-                              fontSize: 13,
+                              fontSize: 13.sp,
                               fontWeight: FontWeight.w600,
                               color: const Color(0xFF880E4F),
                             ),
@@ -183,20 +184,20 @@ class _AllExpiredItemsScreenState extends State<AllExpiredItemsScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10.w),
                     Container(
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 14,
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
                         color: const Color(0xFFB71C1C),
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(16.r),
                       ),
                       child: Text(
                         isEn ? '${_expiredItems.length} items' : '${_expiredItems.length} món',
                         style: GoogleFonts.plusJakartaSans(
-                          fontSize: 15,
+                          fontSize: 15.sp,
                           fontWeight: FontWeight.w900,
                           color: Colors.white,
                         ),
@@ -206,12 +207,12 @@ class _AllExpiredItemsScreenState extends State<AllExpiredItemsScreen> {
                 ),
               ),
 
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
 
               // Expired Items List
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0),
                   child: _isLoading
                       ? const Center(
                           child: CircularProgressIndicator(color: Color(0xFFB71C1C)),
@@ -226,13 +227,13 @@ class _AllExpiredItemsScreenState extends State<AllExpiredItemsScreen> {
                                     size: 64,
                                     color: Color(0xFF008435),
                                   ),
-                                  const SizedBox(height: 12),
+                                  SizedBox(height: 12.h),
                                   Text(
                                     isEn
                                         ? 'Awesome! No expired food found.'
                                         : 'Tuyệt vời! Không có thực phẩm nào bị hết hạn.',
                                     style: GoogleFonts.plusJakartaSans(
-                                      fontSize: 15,
+                                      fontSize: 15.sp,
                                       fontWeight: FontWeight.w700,
                                       color: const Color(0xFF008435),
                                     ),
@@ -244,7 +245,7 @@ class _AllExpiredItemsScreenState extends State<AllExpiredItemsScreen> {
                               physics: const BouncingScrollPhysics(),
                               itemCount: _expiredItems.length,
                               separatorBuilder: (context, index) =>
-                                  const SizedBox(height: 12),
+                                  SizedBox(height: 12.h),
                               itemBuilder: (context, index) {
                                 final item = _expiredItems[index];
                                 final name = isEn && item.englishName.isNotEmpty ? item.englishName : item.name;
@@ -253,10 +254,10 @@ class _AllExpiredItemsScreenState extends State<AllExpiredItemsScreen> {
                                 final expiry = isEn ? 'Expired' : item.expiryText;
 
                                 return Container(
-                                  padding: const EdgeInsets.all(14),
+                                  padding: EdgeInsets.all(14.w),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
-                                    borderRadius: BorderRadius.circular(20),
+                                    borderRadius: BorderRadius.circular(20.r),
                                     border: Border.all(
                                       color: const Color(0xFFEF9A9A),
                                       width: 1.2,
@@ -272,7 +273,7 @@ class _AllExpiredItemsScreenState extends State<AllExpiredItemsScreen> {
                                   child: Row(
                                     children: [
                                       IngredientAvatarWidget(item: item, size: 54),
-                                      const SizedBox(width: 14),
+                                      SizedBox(width: 14.w),
                                       Expanded(
                                         child: Column(
                                           crossAxisAlignment:
@@ -280,17 +281,17 @@ class _AllExpiredItemsScreenState extends State<AllExpiredItemsScreen> {
                                           children: [
                                             Text(
                                               name,
-                                              style: GoogleFonts.outfit(
-                                                fontSize: 18,
+                                              style: GoogleFonts.plusJakartaSans(
+                                                fontSize: 18.sp,
                                                 fontWeight: FontWeight.w800,
                                                 color: const Color(0xFFB71C1C),
                                               ),
                                             ),
-                                            const SizedBox(height: 3),
+                                            SizedBox(height: 3.h),
                                             Text(
                                               '$fName • $qty',
                                               style: GoogleFonts.plusJakartaSans(
-                                                fontSize: 12.5,
+                                                fontSize: 12.5.sp,
                                                 fontWeight: FontWeight.w600,
                                                 color: const Color(0xFF6B786F),
                                               ),
@@ -299,18 +300,18 @@ class _AllExpiredItemsScreenState extends State<AllExpiredItemsScreen> {
                                         ),
                                       ),
                                       Container(
-                                        padding: const EdgeInsets.symmetric(
+                                        padding: EdgeInsets.symmetric(
                                           horizontal: 10,
                                           vertical: 5,
                                         ),
                                         decoration: BoxDecoration(
                                           color: const Color(0xFFFFEBEE),
-                                          borderRadius: BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(12.r),
                                         ),
                                         child: Text(
                                           expiry,
                                           style: GoogleFonts.plusJakartaSans(
-                                            fontSize: 12,
+                                            fontSize: 12.sp,
                                             fontWeight: FontWeight.w800,
                                             color: const Color(0xFFD32F2F),
                                           ),

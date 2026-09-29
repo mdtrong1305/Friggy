@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../data/models/recipe_model.dart';
 import '../data/services/api_exception.dart';
@@ -187,12 +188,12 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
             content: Row(
               children: [
                 const Icon(Icons.stars_rounded, color: Color(0xFFFFD54F), size: 20),
-                const SizedBox(width: 8),
+                SizedBox(width: 8.w),
                 Expanded(
                   child: Text(
                     errorMessage,
                     style: GoogleFonts.plusJakartaSans(
-                      fontSize: 13,
+                      fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
@@ -202,8 +203,8 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
             ),
             backgroundColor: const Color(0xFF006428),
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            margin: const EdgeInsets.all(16),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+            margin: EdgeInsets.all(16.w),
             action: isLimitError
                 ? SnackBarAction(
                     label: isEn ? 'Upgrade' : 'Nâng cấp',
@@ -449,7 +450,7 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
             content: const Text('🎉 AI đã lập thực đơn 7 ngày thành công!'),
             backgroundColor: const Color(0xFF008435),
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14.r)),
           ),
         );
         _checkExistingShoppingList();
@@ -482,7 +483,7 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
 
     if (_weeklyPlanId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Vui lòng chờ AI tạo thực đơn xong trước khi lập danh sách mua sắm!'),
         ),
       );
@@ -491,7 +492,7 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
 
     try {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('🛒 Đang tổng hợp nguyên liệu cần mua từ thực đơn...'),
           duration: Duration(seconds: 2),
         ),
@@ -588,11 +589,11 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4.h),
 
                       // Title & Generate Button
                       Row(
@@ -601,8 +602,8 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                           Expanded(
                             child: Text(
                               isEn ? 'Suggestions for Next Week' : 'Gợi ý cho tuần tới',
-                              style: GoogleFonts.outfit(
-                                fontSize: 26,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 26.sp,
                                 fontWeight: FontWeight.w900,
                                 color: isDark ? Colors.white : const Color(0xFF006428),
                                 letterSpacing: -0.3,
@@ -616,33 +617,33 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                               _isGenerating
                                   ? (isEn ? 'Creating...' : 'Đang tạo...')
                                   : (isEn ? 'AI Plan' : 'AI Lập tuần'),
-                              style: GoogleFonts.outfit(
-                                fontSize: 13,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 13.sp,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF008435),
                               foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(20.r),
                               ),
                             ),
                           ),
                         ],
                       ),
 
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16.h),
 
                       if (_isGenerating || _isLoading)
                         Container(
                           width: double.infinity,
-                          padding: const EdgeInsets.all(24),
-                          margin: const EdgeInsets.only(bottom: 20),
+                          padding: EdgeInsets.all(24.w),
+                          margin: EdgeInsets.only(bottom: 20.h),
                           decoration: BoxDecoration(
                             color: isDark ? const Color(0xFF19271E) : Colors.white,
-                            borderRadius: BorderRadius.circular(24),
+                            borderRadius: BorderRadius.circular(24.r),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black.withValues(alpha: 0.05),
@@ -653,12 +654,12 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                           child: Column(
                             children: [
                               const CircularProgressIndicator(color: Color(0xFF008435)),
-                              const SizedBox(height: 16),
+                              SizedBox(height: 16.h),
                               Text(
                                 _loadingMessage,
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 14,
+                                  fontSize: 14.sp,
                                   fontWeight: FontWeight.w700,
                                   color: isDark ? Colors.white : const Color(0xFF006428),
                                 ),
@@ -670,10 +671,10 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                       // 1. General Overview Card
                       Container(
                         width: double.infinity,
-                        padding: const EdgeInsets.all(18),
+                        padding: EdgeInsets.all(18.w),
                         decoration: BoxDecoration(
                           color: isDark ? const Color(0xFF19271E) : Colors.white,
-                          borderRadius: BorderRadius.circular(24),
+                          borderRadius: BorderRadius.circular(24.r),
                           border: isDark
                               ? Border.all(color: const Color(0xFF2E4D36), width: 1)
                               : null,
@@ -695,7 +696,7 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                                   height: 36,
                                   decoration: BoxDecoration(
                                     color: isDark ? const Color(0xFF233629) : const Color(0xFF2E7D32),
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(12.r),
                                   ),
                                   child: Icon(
                                     Icons.auto_awesome_rounded,
@@ -703,11 +704,11 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                                     size: 22,
                                   ),
                                 ),
-                                const SizedBox(width: 10),
+                                SizedBox(width: 10.w),
                                 Text(
                                   isEn ? 'AI Meal Assistant' : 'Trợ lý thực đơn AI',
-                                  style: GoogleFonts.outfit(
-                                    fontSize: 21,
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 21.sp,
                                     fontWeight: FontWeight.w900,
                                     color: isDark ? Colors.white : const Color(0xFF006428),
                                   ),
@@ -715,7 +716,7 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                               ],
                             ),
 
-                            const SizedBox(height: 16),
+                            SizedBox(height: 16.h),
 
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -727,7 +728,7 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                                       RichText(
                                         text: TextSpan(
                                           style: GoogleFonts.plusJakartaSans(
-                                            fontSize: 14.5,
+                                            fontSize: 14.5.sp,
                                             color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF4A6B53),
                                             fontWeight: FontWeight.w600,
                                             height: 1.45,
@@ -738,7 +739,7 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                                                   TextSpan(
                                                     text: 'fridge ingredients',
                                                     style: TextStyle(
-                                                      fontSize: 15,
+                                                      fontSize: 15.sp,
                                                       fontWeight: FontWeight.w900,
                                                       color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
                                                     ),
@@ -747,7 +748,7 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                                                   TextSpan(
                                                     text: 'nutritional balance',
                                                     style: TextStyle(
-                                                      fontSize: 15,
+                                                      fontSize: 15.sp,
                                                       fontWeight: FontWeight.w900,
                                                       color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
                                                     ),
@@ -759,7 +760,7 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                                                   TextSpan(
                                                     text: 'nguyên liệu trong tủ lạnh',
                                                     style: TextStyle(
-                                                      fontSize: 15,
+                                                      fontSize: 15.sp,
                                                       fontWeight: FontWeight.w900,
                                                       color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
                                                     ),
@@ -768,7 +769,7 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                                                   TextSpan(
                                                     text: 'dinh dưỡng tối ưu',
                                                     style: TextStyle(
-                                                      fontSize: 15,
+                                                      fontSize: 15.sp,
                                                       fontWeight: FontWeight.w900,
                                                       color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
                                                     ),
@@ -777,12 +778,12 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                                                 ],
                                         ),
                                       ),
-                                      const SizedBox(height: 14),
+                                      SizedBox(height: 14.h),
                                       Container(
                                         height: 1,
                                         color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFC8E6C9),
                                       ),
-                                      const SizedBox(height: 12),
+                                      SizedBox(height: 12.h),
                                       Row(
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
@@ -791,14 +792,14 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                                             color: isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32),
                                             size: 18,
                                           ),
-                                          const SizedBox(width: 8),
+                                          SizedBox(width: 8.w),
                                           Expanded(
                                             child: Text(
                                               isEn
                                                   ? 'Explore recipes, replace dishes with AI, or mark cooked meals below!'
                                                   : 'Xem công thức, đổi món AI hoặc đánh dấu đã nấu từng bữa ăn bên dưới nhé!',
                                               style: GoogleFonts.plusJakartaSans(
-                                                fontSize: 13.5,
+                                                fontSize: 13.5.sp,
                                                 fontWeight: FontWeight.w800,
                                                 color: isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32),
                                                 height: 1.3,
@@ -810,7 +811,7 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                                     ],
                                   ),
                                 ),
-                                const SizedBox(width: 8),
+                                SizedBox(width: 8.w),
                                 Transform.translate(
                                   offset: const Offset(8, -12),
                                   child: Transform.scale(
@@ -842,18 +843,18 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                         ),
                       ),
 
-                      const SizedBox(height: 22),
+                      SizedBox(height: 22.h),
 
                       // 2. Shopping Button Banner
                       InkWell(
                         onTap: _handleShoppingListAction,
-                        borderRadius: BorderRadius.circular(30),
+                        borderRadius: BorderRadius.circular(30.r),
                         child: Container(
                           width: double.infinity,
-                          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+                          padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 14.h),
                           decoration: BoxDecoration(
                             color: isDark ? const Color(0xFF19271E) : Colors.white,
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(30.r),
                             border: Border.all(
                               color: isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32),
                               width: 1.5,
@@ -866,7 +867,7 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                                 height: 38,
                                 decoration: BoxDecoration(
                                   color: isDark ? const Color(0xFF233629) : const Color(0xFF2E7D32),
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(12.r),
                                 ),
                                 child: const Icon(
                                   Icons.shopping_cart_checkout_rounded,
@@ -874,7 +875,7 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                                   size: 20,
                                 ),
                               ),
-                              const SizedBox(width: 12),
+                              SizedBox(width: 12.w),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -883,8 +884,8 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                                       _hasShoppingList
                                           ? (isEn ? 'View Meal Shopping List' : 'Xem danh sách thực đơn cần mua')
                                           : (isEn ? 'Create Shopping List from Plan' : 'Tạo danh sách mua sắm từ thực đơn'),
-                                      style: GoogleFonts.outfit(
-                                        fontSize: 15.5,
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 15.5.sp,
                                         fontWeight: FontWeight.w900,
                                         color: isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32),
                                       ),
@@ -894,7 +895,7 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                                           ? (isEn ? 'View and update ingredients to buy' : 'Xem và quản lý các sản phẩm cần mua')
                                           : (isEn ? 'Automatically aggregate missing items' : 'Tự động tổng hợp sản phẩm thiếu'),
                                       style: GoogleFonts.plusJakartaSans(
-                                        fontSize: 12.5,
+                                        fontSize: 12.5.sp,
                                         fontWeight: FontWeight.w600,
                                         color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF55A44B),
                                       ),
@@ -911,15 +912,15 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                         ),
                       ),
 
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24.h),
 
                       // 3. Daily Meal Plans List Title
                       Container(
                         width: double.infinity,
-                        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+                        padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 14.h),
                         decoration: BoxDecoration(
                           color: isDark ? const Color(0xFF19271E) : Colors.white,
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(30.r),
                           border: isDark ? Border.all(color: const Color(0xFF2E4D36), width: 1) : null,
                         ),
                         child: Column(
@@ -927,17 +928,17 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                           children: [
                             Text(
                               isEn ? '7-Day Weekly Menu Plan' : 'Thực đơn 7 ngày trong tuần',
-                              style: GoogleFonts.outfit(
-                                fontSize: 18,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 18.sp,
                                 fontWeight: FontWeight.w900,
                                 color: isDark ? Colors.white : const Color(0xFF006428),
                               ),
                             ),
-                            const SizedBox(height: 2),
+                            SizedBox(height: 2.h),
                             Text(
                               isEn ? 'AI generated balanced menu for 7 days!' : 'Thực đơn 7 ngày từ Thứ 2 đến Chủ nhật do AI lập!',
                               style: GoogleFonts.plusJakartaSans(
-                                fontSize: 13,
+                                fontSize: 13.sp,
                                 fontWeight: FontWeight.w600,
                                 color: isDark ? const Color(0xFF81C784) : const Color(0xFF55A44B),
                               ),
@@ -946,7 +947,7 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                         ),
                       ),
 
-                      const SizedBox(height: 14),
+                      SizedBox(height: 14.h),
 
                       // Horizontal Compact Selector Bar of 7 Days (Thứ 2 -> Chủ Nhật)
                       SizedBox(
@@ -972,13 +973,13 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                                 });
                               },
                               child: Container(
-                                margin: const EdgeInsets.only(right: 10),
-                                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 11),
+                                margin: EdgeInsets.only(right: 10.w),
+                                padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 11.h),
                                 decoration: BoxDecoration(
                                   color: isSelected
                                       ? const Color(0xFF008435)
                                       : (isDark ? const Color(0xFF19271E) : Colors.white),
-                                  borderRadius: BorderRadius.circular(24),
+                                  borderRadius: BorderRadius.circular(24.r),
                                   border: Border.all(
                                     color: isSelected
                                         ? const Color(0xFF008435)
@@ -1000,8 +1001,8 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                                   children: [
                                     Text(
                                       dayText,
-                                      style: GoogleFonts.outfit(
-                                        fontSize: 14.5,
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 14.5.sp,
                                         fontWeight: FontWeight.w800,
                                         color: isSelected
                                             ? Colors.white
@@ -1009,7 +1010,7 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                                       ),
                                     ),
                                     if (hasMeals) ...[
-                                      const SizedBox(width: 6),
+                                      SizedBox(width: 6.w),
                                       Container(
                                         width: 6,
                                         height: 6,
@@ -1029,12 +1030,12 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                         ),
                       ),
 
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24.h),
 
                       // 4. Detailed Meal Slots for Selected Day
                       _buildSelectedDayMealSlots(isDark, isEn),
 
-                      const SizedBox(height: 40),
+                      SizedBox(height: 40.h),
                     ],
                   ),
                 ),
@@ -1056,10 +1057,10 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(18.w),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF19271E) : Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(24.r),
         border: Border.all(
           color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFC8E6C9),
           width: 1.5,
@@ -1078,10 +1079,10 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: EdgeInsets.all(8.w),
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF233629) : const Color(0xFFDCEDC8),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Icon(
                   Icons.restaurant_menu_rounded,
@@ -1089,29 +1090,29 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 10),
+              SizedBox(width: 10.w),
               Expanded(
                 child: Text(
                   isEn ? 'Meal Slots for $dayText' : 'Các bữa ăn trong $dayText',
-                  style: GoogleFonts.outfit(
-                    fontSize: 18,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 18.sp,
                     fontWeight: FontWeight.w900,
                     color: isDark ? Colors.white : const Color(0xFF006428),
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8.w),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF233629) : const Color(0xFFE8F5E9),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.r),
                 ),
                 child: Text(
                   '${slots.length} ${isEn ? "meals" : "bữa ăn"}',
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 12.5,
+                    fontSize: 12.5.sp,
                     fontWeight: FontWeight.w800,
                     color: isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32),
                   ),
@@ -1120,16 +1121,16 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
             ],
           ),
 
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
 
           if (slots.isEmpty)
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20.0),
+              padding: EdgeInsets.symmetric(vertical: 20.0),
               child: Center(
                 child: Text(
                   isEn ? 'No meals scheduled for this day.' : 'Chưa có bữa ăn được lập cho ngày này.',
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 13.5,
+                    fontSize: 13.5.sp,
                     fontWeight: FontWeight.w600,
                     color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF757575),
                   ),
@@ -1179,13 +1180,13 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
     }
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(14),
+      margin: EdgeInsets.only(bottom: 12.h),
+      padding: EdgeInsets.all(14.w),
       decoration: BoxDecoration(
         color: isCompleted
             ? (isDark ? const Color(0xFF1B2E21) : const Color(0xFFEAF5E1))
             : (isDark ? const Color(0xFF233629) : const Color(0xFFF5F9F2)),
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(18.r),
         border: Border.all(
           color: isCompleted
               ? const Color(0xFF008435)
@@ -1199,20 +1200,20 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                 decoration: BoxDecoration(
                   color: mealColor.withValues(alpha: isDark ? 0.3 : 0.15),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(10.r),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(mealIcon, size: 15, color: mealColor),
-                    const SizedBox(width: 5),
+                    SizedBox(width: 5.w),
                     Text(
                       mealLabel,
-                      style: GoogleFonts.outfit(
-                        fontSize: 13,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 13.sp,
                         fontWeight: FontWeight.w800,
                         color: isDark ? Colors.white : mealColor,
                       ),
@@ -1224,14 +1225,14 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
               // Nút Đánh dấu đã nấu xong / Toggle completed
               InkWell(
                 onTap: () => _toggleMealSlotCompleted(slotId, isCompleted),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(10.r),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                   decoration: BoxDecoration(
                     color: isCompleted
                         ? const Color(0xFF008435).withValues(alpha: isDark ? 0.3 : 0.15)
                         : (isDark ? const Color(0xFF19271E) : Colors.white),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(10.r),
                     border: Border.all(
                       color: isCompleted
                           ? const Color(0xFF008435)
@@ -1249,11 +1250,11 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                             ? const Color(0xFF008435)
                             : (isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32)),
                       ),
-                      const SizedBox(width: 5),
+                      SizedBox(width: 5.w),
                       Text(
                         isCompleted ? (isEn ? 'Cooked' : 'Đã nấu xong') : (isEn ? 'Mark Cooked' : 'Nấu xong'),
                         style: GoogleFonts.plusJakartaSans(
-                          fontSize: 12,
+                          fontSize: 12.sp,
                           fontWeight: FontWeight.w800,
                           color: isCompleted
                               ? const Color(0xFF008435)
@@ -1266,31 +1267,31 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10.h),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 recipeName,
-                style: GoogleFonts.outfit(
-                  fontSize: 16,
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.w800,
                   color: isDark ? Colors.white : const Color(0xFF006428),
                   decoration: isCompleted ? TextDecoration.lineThrough : null,
                 ),
               ),
-              const SizedBox(height: 2),
+              SizedBox(height: 2.h),
               Text(
                 isEn ? '$servings serving' : '$servings người ăn',
                 style: GoogleFonts.plusJakartaSans(
-                  fontSize: 12,
+                  fontSize: 12.sp,
                   fontWeight: FontWeight.w600,
                   color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF666666),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -1317,7 +1318,7 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                 label: Text(
                   isEn ? 'Recipe' : 'Xem công thức',
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -1326,15 +1327,15 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                   side: BorderSide(
                     color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFC8E6C9),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
                 ),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8.w),
               ElevatedButton.icon(
                 onPressed: isRegenerating ? null : () => _regenerateMealSlot(slotId, recipeId),
                 icon: isRegenerating
-                    ? const SizedBox(
+                    ? SizedBox(
                         width: 12,
                         height: 12,
                         child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
@@ -1345,15 +1346,15 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
                       ? (isEn ? 'Changing...' : 'Đang đổi...')
                       : (isEn ? 'Change Dish' : 'Đổi món AI'),
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF008435),
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
                 ),
               ),
             ],

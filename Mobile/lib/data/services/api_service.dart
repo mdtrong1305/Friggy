@@ -236,8 +236,9 @@ class ApiService {
   // ------------------------------------------------------------------
 
   /// Get list of ingredients
-  Future<List<dynamic>> getIngredients({int? categoryId, String? search, int limit = 100}) async {
+  Future<List<dynamic>> getIngredients({int? categoryId, String? search, int limit = 100, int skip = 0}) async {
     final queryParams = <String, dynamic>{'limit': limit};
+    if (skip > 0) queryParams['skip'] = skip;
     if (categoryId != null) queryParams['categoryId'] = categoryId;
     if (search != null && search.isNotEmpty) queryParams['search'] = search;
 

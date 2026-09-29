@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import '../data/models/fridge_models.dart';
@@ -129,7 +130,7 @@ class _ScanBarcodeScreenState extends State<ScanBarcodeScreen>
           children: [
             // Top Bar
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+              padding: EdgeInsets.symmetric(horizontal: 16.0.w, vertical: 12.0.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -142,8 +143,8 @@ class _ScanBarcodeScreenState extends State<ScanBarcodeScreen>
                   ),
                   Text(
                     isEn ? 'Scan Barcode / QR' : 'Quét Mã Vạch / QR',
-                    style: GoogleFonts.outfit(
-                      fontSize: 20,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 20.sp,
                       fontWeight: FontWeight.bold,
                       color: isDark ? Colors.white : const Color(0xFF19221C),
                     ),
@@ -162,17 +163,17 @@ class _ScanBarcodeScreenState extends State<ScanBarcodeScreen>
             // Viewfinder Frame
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(24.0),
+                padding: EdgeInsets.all(24.0.w),
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(20.r),
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: Colors.black,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(20.r),
                           border: isDark
                               ? Border.all(color: const Color(0xFF2E4D36), width: 1.5)
                               : null,
@@ -195,12 +196,12 @@ class _ScanBarcodeScreenState extends State<ScanBarcodeScreen>
                                   color: isDark ? const Color(0xFF81C784) : const Color(0xFF76FF03),
                                   size: 48,
                                 ),
-                                const SizedBox(height: 8),
+                                SizedBox(height: 8.h),
                                 Text(
                                   isEn ? 'Align barcode inside frame' : 'Căn chỉnh mã vạch vào khung hình',
                                   style: GoogleFonts.plusJakartaSans(
                                     color: Colors.white,
-                                    fontSize: 13,
+                                    fontSize: 13.sp,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -231,7 +232,7 @@ class _ScanBarcodeScreenState extends State<ScanBarcodeScreen>
 
             // Bottom Actions
             Padding(
-              padding: const EdgeInsets.only(bottom: 24.0),
+              padding: EdgeInsets.only(bottom: 24.0.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -263,7 +264,7 @@ class _ScanBarcodeScreenState extends State<ScanBarcodeScreen>
                       ),
                     ),
                   ),
-                  const SizedBox(width: 32),
+                  SizedBox(width: 32.w),
                 ],
               ),
             ),

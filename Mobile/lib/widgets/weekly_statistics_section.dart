@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../l10n/app_localizations.dart';
 import '../data/services/api_service.dart';
@@ -93,8 +94,8 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
           children: [
             Text(
               isEn ? "This Week's Stats" : 'Thống Kê Tuần Này',
-              style: GoogleFonts.outfit(
-                fontSize: 20,
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 20.sp,
                 fontWeight: FontWeight.w800,
                 color: Colors.white,
                 letterSpacing: 0.2,
@@ -103,14 +104,14 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
             GestureDetector(
               onTap: widget.onDetailTap,
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                padding: EdgeInsets.symmetric(vertical: 4.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       isEn ? 'View details' : 'Xem chi tiết',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
                         color: Colors.white.withValues(alpha: 0.95),
                       ),
@@ -127,14 +128,14 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
           ],
         ),
 
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
 
         // 2. Side-by-Side Statistics Cards with smaller frame height (106px) and bigger image pop-outs
         GestureDetector(
           onTap: widget.onDetailTap,
           child: Padding(
             padding:
-                const EdgeInsets.only(top: 22, bottom: 22, left: 12, right: 12),
+                EdgeInsets.only(top: 22.h, bottom: 22.h, left: 12.w, right: 12.w),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -145,13 +146,13 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
                     children: [
                       Container(
                         width: double.infinity,
-                        height: 106,
-                        padding: const EdgeInsets.only(
-                            left: 72, top: 8, right: 6, bottom: 8),
+                        height: 106.h,
+                        padding: EdgeInsets.only(
+                            left: 72.w, top: 8.h, right: 6.w, bottom: 8.h),
                         decoration: BoxDecoration(
                           color:
                               isDark ? const Color(0xFF19271E) : Colors.white,
-                          borderRadius: BorderRadius.circular(22),
+                          borderRadius: BorderRadius.circular(22.r),
                           border: isDark
                               ? Border.all(
                                   color: const Color(0xFF2E4D36), width: 1)
@@ -171,8 +172,8 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
                           children: [
                             Text(
                               isEn ? 'COOKED' : 'BỮA ĐÃ NẤU',
-                              style: GoogleFonts.outfit(
-                                fontSize: 11,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 11.sp,
                                 fontWeight: FontWeight.w800,
                                 color: isDark
                                     ? const Color(0xFF81C784)
@@ -180,14 +181,14 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
                                 letterSpacing: 0.4,
                               ),
                             ),
-                            const SizedBox(height: 1),
+                            SizedBox(height: 1.h),
                             FittedBox(
                               fit: BoxFit.scaleDown,
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 isEn ? 'Meals Cooked' : 'Đã nấu ăn',
-                                style: GoogleFonts.outfit(
-                                  fontSize: 16.5,
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 16.5.sp,
                                   fontWeight: FontWeight.w900,
                                   color: isDark
                                       ? Colors.white
@@ -196,26 +197,26 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 2),
+                            SizedBox(height: 2.h),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.baseline,
                               textBaseline: TextBaseline.alphabetic,
                               children: [
                                 Text(
                                   '$mealsCooked',
-                                  style: GoogleFonts.outfit(
-                                    fontSize: 22,
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 22.sp,
                                     fontWeight: FontWeight.w900,
                                     color: isDark
                                         ? Colors.white
                                         : const Color(0xFF19221C),
                                   ),
                                 ),
-                                const SizedBox(width: 4),
+                                SizedBox(width: 4.w),
                                 Text(
                                   isEn ? 'meals' : 'bữa',
                                   style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 13,
+                                    fontSize: 13.sp,
                                     fontWeight: FontWeight.w700,
                                     color: isDark
                                         ? const Color(0xFF81C784)
@@ -228,10 +229,10 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
                         ),
                       ),
                       Positioned(
-                        left: -28,
-                        top: -22,
-                        width: 100,
-                        height: 100,
+                        left: -28.w,
+                        top: -22.h,
+                        width: 100.w,
+                        height: 100.h,
                         child: Image.asset(
                           'assets/images/left.png',
                           fit: BoxFit.contain,
@@ -241,7 +242,7 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
                   ),
                 ),
 
-                const SizedBox(width: 14),
+                SizedBox(width: 14.w),
 
                 // Right Card: WASTED / SẮP HẾT HẠN
                 Expanded(
@@ -250,14 +251,14 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
                     children: [
                       Container(
                         width: double.infinity,
-                        height: 106,
-                        padding: const EdgeInsets.only(
-                            left: 14, top: 8, right: 60, bottom: 8),
+                        height: 106.h,
+                        padding: EdgeInsets.only(
+                            left: 14.w, top: 8.h, right: 60.w, bottom: 8.h),
                         decoration: BoxDecoration(
                           color: isDark
                               ? const Color(0xFF2D1C1C)
                               : Colors.white,
-                          borderRadius: BorderRadius.circular(22),
+                          borderRadius: BorderRadius.circular(22.r),
                           border: isDark
                               ? Border.all(
                                   color: const Color(0xFF5C2525), width: 1)
@@ -277,8 +278,8 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
                           children: [
                             Text(
                               isEn ? 'EXPIRING' : 'CẦN CHÚ Ý',
-                              style: GoogleFonts.outfit(
-                                fontSize: 11,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 11.sp,
                                 fontWeight: FontWeight.w800,
                                 color: isDark
                                     ? const Color(0xFFFF8A80)
@@ -286,14 +287,14 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
                                 letterSpacing: 0.4,
                               ),
                             ),
-                            const SizedBox(height: 1),
+                            SizedBox(height: 1.h),
                             FittedBox(
                               fit: BoxFit.scaleDown,
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 isEn ? 'Expiring Soon' : 'Sắp hết hạn',
-                                style: GoogleFonts.outfit(
-                                  fontSize: 16.5,
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 16.5.sp,
                                   fontWeight: FontWeight.w900,
                                   color: isDark
                                       ? Colors.white
@@ -302,26 +303,26 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 2),
+                            SizedBox(height: 2.h),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.baseline,
                               textBaseline: TextBaseline.alphabetic,
                               children: [
                                 Text(
                                   '$expiringSoon',
-                                  style: GoogleFonts.outfit(
-                                    fontSize: 22,
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 22.sp,
                                     fontWeight: FontWeight.w900,
                                     color: isDark
                                         ? const Color(0xFFFF8A80)
                                         : const Color(0xFFD32F2F),
                                   ),
                                 ),
-                                const SizedBox(width: 4),
+                                SizedBox(width: 4.w),
                                 Text(
                                   isEn ? 'items' : 'món',
                                   style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 13,
+                                    fontSize: 13.sp,
                                     fontWeight: FontWeight.w700,
                                     color: isDark
                                         ? const Color(0xFFFF8A80)
@@ -334,10 +335,10 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
                         ),
                       ),
                       Positioned(
-                        right: -24,
-                        bottom: -22,
-                        width: 100,
-                        height: 100,
+                        right: -24.w,
+                        bottom: -22.h,
+                        width: 100.w,
+                        height: 100.h,
                         child: Image.asset(
                           'assets/images/right.png',
                           fit: BoxFit.contain,
@@ -351,17 +352,17 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
           ),
         ),
 
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
 
         // 3. First Action Banner Button ("Food suggestions for next week")
         GestureDetector(
           onTap: widget.onMealSuggestionsTap,
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF19271E) : Colors.white,
-              borderRadius: BorderRadius.circular(38),
+              borderRadius: BorderRadius.circular(38.r),
               border: Border.all(
                 color:
                     isDark ? const Color(0xFF81C784) : const Color(0xFF008435),
@@ -384,7 +385,7 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
                     color: isDark
                         ? const Color(0xFF233629)
                         : const Color(0xFF008435),
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.circular(18.r),
                   ),
                   child: Center(
                     child: Icon(
@@ -394,7 +395,7 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 16),
+                SizedBox(width: 16.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -404,20 +405,20 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
                         isEn
                             ? 'Food suggestions for next week'
                             : 'Gợi ý thực phẩm cho tuần tới',
-                        style: GoogleFonts.outfit(
-                          fontSize: 16,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w800,
                           color:
                               isDark ? Colors.white : const Color(0xFF008435),
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(height: 2.h),
                       Text(
                         isEn
                             ? 'Convenient & nutritious'
                             : 'Tiện lợi và dinh dưỡng',
                         style: GoogleFonts.plusJakartaSans(
-                          fontSize: 13.5,
+                          fontSize: 13.5.sp,
                           fontWeight: FontWeight.w600,
                           color: isDark
                               ? const Color(0xFF81C784)
@@ -432,17 +433,17 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
           ),
         ),
 
-        const SizedBox(height: 14),
+        SizedBox(height: 14.h),
 
         // 4. Second Action Banner Button ("Shopping reminder")
         GestureDetector(
           onTap: widget.onShoppingReminderTap,
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF19271E) : Colors.white,
-              borderRadius: BorderRadius.circular(38),
+              borderRadius: BorderRadius.circular(38.r),
               border: Border.all(
                 color:
                     isDark ? const Color(0xFF81C784) : const Color(0xFF008435),
@@ -465,7 +466,7 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
                     color: isDark
                         ? const Color(0xFF233629)
                         : const Color(0xFF008435),
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.circular(18.r),
                   ),
                   child: Center(
                     child: Icon(
@@ -475,7 +476,7 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 16),
+                SizedBox(width: 16.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -483,20 +484,20 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
                     children: [
                       Text(
                         isEn ? 'Shopping reminder' : 'Nhắc nhở mua sắm',
-                        style: GoogleFonts.outfit(
-                          fontSize: 16,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w800,
                           color:
                               isDark ? Colors.white : const Color(0xFF008435),
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(height: 2.h),
                       Text(
                         isEn
                             ? 'Please check your shopping cart!'
                             : 'Vui lòng kiểm tra giỏ hàng của bạn!',
                         style: GoogleFonts.plusJakartaSans(
-                          fontSize: 13.5,
+                          fontSize: 13.5.sp,
                           fontWeight: FontWeight.w600,
                           color: isDark
                               ? const Color(0xFF81C784)

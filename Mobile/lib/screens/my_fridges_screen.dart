@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../l10n/app_localizations.dart';
 import 'fridge_inventory_screen.dart';
@@ -115,10 +116,10 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
           child: Container(
-            padding: const EdgeInsets.all(24),
+            padding: EdgeInsets.all(24.w),
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF19271E) : Colors.white,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
               border: isDark ? Border.all(color: const Color(0xFF2E4D36), width: 1.2) : null,
             ),
             child: Column(
@@ -130,16 +131,16 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                   height: 5,
                   decoration: BoxDecoration(
                     color: isDark ? const Color(0xFF2E4D36) : Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(10.r),
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
 
                 // Top Mascot Thumbnail Banner
                 Container(
                   width: 72,
                   height: 72,
-                  padding: const EdgeInsets.all(8),
+                  padding: EdgeInsets.all(8.w),
                   decoration: BoxDecoration(
                     color: isDark ? const Color(0xFF233629) : const Color(0xFFE8F5E9),
                     shape: BoxShape.circle,
@@ -161,34 +162,34 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 14),
+                SizedBox(height: 14.h),
 
                 // Title & Subtitle
                 Text(
                   'Đổi tên tủ lạnh',
-                  style: GoogleFonts.outfit(
-                    fontSize: 22,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 22.sp,
                     fontWeight: FontWeight.w900,
                     color: isDark ? Colors.white : const Color(0xFF006428),
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4.h),
                 Text(
                   'Nhập tên mới để dễ dàng quản lý thực phẩm',
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 13,
+                    fontSize: 13.sp,
                     fontWeight: FontWeight.w500,
                     color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF757575),
                   ),
                 ),
 
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
 
                 // Styled Input Field (Name Only)
                 Container(
                   decoration: BoxDecoration(
                     color: isDark ? const Color(0xFF0E1611) : const Color(0xFFF5FCF4),
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.circular(18.r),
                     border: Border.all(
                       color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5D6A7),
                       width: 1.2,
@@ -198,7 +199,7 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                     controller: nameController,
                     autofocus: true,
                     style: GoogleFonts.plusJakartaSans(
-                      fontSize: 15.5,
+                      fontSize: 15.5.sp,
                       fontWeight: FontWeight.w700,
                       color: isDark ? Colors.white : const Color(0xFF19221C),
                     ),
@@ -213,7 +214,7 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                         size: 22,
                       ),
                       border: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(
+                      contentPadding: EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 14,
                       ),
@@ -221,7 +222,7 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 24),
+                SizedBox(height: 24.h),
 
                 // Action Buttons
                 Row(
@@ -230,22 +231,22 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                       child: TextButton(
                         onPressed: () => Navigator.pop(context),
                         style: TextButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          padding: EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(20.r),
                           ),
                         ),
                         child: Text(
                           'Hủy',
                           style: GoogleFonts.plusJakartaSans(
-                            fontSize: 15,
+                            fontSize: 15.sp,
                             fontWeight: FontWeight.w700,
                             color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF757575),
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12.w),
                     Expanded(
                       flex: 2,
                       child: ElevatedButton.icon(
@@ -262,7 +263,7 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                                 backgroundColor: const Color(0xFF008435),
                                 behavior: SnackBarBehavior.floating,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14),
+                                  borderRadius: BorderRadius.circular(14.r),
                                 ),
                                 duration: const Duration(seconds: 2),
                               ),
@@ -278,7 +279,7 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                         label: Text(
                           'Lưu tên mới',
                           style: GoogleFonts.plusJakartaSans(
-                            fontSize: 15,
+                            fontSize: 15.sp,
                             fontWeight: FontWeight.w900,
                             color: isDark ? const Color(0xFF0E1611) : Colors.white,
                           ),
@@ -287,7 +288,7 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
               ],
             ),
           ),
@@ -327,16 +328,16 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
               child: Container(
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF19271E) : Colors.white,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
                   border: isDark
                       ? const Border(top: BorderSide(color: Color(0xFF2E4D36), width: 1.2))
                       : null,
                 ),
-                padding: const EdgeInsets.only(
-                  left: 24,
-                  right: 24,
-                  top: 14,
-                  bottom: 24,
+                padding: EdgeInsets.only(
+                  left: 24.w,
+                  right: 24.w,
+                  top: 14.h,
+                  bottom: 24.h,
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -349,12 +350,12 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                         height: 4.5,
                         decoration: BoxDecoration(
                           color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFC8E6C9),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(10.r),
                         ),
                       ),
                     ),
 
-                    const SizedBox(height: 18),
+                    SizedBox(height: 18.h),
 
                     // Header Row: Icon Badge, Title, Subtitle, Close Button
                     Row(
@@ -365,7 +366,7 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                           height: 52,
                           decoration: BoxDecoration(
                             color: isDark ? const Color(0xFF233629) : const Color(0xFFE8F5E9),
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16.r),
                           ),
                           child: Icon(
                             Icons.kitchen_rounded,
@@ -373,24 +374,24 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                             size: 26,
                           ),
                         ),
-                        const SizedBox(width: 14),
+                        SizedBox(width: 14.w),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 'Thêm Tủ Lạnh Mới',
-                                style: GoogleFonts.outfit(
-                                  fontSize: 22,
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 22.sp,
                                   fontWeight: FontWeight.w800,
                                   color: isDark ? Colors.white : const Color(0xFF006428),
                                 ),
                               ),
-                              const SizedBox(height: 2),
+                              SizedBox(height: 2.h),
                               Text(
                                 'Tạo không gian lưu trữ và chia sẻ cùng người thân',
                                 style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 13,
+                                  fontSize: 13.sp,
                                   fontWeight: FontWeight.w500,
                                   color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF55A44B),
                                 ),
@@ -408,23 +409,23 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                       ],
                     ),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
 
                     // Field 1: Fridge Name
                     Text(
                       'TÊN TỦ LẠNH',
-                      style: GoogleFonts.outfit(
-                        fontSize: 13,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 13.sp,
                         fontWeight: FontWeight.w800,
                         color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
                         letterSpacing: 0.5,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     Container(
                       decoration: BoxDecoration(
                         color: isDark ? const Color(0xFF0E1611) : const Color(0xFFF7FAF8),
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(16.r),
                         border: Border.all(
                           color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5E69C),
                           width: 1.2,
@@ -434,7 +435,7 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                         controller: nameController,
                         autofocus: true,
                         style: GoogleFonts.plusJakartaSans(
-                          fontSize: 15,
+                          fontSize: 15.sp,
                           fontWeight: FontWeight.w600,
                           color: isDark ? Colors.white : const Color(0xFF19221C),
                         ),
@@ -446,12 +447,12 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                           ),
                           hintText: 'vd: Tủ công ty, Tủ nhà riêng...',
                           hintStyle: GoogleFonts.plusJakartaSans(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
                             color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF9EA8A1),
                           ),
                           border: InputBorder.none,
-                          contentPadding: const EdgeInsets.symmetric(
+                          contentPadding: EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 14,
                           ),
@@ -459,23 +460,23 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 18),
+                    SizedBox(height: 18.h),
 
                     // Field 2: Add Members
                     Text(
                       'THÊM THÀNH VIÊN (SĐT HOẶC EMAIL)',
-                      style: GoogleFonts.outfit(
-                        fontSize: 13,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 13.sp,
                         fontWeight: FontWeight.w800,
                         color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
                         letterSpacing: 0.5,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     Container(
                       decoration: BoxDecoration(
                         color: isDark ? const Color(0xFF0E1611) : const Color(0xFFF7FAF8),
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(16.r),
                         border: Border.all(
                           color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5E69C),
                           width: 1.2,
@@ -485,7 +486,7 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                         controller: memberController,
                         onSubmitted: (_) => addMember(),
                         style: GoogleFonts.plusJakartaSans(
-                          fontSize: 14.5,
+                          fontSize: 14.5.sp,
                           fontWeight: FontWeight.w600,
                           color: isDark ? Colors.white : const Color(0xFF19221C),
                         ),
@@ -497,27 +498,27 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                           ),
                           hintText: 'vd: friend@email.com...',
                           hintStyle: GoogleFonts.plusJakartaSans(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
                             color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF9EA8A1),
                           ),
                           border: InputBorder.none,
-                          contentPadding: const EdgeInsets.symmetric(
+                          contentPadding: EdgeInsets.symmetric(
                             horizontal: 14,
                             vertical: 14,
                           ),
                           suffixIcon: Padding(
-                            padding: const EdgeInsets.all(6.0),
+                            padding: EdgeInsets.all(6.0.w),
                             child: GestureDetector(
                               onTap: addMember,
                               child: Container(
-                                padding: const EdgeInsets.symmetric(
+                                padding: EdgeInsets.symmetric(
                                   horizontal: 14,
                                   vertical: 8,
                                 ),
                                 decoration: BoxDecoration(
                                   color: isDark ? const Color(0xFF81C784) : const Color(0xFF008435),
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(12.r),
                                 ),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
@@ -527,11 +528,11 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                                       size: 18,
                                       color: isDark ? const Color(0xFF0E1611) : Colors.white,
                                     ),
-                                    const SizedBox(width: 4),
+                                    SizedBox(width: 4.w),
                                     Text(
                                       'Thêm',
                                       style: GoogleFonts.plusJakartaSans(
-                                        fontSize: 13,
+                                        fontSize: 13.sp,
                                         fontWeight: FontWeight.w800,
                                         color: isDark ? const Color(0xFF0E1611) : Colors.white,
                                       ),
@@ -547,16 +548,16 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
 
                     // Added Member Chips
                     if (memberList.isNotEmpty) ...[
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
                       Wrap(
                         spacing: 8,
                         runSpacing: 8,
                         children: memberList.map((mem) {
                           return Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 7.h),
                             decoration: BoxDecoration(
                               color: isDark ? const Color(0xFF233629) : const Color(0xFFE8F5E9),
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(20.r),
                               border: Border.all(
                                 color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5D6A7),
                               ),
@@ -575,23 +576,23 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                                     child: Text(
                                       mem[0].toUpperCase(),
                                       style: GoogleFonts.plusJakartaSans(
-                                        fontSize: 11,
+                                        fontSize: 11.sp,
                                         fontWeight: FontWeight.w900,
                                         color: isDark ? const Color(0xFF0E1611) : Colors.white,
                                       ),
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 8),
+                                SizedBox(width: 8.w),
                                 Text(
                                   mem,
                                   style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 13,
+                                    fontSize: 13.sp,
                                     fontWeight: FontWeight.w700,
                                     color: isDark ? Colors.white : const Color(0xFF006428),
                                   ),
                                 ),
-                                const SizedBox(width: 6),
+                                SizedBox(width: 6.w),
                                 GestureDetector(
                                   onTap: () {
                                     setModalState(() {
@@ -611,7 +612,7 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                       ),
                     ],
 
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
 
                     // Submit Button
                     GestureDetector(
@@ -678,7 +679,7 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                               backgroundColor: const Color(0xFF008435),
                               behavior: SnackBarBehavior.floating,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
+                                borderRadius: BorderRadius.circular(14.r),
                               ),
                               duration: const Duration(seconds: 2),
                             ),
@@ -691,7 +692,7 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                         height: 54,
                         decoration: BoxDecoration(
                           color: isDark ? const Color(0xFF81C784) : const Color(0xFF008435),
-                          borderRadius: BorderRadius.circular(28),
+                          borderRadius: BorderRadius.circular(28.r),
                           boxShadow: [
                             BoxShadow(
                               color: (isDark ? const Color(0xFF81C784) : const Color(0xFF008435))
@@ -709,11 +710,11 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                               color: isDark ? const Color(0xFF0E1611) : Colors.white,
                               size: 22,
                             ),
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8.w),
                             Text(
                               'Tạo Tủ Lạnh',
-                              style: GoogleFonts.outfit(
-                                fontSize: 17,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 17.sp,
                                 fontWeight: FontWeight.w800,
                                 color: isDark ? const Color(0xFF0E1611) : Colors.white,
                               ),
@@ -723,7 +724,7 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                   ],
                 ),
               ),
@@ -741,11 +742,11 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
     final isEn = loc?.locale.languageCode == 'en';
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      padding: EdgeInsets.symmetric(horizontal: 20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
 
           // Header Title matching HomeHeader 100%
           Row(
@@ -758,7 +759,7 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                   RichText(
                     text: TextSpan(
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 32,
+                        fontSize: 32.sp,
                         fontWeight: FontWeight.bold,
                         letterSpacing: -0.5,
                       ),
@@ -800,7 +801,7 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                   Text(
                     isEn ? 'Long press a fridge card to rename' : 'Đề giữ vào tủ để sửa tên',
                     style: GoogleFonts.plusJakartaSans(
-                      fontSize: 12,
+                      fontSize: 12.sp,
                       fontWeight: FontWeight.w600,
                       color: isDark
                           ? const Color(0xFF9DA8A0)
@@ -842,7 +843,7 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
             ],
           ),
 
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
 
           // Grid Display of Fridges with onboarding_fridge.png & Name below!
           Expanded(
@@ -879,10 +880,10 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                       Container(
                         width: double.infinity,
                         height: double.infinity,
-                        padding: const EdgeInsets.all(14),
+                        padding: EdgeInsets.all(14.w),
                         decoration: BoxDecoration(
                           color: isDark ? const Color(0xFF19271E) : Colors.white,
-                          borderRadius: BorderRadius.circular(24),
+                          borderRadius: BorderRadius.circular(24.r),
                           border: Border.all(
                             color: isDark
                                 ? const Color(0xFF2E4D36)
@@ -900,12 +901,12 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const SizedBox(height: 12),
+                            SizedBox(height: 12.h),
 
                             // 1. Fridge Image (assets/images/onboarding_fridge.png)
                             Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.all(4.0),
+                                padding: EdgeInsets.all(4.0.w),
                                 child: Image.asset(
                                   'assets/images/onboarding_fridge.png',
                                   fit: BoxFit.contain,
@@ -913,7 +914,7 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                               ),
                             ),
 
-                            const SizedBox(height: 10),
+                            SizedBox(height: 10.h),
 
                             // 2. Fridge Name (Below the image)
                             Text(
@@ -922,13 +923,13 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.plusJakartaSans(
-                                fontSize: 15.5,
+                                fontSize: 15.5.sp,
                                 fontWeight: FontWeight.w900,
                                 color: isDark ? Colors.white : const Color(0xFF006428),
                                 height: 1.15,
                               ),
                             ),
-                            const SizedBox(height: 4),
+                            SizedBox(height: 4.h),
                           ],
                         ),
                       ),
@@ -936,8 +937,8 @@ class _MyFridgesScreenState extends State<MyFridgesScreen> {
                       // Top Right Circular Member Icon Button (👥)
                       if (_familyRole?.group != null && (_familyRole?.role == 'owner' || _familyRole?.role == 'member'))
                         Positioned(
-                        top: 8,
-                        right: 8,
+                        top: 8.h,
+                        right: 8.w,
                         child: GestureDetector(
                           onTap: () {
                             showFridgeMembersModal(

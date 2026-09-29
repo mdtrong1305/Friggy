@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../data/models/user_models.dart';
 import '../data/services/api_service.dart';
@@ -99,10 +100,10 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
         final displayName = member.memberName ?? member.invitedEmail;
         return AlertDialog(
           backgroundColor: isDark ? const Color(0xFF19271E) : Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
           title: Text(
             'Xóa thành viên',
-            style: GoogleFonts.outfit(
+            style: GoogleFonts.plusJakartaSans(
               fontWeight: FontWeight.bold,
               color: isDark ? Colors.white : const Color(0xFF19221C),
             ),
@@ -110,7 +111,7 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
           content: Text(
             'Bạn có chắc chắn muốn xóa $displayName khỏi nhóm gia đình?',
             style: GoogleFonts.plusJakartaSans(
-              fontSize: 14,
+              fontSize: 14.sp,
               color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF616161),
             ),
           ),
@@ -127,7 +128,7 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFE53935),
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
               ),
               child: const Text('Xóa'),
             ),
@@ -165,14 +166,14 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
         final isDark = Theme.of(context).brightness == Brightness.dark;
         return AlertDialog(
           backgroundColor: isDark ? const Color(0xFF19271E) : Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
           title: Row(
             children: [
               const Icon(Icons.warning_amber_rounded, color: Color(0xFFE53935)),
-              const SizedBox(width: 8),
+              SizedBox(width: 8.w),
               Text(
                 'Giải tán gia đình',
-                style: GoogleFonts.outfit(
+                style: GoogleFonts.plusJakartaSans(
                   fontWeight: FontWeight.bold,
                   color: const Color(0xFFE53935),
                 ),
@@ -182,7 +183,7 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
           content: Text(
             'Tất cả thành viên sẽ rời khỏi nhóm và nhận thông báo. Bạn có chắc chắn muốn giải tán nhóm gia đình này không?',
             style: GoogleFonts.plusJakartaSans(
-              fontSize: 14,
+              fontSize: 14.sp,
               color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF616161),
             ),
           ),
@@ -199,7 +200,7 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFE53935),
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
               ),
               child: const Text('Giải tán'),
             ),
@@ -281,10 +282,10 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: isDark ? const Color(0xFF19271E) : Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
           title: Text(
             'Mời thành viên mới',
-            style: GoogleFonts.outfit(
+            style: GoogleFonts.plusJakartaSans(
               fontWeight: FontWeight.bold,
               color: isDark ? Colors.white : const Color(0xFF006428),
             ),
@@ -296,11 +297,11 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
               Text(
                 'Nhập địa chỉ email người thân để gửi lời mời tham gia gói gia đình (tối đa 5 người):',
                 style: GoogleFonts.plusJakartaSans(
-                  fontSize: 13,
+                  fontSize: 13.sp,
                   color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF616161),
                 ),
               ),
-              const SizedBox(height: 14),
+              SizedBox(height: 14.h),
               TextField(
                 controller: _inviteEmailController,
                 keyboardType: TextInputType.emailAddress,
@@ -309,7 +310,7 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
                   labelText: 'Email người được mời',
                   hintText: 'vi-du@gmail.com',
                   prefixIcon: const Icon(Icons.email_outlined),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14.r)),
                   filled: true,
                   fillColor: isDark ? const Color(0xFF233629) : const Color(0xFFF5F5F5),
                 ),
@@ -329,10 +330,10 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF008435),
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
               ),
               child: _isActionLoading
-                  ? const SizedBox(
+                  ? SizedBox(
                       width: 18,
                       height: 18,
                       child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
@@ -352,10 +353,10 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: isDark ? const Color(0xFF19271E) : Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
           title: Text(
             'Nhập Token lời mời',
-            style: GoogleFonts.outfit(
+            style: GoogleFonts.plusJakartaSans(
               fontWeight: FontWeight.bold,
               color: isDark ? Colors.white : const Color(0xFF006428),
             ),
@@ -367,11 +368,11 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
               Text(
                 'Nếu bạn nhận được mã Token lời mời từ Email, nhập mã vào đây để tham gia:',
                 style: GoogleFonts.plusJakartaSans(
-                  fontSize: 13,
+                  fontSize: 13.sp,
                   color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF616161),
                 ),
               ),
-              const SizedBox(height: 14),
+              SizedBox(height: 14.h),
               TextField(
                 controller: _tokenController,
                 style: TextStyle(color: isDark ? Colors.white : Colors.black87),
@@ -379,7 +380,7 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
                   labelText: 'Mã Token lời mời',
                   hintText: 'Dán mã token từ email',
                   prefixIcon: const Icon(Icons.key_rounded),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14.r)),
                   filled: true,
                   fillColor: isDark ? const Color(0xFF233629) : const Color(0xFFF5F5F5),
                 ),
@@ -405,7 +406,7 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
               style: OutlinedButton.styleFrom(
                 foregroundColor: const Color(0xFFE53935),
                 side: const BorderSide(color: Color(0xFFE53935)),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
               ),
               child: const Text('Từ chối'),
             ),
@@ -420,7 +421,7 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF008435),
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
               ),
               child: const Text('Tham gia'),
             ),
@@ -451,12 +452,12 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
     final isEn = loc?.locale.languageCode == 'en';
 
     final bgGradient = isDark
-        ? const LinearGradient(
+        ? LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [Color(0xFF0C1610), Color(0xFF142017)],
           )
-        : const LinearGradient(
+        : LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [Color(0xFFF4F7F5), Color(0xFFE8EFEA)],
@@ -469,8 +470,8 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
         centerTitle: true,
         title: Text(
           isEn ? 'Family Group' : 'Nhóm Gia Đình',
-          style: GoogleFonts.outfit(
-            fontSize: 20,
+          style: GoogleFonts.plusJakartaSans(
+            fontSize: 20.sp,
             fontWeight: FontWeight.bold,
             color: isDark ? Colors.white : const Color(0xFF006428),
           ),
@@ -491,7 +492,7 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
                 onRefresh: _loadFamilyInfo,
                 child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.all(20.w),
                   child: _buildContent(isDark, isEn),
                 ),
               ),
@@ -514,11 +515,11 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
       children: [
         // Header Banner Card
         _buildGroupHeaderCard(group, isOwner, isDark, isEn),
-        const SizedBox(height: 24),
+        SizedBox(height: 24.h),
 
         // Owner Info Card
         _buildOwnerCard(group.owner, isDark, isEn),
-        const SizedBox(height: 24),
+        SizedBox(height: 24.h),
 
         // Members List Header
         Row(
@@ -528,8 +529,8 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
               isEn
                   ? 'Members (${group.members.length})'
                   : 'Thành viên (${group.members.length})',
-              style: GoogleFonts.outfit(
-                fontSize: 18,
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 18.sp,
                 fontWeight: FontWeight.bold,
                 color: isDark ? Colors.white : const Color(0xFF006428),
               ),
@@ -542,27 +543,27 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
                   isEn ? 'Invite' : 'Mời người dùng',
                   style: GoogleFonts.plusJakartaSans(
                     fontWeight: FontWeight.bold,
-                    fontSize: 13,
+                    fontSize: 13.sp,
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF008435),
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                  padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14.r)),
                 ),
               ),
           ],
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
 
         // Members List
         if (group.members.isEmpty)
           Container(
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(20.w),
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF19271E) : Colors.white,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16.r),
             ),
             child: Center(
               child: Text(
@@ -580,14 +581,14 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: group.members.length,
-            separatorBuilder: (context, index) => const SizedBox(height: 10),
+            separatorBuilder: (context, index) => SizedBox(height: 10.h),
             itemBuilder: (context, index) {
               final member = group.members[index];
               return _buildMemberTile(member, isOwner, isDark, isEn);
             },
           ),
 
-        const SizedBox(height: 32),
+        SizedBox(height: 32.h),
 
         // Token Input Button for accepting invite via token manually
         Center(
@@ -596,12 +597,12 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
             icon: const Icon(Icons.vpn_key_outlined, size: 18),
             label: Text(
               isEn ? 'Enter invitation token' : 'Nhập mã Token lời mời',
-              style: const TextStyle(fontWeight: FontWeight.w600),
+              style: TextStyle(fontWeight: FontWeight.w600),
             ),
           ),
         ),
 
-        const SizedBox(height: 16),
+        SizedBox(height: 16.h),
 
         // Dissolve Group Button for Owner
         if (isOwner)
@@ -620,7 +621,7 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
               ),
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Color(0xFFE53935), width: 1.5),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
               ),
             ),
           ),
@@ -632,9 +633,9 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const SizedBox(height: 40),
+        SizedBox(height: 40.h),
         Container(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(24.w),
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF1E3A25) : const Color(0xFFE8F5E9),
             shape: BoxShape.circle,
@@ -645,32 +646,32 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
             color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
           ),
         ),
-        const SizedBox(height: 24),
+        SizedBox(height: 24.h),
         Text(
           isEn ? 'No Family Group Yet' : 'Chưa có nhóm gia đình',
           textAlign: TextAlign.center,
-          style: GoogleFonts.outfit(
-            fontSize: 24,
+          style: GoogleFonts.plusJakartaSans(
+            fontSize: 24.sp,
             fontWeight: FontWeight.bold,
             color: isDark ? Colors.white : const Color(0xFF006428),
           ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12.h),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: EdgeInsets.symmetric(horizontal: 24),
           child: Text(
             isEn
                 ? 'Upgrade to the Family Plan to create a family group and share smart fridge & AI features with up to 5 members.'
                 : 'Đăng ký Gói Gia Đình để tạo nhóm và chia sẻ tính năng tủ lạnh thông minh & AI với tối đa 5 người thân.',
             textAlign: TextAlign.center,
             style: GoogleFonts.plusJakartaSans(
-              fontSize: 14,
+              fontSize: 14.sp,
               color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF616161),
               height: 1.4,
             ),
           ),
         ),
-        const SizedBox(height: 32),
+        SizedBox(height: 32.h),
 
         SizedBox(
           width: double.infinity,
@@ -684,8 +685,8 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
             icon: const Icon(Icons.workspace_premium_rounded),
             label: Text(
               isEn ? 'Upgrade to Family Plan' : 'Nâng cấp Gói Gia Đình',
-              style: GoogleFonts.outfit(
-                fontSize: 16,
+              style: GoogleFonts.plusJakartaSans(
+                fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -693,11 +694,11 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
               backgroundColor: const Color(0xFF008435),
               foregroundColor: Colors.white,
               elevation: 4,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: 16.h),
 
         SizedBox(
           width: double.infinity,
@@ -708,7 +709,7 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
             label: Text(
               isEn ? 'Have an invitation code?' : 'Bạn có mã Token lời mời?',
               style: GoogleFonts.plusJakartaSans(
-                fontSize: 14,
+                fontSize: 14.sp,
                 fontWeight: FontWeight.bold,
                 color: isDark ? Colors.white : const Color(0xFF006428),
               ),
@@ -717,7 +718,7 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
               side: BorderSide(
                 color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5E69C),
               ),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
             ),
           ),
         ),
@@ -732,9 +733,9 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
     bool isEn,
   ) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(24.r),
         gradient: LinearGradient(
           colors: isDark
               ? [const Color(0xFF1E3A25), const Color(0xFF142017)]
@@ -757,11 +758,11 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
               Row(
                 children: [
                   const Icon(Icons.family_restroom_rounded, color: Colors.white, size: 28),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10.w),
                   Text(
                     isEn ? 'Family Plan' : 'Gói Gia Đình',
-                    style: GoogleFonts.outfit(
-                      fontSize: 22,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 22.sp,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -769,15 +770,15 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                 decoration: BoxDecoration(
                   color: isOwner ? const Color(0xFFFFB74D) : const Color(0xFF81C784),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Text(
                   isOwner ? (isEn ? 'Owner' : 'Chủ nhóm') : (isEn ? 'Member' : 'Thành viên'),
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
                   ),
@@ -785,30 +786,30 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 isEn ? 'Active slots:' : 'Số thành viên đang dùng:',
                 style: GoogleFonts.plusJakartaSans(
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   color: Colors.white70,
                 ),
               ),
               Text(
                 '${group.activeCount} / ${group.maxMembers}',
-                style: GoogleFonts.outfit(
-                  fontSize: 18,
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           ClipRRect(
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: BorderRadius.circular(6.r),
             child: LinearProgressIndicator(
               value: group.activeCount / group.maxMembers,
               backgroundColor: Colors.white.withValues(alpha: 0.2),
@@ -824,10 +825,10 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
   Widget _buildOwnerCard(FamilyOwnerModel owner, bool isDark, bool isEn) {
     final avatar = _getFullAvatarUrl(owner.avatar);
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF19271E) : Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
         border: Border.all(
           color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5E69C),
         ),
@@ -841,15 +842,15 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
             child: avatar == null
                 ? Text(
                     (owner.name ?? 'U').substring(0, 1).toUpperCase(),
-                    style: GoogleFonts.outfit(
-                      fontSize: 18,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                       color: isDark ? Colors.white : const Color(0xFF006428),
                     ),
                   )
                 : null,
           ),
-          const SizedBox(width: 14),
+          SizedBox(width: 14.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -859,20 +860,20 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
                     Text(
                       owner.name ?? (isEn ? 'Family Owner' : 'Chủ gia đình'),
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 15,
+                        fontSize: 15.sp,
                         fontWeight: FontWeight.bold,
                         color: isDark ? Colors.white : const Color(0xFF19221C),
                       ),
                     ),
-                    const SizedBox(width: 6),
+                    SizedBox(width: 6.w),
                     const Icon(Icons.star_rounded, color: Color(0xFFFFB74D), size: 16),
                   ],
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2.h),
                 Text(
                   isEn ? 'Group Creator / Subscription Owner' : 'Trưởng nhóm / Chủ gói dịch vụ',
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF757575),
                   ),
                 ),
@@ -895,10 +896,10 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
     final displayName = member.memberName ?? member.invitedEmail;
 
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsets.all(14.w),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF19271E) : Colors.white,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(18.r),
         border: Border.all(
           color: isDark ? const Color(0xFF233629) : const Color(0xFFE0E0E0),
         ),
@@ -919,7 +920,7 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
                   )
                 : null,
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -928,7 +929,7 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
                   displayName,
                   overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
                     color: isDark ? Colors.white : const Color(0xFF19221C),
                   ),
@@ -937,30 +938,30 @@ class _FamilyManagementScreenState extends State<FamilyManagementScreen> {
                   Text(
                     member.invitedEmail,
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 12.sp,
                       color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF757575),
                     ),
                   ),
               ],
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8.w),
 
           // Status Badge
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
             decoration: BoxDecoration(
               color: isPending
                   ? const Color(0xFFFFF3E0)
                   : (isDark ? const Color(0xFF1E3A25) : const Color(0xFFE8F5E9)),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12.r),
             ),
             child: Text(
               isPending
                   ? (isEn ? 'Pending' : 'Đang chờ')
                   : (isEn ? 'Active' : 'Đang tham gia'),
               style: TextStyle(
-                fontSize: 11,
+                fontSize: 11.sp,
                 fontWeight: FontWeight.bold,
                 color: isPending ? const Color(0xFFE65100) : const Color(0xFF2E7D32),
               ),

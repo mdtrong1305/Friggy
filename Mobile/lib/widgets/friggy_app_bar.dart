@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../data/services/api_service.dart';
 import '../screens/notifications_screen.dart';
@@ -25,7 +26,7 @@ class FriggyAppBar extends StatefulWidget implements PreferredSizeWidget {
   State<FriggyAppBar> createState() => _FriggyAppBarState();
 
   @override
-  Size get preferredSize => const Size.fromHeight(60.0);
+  Size get preferredSize => Size.fromHeight(60.h);
 }
 
 class _FriggyAppBarState extends State<FriggyAppBar> {
@@ -58,8 +59,8 @@ class _FriggyAppBarState extends State<FriggyAppBar> {
     return Container(
       color: widget.backgroundColor ?? Colors.transparent,
       padding: EdgeInsets.symmetric(
-        horizontal: widget.showBackButton ? 16.0 : 0.0,
-        vertical: 4.0,
+        horizontal: widget.showBackButton ? 16.w : 0.0,
+        vertical: 4.h,
       ),
       child: SafeArea(
         bottom: false,
@@ -75,13 +76,13 @@ class _FriggyAppBarState extends State<FriggyAppBar> {
                   IconButton(
                     icon: Icon(
                       Icons.chevron_left_rounded,
-                      size: 32,
+                      size: 32.sp,
                       color: isDark ? Colors.white : const Color(0xFF19221C),
                     ),
                     padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(
-                      minWidth: 36,
-                      minHeight: 36,
+                    constraints: BoxConstraints(
+                      minWidth: 36.w,
+                      minHeight: 36.h,
                     ),
                     onPressed: () {
                       if (widget.onBackTap != null) {
@@ -91,7 +92,7 @@ class _FriggyAppBarState extends State<FriggyAppBar> {
                       }
                     },
                   ),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4.w),
                 ],
 
                 // Friggy Brand Logo with Leaf Badge
@@ -101,7 +102,7 @@ class _FriggyAppBarState extends State<FriggyAppBar> {
                     RichText(
                       text: TextSpan(
                         style: GoogleFonts.plusJakartaSans(
-                          fontSize: 32,
+                          fontSize: 28.sp,
                           fontWeight: FontWeight.bold,
                           letterSpacing: -0.5,
                         ),
@@ -121,9 +122,9 @@ class _FriggyAppBarState extends State<FriggyAppBar> {
                         ],
                       ),
                     ),
-                    const SizedBox(width: 5),
+                    SizedBox(width: 5.w),
                     Container(
-                      padding: const EdgeInsets.all(4.5),
+                      padding: EdgeInsets.all(4.5.w),
                       decoration: BoxDecoration(
                         color: isDark ? const Color(0xFF81C784) : const Color(0xFF4CAF50),
                         shape: BoxShape.circle,
@@ -131,7 +132,7 @@ class _FriggyAppBarState extends State<FriggyAppBar> {
                       child: Icon(
                         Icons.eco_rounded,
                         color: isDark ? const Color(0xFF0E1611) : Colors.white,
-                        size: 16,
+                        size: 14.sp,
                       ),
                     ),
                   ],
@@ -155,8 +156,8 @@ class _FriggyAppBarState extends State<FriggyAppBar> {
                 await _fetchUnreadCount();
               },
               child: Container(
-                width: 44,
-                height: 44,
+                width: 42.w,
+                height: 42.w,
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF19271E) : Colors.white,
                   shape: BoxShape.circle,
@@ -182,31 +183,31 @@ class _FriggyAppBarState extends State<FriggyAppBar> {
                         Icon(
                           Icons.notifications_none_rounded,
                           color: isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32),
-                          size: 24,
+                          size: 22.sp,
                         ),
                         if (widget.hasUnreadNotifications && displayUnreadCount > 0)
                           Positioned(
-                            top: 4,
-                            right: 4,
+                            top: 3.h,
+                            right: 3.w,
                             child: Container(
-                              padding: const EdgeInsets.all(2.5),
+                              padding: EdgeInsets.all(2.w),
                               decoration: BoxDecoration(
-                                color: const Color(0xFF008435), // Green theme badge
+                                color: const Color(0xFF008435),
                                 shape: BoxShape.circle,
                                 border: Border.all(
                                   color: isDark ? const Color(0xFF19271E) : Colors.white,
                                   width: 1.5,
                                 ),
                               ),
-                              constraints: const BoxConstraints(
-                                minWidth: 17,
-                                minHeight: 17,
+                              constraints: BoxConstraints(
+                                minWidth: 16.w,
+                                minHeight: 16.w,
                               ),
                               child: Center(
                                 child: Text(
                                   '$displayUnreadCount',
                                   style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 9.5,
+                                    fontSize: 8.5.sp,
                                     fontWeight: FontWeight.w900,
                                     color: Colors.white,
                                     height: 1.0,

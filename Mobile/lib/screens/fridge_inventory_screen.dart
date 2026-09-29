@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../data/models/ingredient_model.dart';
 import '../data/models/user_models.dart';
@@ -196,11 +197,11 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                 bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
               child: Container(
-                padding: const EdgeInsets.all(24),
+                padding: EdgeInsets.all(24.w),
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF19271E) : Colors.white,
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(28),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(28.r),
                   ),
                   border: isDark
                       ? Border.all(color: const Color(0xFF2E4D36), width: 1.2)
@@ -214,15 +215,15 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                     Row(
                       children: [
                         IngredientAvatarWidget(item: item, size: 48),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12.w),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 isEn ? 'Update Quantity' : 'Cập nhật số lượng',
-                                style: GoogleFonts.outfit(
-                                  fontSize: 20,
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 20.sp,
                                   fontWeight: FontWeight.w800,
                                   color: isDark ? Colors.white : const Color(0xFF006428),
                                 ),
@@ -230,7 +231,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                               Text(
                                 item.displayName(isEn),
                                 style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 14,
+                                  fontSize: 14.sp,
                                   fontWeight: FontWeight.w600,
                                   color: isDark
                                       ? const Color(0xFF9DA8A0)
@@ -250,7 +251,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                       ],
                     ),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
 
                     // Numeric Keyboard & +/- Stepper Row
                     Row(
@@ -274,7 +275,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                               color: isDark
                                   ? const Color(0xFF233629)
                                   : const Color(0xFFE8F5E9),
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(16.r),
                             ),
                             child: Icon(
                               Icons.remove_rounded,
@@ -286,7 +287,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                           ),
                         ),
 
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12.w),
 
                         // Quantity Numeric TextField (Bàn phím số)
                         Expanded(
@@ -294,19 +295,19 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                             controller: qtyNumberController,
                             keyboardType: TextInputType.number,
                             textAlign: TextAlign.center,
-                            style: GoogleFonts.outfit(
-                              fontSize: 26,
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 26.sp,
                               fontWeight: FontWeight.w900,
                               color: isDark
                                   ? const Color(0xFF81C784)
                                   : const Color(0xFF006428),
                             ),
                             decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.symmetric(
+                              contentPadding: EdgeInsets.symmetric(
                                 vertical: 12,
                               ),
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(16.r),
                                 borderSide: BorderSide(
                                   color: isDark
                                       ? const Color(0xFF2E4D36)
@@ -314,7 +315,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(16.r),
                                 borderSide: BorderSide(
                                   color: isDark
                                       ? const Color(0xFF81C784)
@@ -326,7 +327,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                           ),
                         ),
 
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12.w),
 
                         // Plus Button
                         GestureDetector(
@@ -344,7 +345,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                               color: isDark
                                   ? const Color(0xFF81C784)
                                   : const Color(0xFF008435),
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(16.r),
                             ),
                             child: Icon(
                               Icons.add_rounded,
@@ -358,7 +359,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                       ],
                     ),
 
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
 
                     // Unit Selection Pills (Horizontal Scroll)
                     SingleChildScrollView(
@@ -374,8 +375,8 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                               });
                             },
                             child: Container(
-                              margin: const EdgeInsets.only(right: 8),
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                              margin: EdgeInsets.only(right: 8.w),
+                              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                               decoration: BoxDecoration(
                                 color: isSel
                                     ? (isDark
@@ -384,7 +385,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                                     : (isDark
                                         ? const Color(0xFF233629)
                                         : const Color(0xFFF1F8E9)),
-                                borderRadius: BorderRadius.circular(14),
+                                borderRadius: BorderRadius.circular(14.r),
                                 border: isSel
                                     ? null
                                     : Border.all(
@@ -397,7 +398,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                                 child: Text(
                                   displayUnit,
                                   style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 14,
+                                    fontSize: 14.sp,
                                     fontWeight: FontWeight.w700,
                                     color: isSel
                                         ? (isDark
@@ -415,7 +416,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
 
                     // Save Button
                     SizedBox(
@@ -427,7 +428,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                               ? const Color(0xFF81C784)
                               : const Color(0xFF008435),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18),
+                            borderRadius: BorderRadius.circular(18.r),
                           ),
                         ),
                         onPressed: () async {
@@ -448,8 +449,8 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                         },
                         child: Text(
                           isEn ? 'Save' : 'Lưu thay đổi',
-                          style: GoogleFonts.outfit(
-                            fontSize: 16.5,
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 16.5.sp,
                             fontWeight: FontWeight.w800,
                             color: isDark
                                 ? const Color(0xFF0E1611)
@@ -459,24 +460,24 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12.h),
 
                     Row(
                       children: [
                         Expanded(
                           child: OutlinedButton.icon(
                             style: OutlinedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              padding: EdgeInsets.symmetric(vertical: 12),
                               side: const BorderSide(color: Color(0xFF4CAF50)),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
+                                borderRadius: BorderRadius.circular(14.r),
                               ),
                             ),
                             icon: const Icon(Icons.check_circle_outline_rounded, color: Color(0xFF4CAF50), size: 18),
                             label: Text(
                               isEn ? 'Used All' : 'Đã dùng hết',
                               style: GoogleFonts.plusJakartaSans(
-                                fontSize: 13.5,
+                                fontSize: 13.5.sp,
                                 fontWeight: FontWeight.w700,
                                 color: const Color(0xFF4CAF50),
                               ),
@@ -492,21 +493,21 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                             },
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12.w),
                         Expanded(
                           child: OutlinedButton.icon(
                             style: OutlinedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              padding: EdgeInsets.symmetric(vertical: 12),
                               side: const BorderSide(color: Color(0xFFE57373)),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
+                                borderRadius: BorderRadius.circular(14.r),
                               ),
                             ),
                             icon: const Icon(Icons.delete_outline_rounded, color: Color(0xFFE57373), size: 18),
                             label: Text(
                               isEn ? 'Delete' : 'Xóa khỏi tủ',
                               style: GoogleFonts.plusJakartaSans(
-                                fontSize: 13.5,
+                                fontSize: 13.5.sp,
                                 fontWeight: FontWeight.w700,
                                 color: const Color(0xFFE57373),
                               ),
@@ -575,11 +576,11 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
             children: [
               // 1. Top App Bar Header
               Padding(
-                padding: const EdgeInsets.only(
-                  left: 20.0,
-                  right: 20.0,
-                  top: 10.0,
-                  bottom: 12.0,
+                padding: EdgeInsets.only(
+                  left: 20.0.w,
+                  right: 20.0.w,
+                  top: 10.0.h,
+                  bottom: 12.0.h,
                 ),
                 child: Row(
                   children: [
@@ -616,7 +617,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12.w),
                     ],
                     Expanded(
                       child: Row(
@@ -625,7 +626,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                             child: RichText(
                               text: TextSpan(
                                 style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 32,
+                                  fontSize: 32.sp,
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: -0.5,
                                 ),
@@ -688,7 +689,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                           );
                         },
                         child: Container(
-                          padding: const EdgeInsets.symmetric(
+                          padding: EdgeInsets.symmetric(
                             horizontal: 12,
                             vertical: 6,
                           ),
@@ -696,7 +697,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                             color: isDark
                                 ? const Color(0xFF19271E)
                                 : Colors.white.withValues(alpha: 0.9),
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(20.r),
                             border: Border.all(
                               color: isDark
                                   ? const Color(0xFF2E4D36)
@@ -720,11 +721,11 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                                     ? const Color(0xFF81C784)
                                     : const Color(0xFF008435),
                               ),
-                              const SizedBox(width: 5),
+                              SizedBox(width: 5.w),
                               Text(
                                 '${_familyRole!.group!.activeCount}',
                                 style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 13,
+                                  fontSize: 13.sp,
                                   fontWeight: FontWeight.w900,
                                   color: isDark
                                       ? const Color(0xFF81C784)
@@ -741,16 +742,16 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
 
               // 2. Premium Search Bar (Left) & Glowing AI Recipe Button (Right)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Row(
                   children: [
                     // Crisp Search Pill Bar
                     Expanded(
                       child: Container(
-                        height: 46,
+                        height: 44.h,
                         decoration: BoxDecoration(
                           color: isDark ? const Color(0xFF19271E) : Colors.white,
-                          borderRadius: BorderRadius.circular(23),
+                          borderRadius: BorderRadius.circular(22.r),
                           border: Border.all(
                             color: isDark
                                 ? const Color(0xFF2E4D36)
@@ -769,14 +770,14 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                           controller: _searchController,
                           onChanged: (val) => setState(() {}),
                           style: GoogleFonts.plusJakartaSans(
-                            fontSize: 13.5,
+                            fontSize: 13.5.sp,
                             fontWeight: FontWeight.w600,
                             color: isDark ? Colors.white : const Color(0xFF19221C),
                           ),
                           decoration: InputDecoration(
                             hintText: isEn ? 'Search items...' : 'Tìm thực phẩm...',
                             hintStyle: GoogleFonts.plusJakartaSans(
-                              fontSize: 13,
+                              fontSize: 13.sp,
                               color: isDark
                                   ? const Color(0xFF9DA8A0)
                                   : const Color(0xFFA5D6A7),
@@ -789,15 +790,15 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                               size: 20,
                             ),
                             border: InputBorder.none,
-                            contentPadding: const EdgeInsets.symmetric(vertical: 11),
+                            contentPadding: EdgeInsets.symmetric(vertical: 11),
                           ),
                         ),
                       ),
                     ),
 
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10.w),
 
-                    // Glowing Solid Emerald Gradient AI "Gợi Ý Món Ăn" Button
+                    // Glowing Solid Emerald Gradient AI Button
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -812,8 +813,8 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                         );
                       },
                       child: Container(
-                        height: 46,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        height: 44.h,
+                        padding: EdgeInsets.symmetric(horizontal: 14.w),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: isDark
@@ -822,7 +823,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
-                          borderRadius: BorderRadius.circular(23),
+                          borderRadius: BorderRadius.circular(22.r),
                           boxShadow: [
                             BoxShadow(
                               color: const Color(0xFF008435).withValues(alpha: 0.35),
@@ -834,16 +835,16 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.auto_awesome_rounded,
                               color: Colors.white,
-                              size: 17,
+                              size: 15.sp,
                             ),
-                            const SizedBox(width: 6),
+                            SizedBox(width: 5.w),
                             Text(
                               isEn ? 'Recipes' : 'Gợi Ý Món Ăn',
-                              style: GoogleFonts.outfit(
-                                fontSize: 13,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 12.sp,
                                 fontWeight: FontWeight.w800,
                                 color: Colors.white,
                                 letterSpacing: -0.1,
@@ -857,37 +858,41 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                 ),
               ),
 
-              const SizedBox(height: 12),
+              SizedBox(height: 10.h),
 
               // 5. Compartment Filter Pills & View Mode Toggle
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Row(
                   children: [
+                    // Filter pills - dùng SingleChildScrollView để tránh wrap trên màn hình nhỏ
                     Expanded(
-                      child: Row(
-                        children: [
-                          {'key': 'All', 'label': isEn ? 'All' : 'Tất cả'},
-                          {'key': 'Fridge', 'label': isEn ? 'Cooler' : 'Ngăn mát'},
-                          {'key': 'Freezer', 'label': isEn ? 'Freezer' : 'Ngăn đông'},
-                          {'key': 'Pantry', 'label': isEn ? 'Pantry' : 'Tủ khô'},
-                        ].map((item) {
-                          final key = item['key']!;
-                          final label = item['label']!;
-                          final isSelected = _selectedStorage == key;
-                          return Expanded(
-                            child: GestureDetector(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        child: Row(
+                          children: [
+                            {'key': 'All', 'label': isEn ? 'All' : 'Tất cả'},
+                            {'key': 'Fridge', 'label': isEn ? 'Cooler' : 'Ngăn mát'},
+                            {'key': 'Freezer', 'label': isEn ? 'Freezer' : 'Ngăn đông'},
+                            {'key': 'Pantry', 'label': isEn ? 'Pantry' : 'Tủ khô'},
+                          ].map((item) {
+                            final key = item['key']!;
+                            final label = item['label']!;
+                            final isSelected = _selectedStorage == key;
+                            return GestureDetector(
                               onTap: () => setState(() => _selectedStorage = key),
                               child: AnimatedContainer(
                                 duration: const Duration(milliseconds: 150),
-                                height: 36,
-                                margin: const EdgeInsets.symmetric(horizontal: 2),
+                                height: 36.h,
+                                margin: EdgeInsets.only(right: 6.w),
+                                padding: EdgeInsets.symmetric(horizontal: 14.w),
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   color: isSelected
                                       ? const Color(0xFF008435)
                                       : (isDark ? const Color(0xFF19271E) : Colors.white),
-                                  borderRadius: BorderRadius.circular(18),
+                                  borderRadius: BorderRadius.circular(18.r),
                                   border: Border.all(
                                     color: isSelected
                                         ? const Color(0xFF008435)
@@ -898,31 +903,33 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                                 child: Text(
                                   label,
                                   style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 12.0,
+                                    fontSize: 12.sp,
                                     fontWeight: FontWeight.w700,
                                     color: isSelected
                                         ? Colors.white
                                         : (isDark ? Colors.white : const Color(0xFF008435)),
                                   ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.visible,
                                 ),
                               ),
-                            ),
-                          );
-                        }).toList(),
+                            );
+                          }).toList(),
+                        ),
                       ),
                     ),
 
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8.w),
 
                     // View Mode Toggle (Grid / List)
                     GestureDetector(
                       onTap: () => setState(() => _isGridView = !_isGridView),
                       child: Container(
-                        width: 36,
-                        height: 36,
+                        width: 36.w,
+                        height: 36.h,
                         decoration: BoxDecoration(
                           color: isDark ? const Color(0xFF19271E) : Colors.white,
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(14.r),
                           border: Border.all(
                             color: isDark ? const Color(0xFF2E4D36) : const Color(0xFF81C784),
                             width: 1,
@@ -930,7 +937,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                         ),
                         child: Icon(
                           _isGridView ? Icons.view_list_rounded : Icons.grid_view_rounded,
-                          size: 20,
+                          size: 18.sp,
                           color: isDark ? const Color(0xFF81C784) : const Color(0xFF008435),
                         ),
                       ),
@@ -939,12 +946,12 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                 ),
               ),
 
-              const SizedBox(height: 12),
+              SizedBox(height: 10.h),
 
               // 6. Food Items Display (Square Cards Grid / List View)
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0),
                   child: RefreshIndicator(
                     color: const Color(0xFF008435),
                     onRefresh: _loadIngredients,
@@ -968,11 +975,11 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                                           size: 56,
                                           color: Colors.white.withValues(alpha: 0.6),
                                         ),
-                                        const SizedBox(height: 10),
+                                        SizedBox(height: 10.h),
                                         Text(
                                           isEn ? 'No food items found' : 'Không tìm thấy thực phẩm nào',
                                           style: GoogleFonts.plusJakartaSans(
-                                            fontSize: 15,
+                                            fontSize: 15.sp,
                                             fontWeight: FontWeight.w700,
                                             color: isDark ? const Color(0xFF81C784) : const Color(0xFF1B5E20),
                                           ),
@@ -986,20 +993,20 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                                 ? _buildGridView(filteredItems, isEn, isDark)
                               : ListView.separated(
                                   physics: const BouncingScrollPhysics(),
-                                  padding: const EdgeInsets.only(bottom: 120),
+                                  padding: EdgeInsets.only(bottom: 120.h),
                                   itemCount: filteredItems.length,
                                   separatorBuilder: (context, index) =>
-                                      const SizedBox(height: 12),
+                                      SizedBox(height: 12.h),
                                   itemBuilder: (context, index) {
                                     final item = filteredItems[index];
 
                                     return GestureDetector(
                                       onTap: () => _showUpdateQuantityDialog(item, isEn),
                                       child: Container(
-                                        padding: const EdgeInsets.all(12),
+                                        padding: EdgeInsets.all(12.w),
                                         decoration: BoxDecoration(
                                           color: isDark ? const Color(0xFF19271E) : Colors.white,
-                                          borderRadius: BorderRadius.circular(20),
+                                          borderRadius: BorderRadius.circular(20.r),
                                           border: Border.all(
                                             color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5E69C),
                                             width: 1,
@@ -1010,7 +1017,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                                             // Food Image Avatar
                                             IngredientAvatarWidget(item: item, size: 54),
 
-                                            const SizedBox(width: 14),
+                                            SizedBox(width: 14.w),
 
                                             // Food Name & Quantity
                                             Expanded(
@@ -1022,8 +1029,8 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                                                     children: [
                                                       Text(
                                                         item.displayName(isEn),
-                                                        style: GoogleFonts.outfit(
-                                                          fontSize: 18,
+                                                        style: GoogleFonts.plusJakartaSans(
+                                                          fontSize: 18.sp,
                                                           fontWeight:
                                                               FontWeight.w800,
                                                           color: isDark
@@ -1031,7 +1038,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                                                               : const Color(0xFF19221C),
                                                         ),
                                                       ),
-                                                      const SizedBox(width: 6),
+                                                      SizedBox(width: 6.w),
                                                       const Icon(
                                                         Icons.edit_rounded,
                                                         size: 14,
@@ -1039,12 +1046,12 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                                                       ),
                                                     ],
                                                   ),
-                                                  const SizedBox(height: 4),
+                                                  SizedBox(height: 4.h),
                                                   Text(
                                                     item.quantity,
                                                     style:
                                                         GoogleFonts.plusJakartaSans(
-                                                      fontSize: 14,
+                                                      fontSize: 14.sp,
                                                       fontWeight: FontWeight.w600,
                                                       color: isDark
                                                           ? const Color(0xFF9DA8A0)
@@ -1057,19 +1064,19 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
 
                                             // Expiry Status Badge Pill
                                             Container(
-                                              padding: const EdgeInsets.symmetric(
+                                              padding: EdgeInsets.symmetric(
                                                 horizontal: 14,
                                                 vertical: 7,
                                               ),
                                               decoration: BoxDecoration(
                                                 color: item.badgeBgColor,
                                                 borderRadius:
-                                                    BorderRadius.circular(20),
+                                                    BorderRadius.circular(20.r),
                                               ),
                                               child: Text(
                                                 item.expiryStatusText(isEn),
                                                 style: GoogleFonts.plusJakartaSans(
-                                                  fontSize: 13,
+                                                  fontSize: 13.sp,
                                                   fontWeight: FontWeight.w700,
                                                   color: item.badgeTextColor,
                                                 ),
@@ -1115,7 +1122,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
       child: Container(
         decoration: BoxDecoration(
           color: isDark ? const Color(0xFF19271E) : Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
           border: Border.all(
             color: isDark
                 ? const Color(0xFF2E4D36)
@@ -1133,37 +1140,37 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
         child: Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+              padding: EdgeInsets.symmetric(horizontal: 8.0.w, vertical: 10.0.h),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 14),
+                  SizedBox(height: 14.h),
                   Expanded(
                     child: Center(
                       child: IngredientAvatarWidget(item: item, size: 54),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8.h),
                   Text(
                     item.displayName(isEn),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.outfit(
-                      fontSize: 13.5,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 13.5.sp,
                       fontWeight: FontWeight.w800,
                       color: isDark ? Colors.white : const Color(0xFF19221C),
                     ),
                   ),
-                  const SizedBox(height: 2),
+                  SizedBox(height: 2.h),
                   Text(
                     item.quantity,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.plusJakartaSans(
-                      fontSize: 12,
+                      fontSize: 12.sp,
                       fontWeight: FontWeight.w600,
                       color: isDark
                           ? const Color(0xFF9DA8A0)
@@ -1174,10 +1181,10 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
               ),
             ),
             Positioned(
-              top: 7,
-              right: 7,
+              top: 7.h,
+              right: 7.w,
               child: Container(
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 7,
                   vertical: 3,
                 ),
@@ -1185,12 +1192,12 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                   color: isDark
                       ? item.badgeBgColor.withValues(alpha: 0.25)
                       : item.badgeBgColor,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(10.r),
                 ),
                 child: Text(
                   item.expiryStatusText(isEn),
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 10.5,
+                    fontSize: 10.5.sp,
                     fontWeight: FontWeight.w700,
                     color: item.badgeTextColor,
                   ),
@@ -1212,7 +1219,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
 
     return ListView.builder(
       physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-      padding: const EdgeInsets.only(bottom: 120),
+      padding: EdgeInsets.only(bottom: 120.h),
       itemCount: categories.length,
       itemBuilder: (context, catIdx) {
         final categoryKey = categories[catIdx];
@@ -1223,7 +1230,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 4, bottom: 8),
+              padding: EdgeInsets.only(top: 4.h, bottom: 8.h),
               child: Row(
                 children: [
                   Container(
@@ -1231,23 +1238,23 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                     height: 16,
                     decoration: BoxDecoration(
                       color: const Color(0xFF008435),
-                      borderRadius: BorderRadius.circular(2),
+                      borderRadius: BorderRadius.circular(2.r),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8.w),
                   Text(
                     categoryTitle,
-                    style: GoogleFonts.outfit(
-                      fontSize: 16,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w800,
                       color: isDark ? Colors.white : const Color(0xFF19221C),
                     ),
                   ),
-                  const SizedBox(width: 6),
+                  SizedBox(width: 6.w),
                   Text(
                     '(${items.length})',
                     style: GoogleFonts.plusJakartaSans(
-                      fontSize: 13,
+                      fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
                       color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF6B786F),
                     ),
@@ -1269,7 +1276,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                 return _buildSquareFoodCard(items[index], isEn, isDark);
               },
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12.h),
           ],
         );
       },

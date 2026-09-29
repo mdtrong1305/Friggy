@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import 'l10n/app_localizations.dart';
@@ -53,22 +54,30 @@ class GroceryApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer2<ThemeProvider, LanguageProvider>(
       builder: (context, themeProvider, languageProvider, child) {
-        return MaterialApp(
-          navigatorKey: NavigationService.navigatorKey,
-          title: 'Friggy',
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          themeMode: themeProvider.themeMode,
-          locale: languageProvider.locale,
-          supportedLocales: AppLocalizations.supportedLocales,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          home: const InitialLoadingScreen(),
+        return ScreenUtilInit(
+          // Kích thước màn hình thiết bị dùng để thiết kế/test gốc.
+          // Thay bằng kích thước đúng của điện thoại bạn đang test nếu khác.
+          designSize: const Size(412, 915),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (context, child) => MaterialApp(
+            navigatorKey: NavigationService.navigatorKey,
+            title: 'Friggy',
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: themeProvider.themeMode,
+            locale: languageProvider.locale,
+            supportedLocales: AppLocalizations.supportedLocales,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            home: child,
+          ),
+          child: const InitialLoadingScreen(),
         );
       },
     );

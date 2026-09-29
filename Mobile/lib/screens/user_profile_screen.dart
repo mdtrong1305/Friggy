@@ -1,5 +1,6 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import '../data/local/storage_service.dart';
@@ -121,23 +122,23 @@ class UserProfileScreenState extends State<UserProfileScreen> {
       backgroundColor: Colors.transparent,
       builder: (context) {
         return Container(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(24.w),
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF19271E) : Colors.white,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(28.r)),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 'Cập nhật ảnh đại diện',
-                style: GoogleFonts.outfit(
-                  fontSize: 18,
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: isDark ? Colors.white : const Color(0xFF006428),
                 ),
               ),
-              const SizedBox(height: 18),
+              SizedBox(height: 18.h),
               ListTile(
                 leading: const Icon(Icons.photo_library_rounded, color: Color(0xFF4CAF50)),
                 title: const Text('Chọn từ thư viện ảnh'),
@@ -179,7 +180,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
             _avatarUrl = newAvatar;
           });
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
+            SnackBar(
               content: Text('Đã cập nhật ảnh đại diện thành công!'),
               backgroundColor: Color(0xFF008435),
               behavior: SnackBarBehavior.floating,
@@ -191,7 +192,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
       debugPrint('[UserProfileScreen] Error uploading avatar: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text('Tải ảnh đại diện lên thất bại. Vui lòng thử lại!'),
             backgroundColor: Color(0xFFD32F2F),
             behavior: SnackBarBehavior.floating,
@@ -267,11 +268,11 @@ class UserProfileScreenState extends State<UserProfileScreen> {
       color: const Color(0xFF008435),
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+        padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 12.0.h),
         child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 28),
+          SizedBox(height: 28.h),
 
           // 2. User Avatar & Info Section
           Center(
@@ -281,7 +282,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
                   alignment: Alignment.bottomRight,
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(5),
+                      padding: EdgeInsets.all(5.w),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
@@ -310,7 +311,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
                     GestureDetector(
                       onTap: _showAvatarPickerModal,
                       child: Container(
-                        padding: const EdgeInsets.all(8),
+                        padding: EdgeInsets.all(8.w),
                         decoration: BoxDecoration(
                           color: const Color(0xFF4CAF50),
                           shape: BoxShape.circle,
@@ -331,34 +332,34 @@ class UserProfileScreenState extends State<UserProfileScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 14),
+                SizedBox(height: 14.h),
                 Text(
                   _userName,
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 26,
+                    fontSize: 26.sp,
                     fontWeight: FontWeight.w900,
                     color: nameColor,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4.h),
                 Text(
                   _userContact,
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 15,
+                    fontSize: 15.sp,
                     fontWeight: FontWeight.w700,
                     color: emailColor,
                   ),
                 ),
                 if (_bio != null && _bio!.isNotEmpty)
                   Padding(
-                    padding: const EdgeInsets.only(top: 8.0, left: 24, right: 24),
+                    padding: EdgeInsets.only(top: 8.0.h, left: 24.w, right: 24.w),
                     child: Text(
                       '“$_bio”',
                       textAlign: TextAlign.center,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 13.5,
+                        fontSize: 13.5.sp,
                         fontStyle: FontStyle.italic,
                         color: isDark ? const Color(0xFFB0BEC5) : const Color(0xFF616161),
                       ),
@@ -368,7 +369,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
             ),
           ),
 
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
 
           // 3. Subscription Package & AI Usage Card
           GestureDetector(
@@ -382,9 +383,9 @@ class UserProfileScreenState extends State<UserProfileScreen> {
             },
             child: Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(20.w),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(26),
+                borderRadius: BorderRadius.circular(26.r),
                 border: isDark
                     ? Border.all(
                         color: const Color(0xFF2E4D36),
@@ -426,8 +427,8 @@ class UserProfileScreenState extends State<UserProfileScreen> {
                         Row(
                           children: [
                             Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: const BoxDecoration(
+                              padding: EdgeInsets.all(4.w),
+                              decoration: BoxDecoration(
                                 color: Color(0xFFFFB74D),
                                 shape: BoxShape.circle,
                               ),
@@ -437,11 +438,11 @@ class UserProfileScreenState extends State<UserProfileScreen> {
                                 size: 14,
                               ),
                             ),
-                            const SizedBox(width: 6),
+                            SizedBox(width: 6.w),
                             Text(
                               isEn ? 'AI PLAN' : 'GÓI AI FRIGGY',
                               style: GoogleFonts.plusJakartaSans(
-                                fontSize: 13,
+                                fontSize: 13.sp,
                                 fontWeight: FontWeight.w900,
                                 color: isDark ? const Color(0xFFFFB74D) : Colors.white,
                                 letterSpacing: 0.6,
@@ -449,7 +450,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8.h),
 
                         if (_aiUsage != null && _aiUsage!.limit == -1) ...[
                           Row(
@@ -458,7 +459,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
                               Text(
                                 isEn ? 'Unlimited AI ' : 'Không giới hạn AI ',
                                 style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 18,
+                                  fontSize: 18.sp,
                                   fontWeight: FontWeight.w900,
                                   color: Colors.white,
                                   height: 1.1,
@@ -469,7 +470,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
                                 child: Text(
                                   '∞',
                                   style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 60,
+                                    fontSize: 60.sp,
                                     fontWeight: FontWeight.w900,
                                     color: Colors.white,
                                     height: 0.8,
@@ -482,19 +483,19 @@ class UserProfileScreenState extends State<UserProfileScreen> {
                           Text(
                             aiUsageText,
                             style: GoogleFonts.plusJakartaSans(
-                              fontSize: 20,
+                              fontSize: 20.sp,
                               fontWeight: FontWeight.w900,
                               color: Colors.white,
                               height: 1.15,
                             ),
                           ),
                         ],
-                        const SizedBox(height: 4),
+                        SizedBox(height: 4.h),
 
                         Text(
                           remainingText,
                           style: GoogleFonts.plusJakartaSans(
-                            fontSize: 13.5,
+                            fontSize: 13.5.sp,
                             fontWeight: FontWeight.w600,
                             color: isDark ? const Color(0xFFD0D7D1) : Colors.white.withValues(alpha: 0.95),
                           ),
@@ -503,10 +504,10 @@ class UserProfileScreenState extends State<UserProfileScreen> {
                     ),
                   ),
 
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12.w),
 
                   Container(
-                    padding: const EdgeInsets.symmetric(
+                    padding: EdgeInsets.symmetric(
                       horizontal: 14,
                       vertical: 10,
                     ),
@@ -514,7 +515,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
                       color: isDark
                           ? const Color(0xFF233629)
                           : const Color(0xFF8BC34A).withValues(alpha: 0.85),
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(30.r),
                       border: Border.all(
                         color: isDark
                             ? const Color(0xFF81C784)
@@ -525,7 +526,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
                     child: Text(
                       isEn ? 'Manage Plan' : 'Quản lý gói',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 13,
+                        fontSize: 13.sp,
                         fontWeight: FontWeight.w800,
                         color: isDark ? const Color(0xFF81C784) : Colors.white,
                       ),
@@ -536,23 +537,23 @@ class UserProfileScreenState extends State<UserProfileScreen> {
             ),
           ),
 
-          const SizedBox(height: 28),
+          SizedBox(height: 28.h),
 
           // 4. Account Settings Menu List Section
           Text(
             isEn ? 'Account & Settings' : 'Tài khoản & Ứng dụng',
             style: GoogleFonts.plusJakartaSans(
-              fontSize: 18,
+              fontSize: 18.sp,
               fontWeight: FontWeight.w900,
               color: sectionTitleColor,
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
 
           Container(
             decoration: BoxDecoration(
               color: cardBg,
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(24.r),
               border: Border.all(
                 color: cardBorder,
                 width: 1.2,
@@ -689,7 +690,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
             ),
           ),
 
-          const SizedBox(height: 32),
+          SizedBox(height: 32.h),
         ],
       ),
     ),
@@ -698,7 +699,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
 
   Widget _buildDivider(bool isDark) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+      margin: EdgeInsets.symmetric(horizontal: 16),
       height: 1,
       color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFE8F5E9),
     );
@@ -717,20 +718,20 @@ class UserProfileScreenState extends State<UserProfileScreen> {
   }) {
     return ListTile(
       onTap: onTap,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
       leading: Container(
-        padding: const EdgeInsets.all(10),
+        padding: EdgeInsets.all(10.w),
         decoration: BoxDecoration(
           color: iconBgColor,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(14.r),
         ),
         child: Icon(icon, color: iconColor, size: 22),
       ),
       title: Text(
         title,
         style: GoogleFonts.plusJakartaSans(
-          fontSize: 15,
+          fontSize: 15.sp,
           fontWeight: FontWeight.w700,
           color: titleColor,
         ),
@@ -739,7 +740,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
           ? Text(
               subtitle,
               style: GoogleFonts.plusJakartaSans(
-                fontSize: 12.5,
+                fontSize: 12.5.sp,
                 color: subtitleColor,
               ),
             )

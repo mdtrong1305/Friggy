@@ -4,25 +4,42 @@ class ApiException implements Exception {
   final String message;
   final int? statusCode;
   final dynamic data;
+  final bool isNetworkError; // true khi lỗi mạng (offline), false khi lỗi server
 
   ApiException({
     required this.message,
     this.statusCode,
     this.data,
+    this.isNetworkError = false,
   });
 
   factory ApiException.fromDioException(DioException dioException) {
     switch (dioException.type) {
       case DioExceptionType.cancel:
-        return ApiException(message: 'Yêu cầu bị hủy kết nối');
+        return ApiException(
+          message: 'Yêu cầu bị hủy kết nối',
+          isNetworkError: true,
+        );
       case DioExceptionType.connectionTimeout:
-        return ApiException(message: 'Hết thời gian kết nối tới máy chủ');
+        return ApiException(
+          message: 'Hết thời gian kết nối tới máy chủ',
+          isNetworkError: true,
+        );
       case DioExceptionType.receiveTimeout:
-        return ApiException(message: 'Máy chủ phản hồi quá chậm (Timeout)');
+        return ApiException(
+          message: 'Máy chủ phản hồi quá chậm (Timeout)',
+          isNetworkError: true,
+        );
       case DioExceptionType.sendTimeout:
-        return ApiException(message: 'Gửi dữ liệu quá thời gian chờ');
+        return ApiException(
+          message: 'Gửi dữ liệu quá thời gian chờ',
+          isNetworkError: true,
+        );
       case DioExceptionType.connectionError:
-        return ApiException(message: 'Không thể kết nối máy chủ. Vui lòng kiểm tra mạng');
+        return ApiException(
+          message: 'Không thể kết nối máy chủ. Vui lòng kiểm tra mạng',
+          isNetworkError: true,
+        );
       case DioExceptionType.badResponse:
         final response = dioException.response;
         final statusCode = response?.statusCode;
@@ -51,11 +68,15 @@ class ApiException implements Exception {
           message: errorMessage,
           statusCode: statusCode,
           data: response?.data,
+          isNetworkError: false,
         );
       case DioExceptionType.unknown:
       default:
         if (dioException.error != null) {
-          return ApiException(message: dioException.error.toString());
+          return ApiException(
+            message: dioException.error.toString(),
+            isNetworkError: true, // unknown thường là lỗi mạng
+          );
         }
         return ApiException(message: 'Đã xảy ra lỗi không xác định');
     }

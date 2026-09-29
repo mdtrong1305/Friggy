@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../data/models/user_models.dart';
 import '../data/services/api_exception.dart';
 import '../data/services/api_service.dart';
 import '../l10n/app_localizations.dart';
+import '../sqlite/models/local_user_preference_model.dart';
+import '../sqlite/services/user_preference_local_service.dart';
 
 class UserPreferencesScreen extends StatefulWidget {
   const UserPreferencesScreen({super.key});
@@ -14,6 +17,7 @@ class UserPreferencesScreen extends StatefulWidget {
 
 class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
   final ApiService _apiService = ApiService();
+  final UserPreferenceLocalService _prefLocalService = UserPreferenceLocalService();
   bool _isLoading = true;
   bool _isSaving = false;
 
@@ -39,6 +43,28 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
   }
 
   Future<void> _fetchPreferences() async {
+    // Hiển thị ngay từ SQLite trước khi gọi API
+    final cachedFirst = await _prefLocalService.getCachedPreferences();
+    if (cachedFirst != null && mounted) {
+      setState(() {
+        _weeklyBudgetController.text = cachedFirst.weeklyBudget?.toString() ?? '';
+        _calorieController.text = cachedFirst.dailyCalorieTarget?.toString() ?? '';
+        _maxCookTimeController.text = cachedFirst.maxCookTimeMinutes?.toString() ?? '';
+        _householdSizeController.text = cachedFirst.householdSize.toString();
+        _heightController.text = cachedFirst.height?.toString() ?? '';
+        _weightController.text = cachedFirst.weight?.toString() ?? '';
+        _dietaryStyle = cachedFirst.dietaryStyle;
+        _skillLevel = cachedFirst.skillLevel;
+        _aiPersonalityMode = cachedFirst.aiPersonalityMode;
+        _primaryGoal = cachedFirst.primaryGoal ?? 'save_money';
+        _cookingFrequency = cachedFirst.cookingFrequency ?? 'daily';
+        _activityLevel = cachedFirst.activityLevel ?? 'moderate';
+        _preferSimpleRecipes = cachedFirst.preferSimpleRecipes == 1;
+        _isLoading = false;
+      });
+      debugPrint('[UserPreferencesScreen] Pre-loaded from SQLite.');
+    }
+
     try {
       final res = await _apiService.getPreferences();
       if (res != null && mounted) {
@@ -50,7 +76,6 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
           _householdSizeController.text = prefs.householdSize.toString();
           _heightController.text = prefs.height?.toString() ?? '';
           _weightController.text = prefs.weight?.toString() ?? '';
-
           _dietaryStyle = prefs.dietaryStyle ?? 'omnivore';
           _skillLevel = prefs.skillLevel;
           _aiPersonalityMode = prefs.aiPersonalityMode;
@@ -58,16 +83,38 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
           _cookingFrequency = prefs.cookingFrequency ?? 'daily';
           _activityLevel = prefs.activityLevel ?? 'moderate';
           _preferSimpleRecipes = prefs.preferSimpleRecipes;
-        });
-      }
-    } catch (e) {
-      debugPrint('[UserPreferencesScreen] Error fetching preferences: $e');
-    } finally {
-      if (mounted) {
-        setState(() {
           _isLoading = false;
         });
       }
+    } catch (e) {
+      debugPrint('[UserPreferencesScreen] API error, using SQLite: $e');
+      // Nếu SQLite đã có → giữ nguyên
+      if (cachedFirst != null) {
+        if (mounted) setState(() => _isLoading = false);
+        return;
+      }
+      // SQLite chưa có → đợi 2s rồi thử lại
+      await Future.delayed(const Duration(seconds: 2));
+      final cached = await _prefLocalService.getCachedPreferences();
+      if (cached != null && mounted) {
+        setState(() {
+          _weeklyBudgetController.text = cached.weeklyBudget?.toString() ?? '';
+          _calorieController.text = cached.dailyCalorieTarget?.toString() ?? '';
+          _maxCookTimeController.text = cached.maxCookTimeMinutes?.toString() ?? '';
+          _householdSizeController.text = cached.householdSize.toString();
+          _heightController.text = cached.height?.toString() ?? '';
+          _weightController.text = cached.weight?.toString() ?? '';
+          _dietaryStyle = cached.dietaryStyle;
+          _skillLevel = cached.skillLevel;
+          _aiPersonalityMode = cached.aiPersonalityMode;
+          _primaryGoal = cached.primaryGoal ?? 'save_money';
+          _cookingFrequency = cached.cookingFrequency ?? 'daily';
+          _activityLevel = cached.activityLevel ?? 'moderate';
+          _preferSimpleRecipes = cached.preferSimpleRecipes == 1;
+          debugPrint('[UserPreferencesScreen] Retry: loaded from SQLite.');
+        });
+      }
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
@@ -77,35 +124,49 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
       _isSaving = true;
     });
 
+    final now = DateTime.now().millisecondsSinceEpoch;
+
+    // Build model từ form
+    final prefModel = LocalUserPreferenceModel(
+      weeklyBudget: int.tryParse(_weeklyBudgetController.text.trim()),
+      dailyCalorieTarget: int.tryParse(_calorieController.text.trim()),
+      dietaryStyle: _dietaryStyle,
+      preferSimpleRecipes: _preferSimpleRecipes ? 1 : 0,
+      maxCookTimeMinutes: int.tryParse(_maxCookTimeController.text.trim()),
+      skillLevel: _skillLevel,
+      householdSize: int.tryParse(_householdSizeController.text.trim()) ?? 1,
+      aiPersonalityMode: _aiPersonalityMode,
+      primaryGoal: _primaryGoal,
+      cookingFrequency: _cookingFrequency,
+      height: int.tryParse(_heightController.text.trim()),
+      weight: int.tryParse(_weightController.text.trim()),
+      activityLevel: _activityLevel,
+      updatedAt: now,
+    );
+
     try {
-      final data = <String, dynamic>{
-        'dietaryStyle': _dietaryStyle,
-        'skillLevel': _skillLevel,
-        'aiPersonalityMode': _aiPersonalityMode,
-        'primaryGoal': _primaryGoal,
-        'cookingFrequency': _cookingFrequency,
-        'activityLevel': _activityLevel,
-        'preferSimpleRecipes': _preferSimpleRecipes,
-        'householdSize': int.tryParse(_householdSizeController.text.trim()) ?? 1,
-      };
+      await _apiService.updatePreferences(prefModel.toApiMap());
 
-      if (_weeklyBudgetController.text.trim().isNotEmpty) {
-        data['weeklyBudget'] = int.tryParse(_weeklyBudgetController.text.trim());
-      }
-      if (_calorieController.text.trim().isNotEmpty) {
-        data['dailyCalorieTarget'] = int.tryParse(_calorieController.text.trim());
-      }
-      if (_maxCookTimeController.text.trim().isNotEmpty) {
-        data['maxCookTimeMinutes'] = int.tryParse(_maxCookTimeController.text.trim());
-      }
-      if (_heightController.text.trim().isNotEmpty) {
-        data['height'] = int.tryParse(_heightController.text.trim());
-      }
-      if (_weightController.text.trim().isNotEmpty) {
-        data['weight'] = int.tryParse(_weightController.text.trim());
-      }
-
-      await _apiService.updatePreferences(data);
+      // === ONLINE: lưu SQLite với sync_status='synced' ===
+      await _prefLocalService.savePreferencesCache(
+        LocalUserPreferenceModel(
+          weeklyBudget: prefModel.weeklyBudget,
+          dailyCalorieTarget: prefModel.dailyCalorieTarget,
+          dietaryStyle: prefModel.dietaryStyle,
+          preferSimpleRecipes: prefModel.preferSimpleRecipes,
+          maxCookTimeMinutes: prefModel.maxCookTimeMinutes,
+          skillLevel: prefModel.skillLevel,
+          householdSize: prefModel.householdSize,
+          aiPersonalityMode: prefModel.aiPersonalityMode,
+          primaryGoal: prefModel.primaryGoal,
+          cookingFrequency: prefModel.cookingFrequency,
+          height: prefModel.height,
+          weight: prefModel.weight,
+          activityLevel: prefModel.activityLevel,
+          updatedAt: now,
+          syncStatus: 'synced',
+        ),
+      );
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -113,31 +174,31 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
             content: const Text('Đã cập nhật tùy chọn cá nhân thành công!'),
             backgroundColor: const Color(0xFF008435),
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14.r)),
           ),
         );
         Navigator.pop(context);
       }
     } on ApiException catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(e.message),
-            backgroundColor: const Color(0xFFD32F2F),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
+      if (e.isNetworkError) {
+        // Lỗi mạng → save offline pending
+        debugPrint('[PreferencesScreen] Network error, saving as pending: ${e.message}');
+        await _saveOfflinePendingPrefs(prefModel, now);
+      } else {
+        // Lỗi server thực sự (4xx/5xx)
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(e.message),
+              backgroundColor: const Color(0xFFD32F2F),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
       }
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Đã xảy ra lỗi khi lưu tùy chọn'),
-            backgroundColor: Color(0xFFD32F2F),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
+      debugPrint('[PreferencesScreen] Unexpected error, saving as pending: $e');
+      await _saveOfflinePendingPrefs(prefModel, now);
     } finally {
       if (mounted) {
         setState(() {
@@ -145,6 +206,31 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
         });
       }
     }
+  }
+
+  /// Lưu preferences vào SQLite pending khi offline
+  Future<void> _saveOfflinePendingPrefs(LocalUserPreferenceModel prefModel, int now) async {
+    await _prefLocalService.savePreferencesCache(
+      LocalUserPreferenceModel(
+        weeklyBudget: prefModel.weeklyBudget,
+        dailyCalorieTarget: prefModel.dailyCalorieTarget,
+        dietaryStyle: prefModel.dietaryStyle,
+        preferSimpleRecipes: prefModel.preferSimpleRecipes,
+        maxCookTimeMinutes: prefModel.maxCookTimeMinutes,
+        skillLevel: prefModel.skillLevel,
+        householdSize: prefModel.householdSize,
+        aiPersonalityMode: prefModel.aiPersonalityMode,
+        primaryGoal: prefModel.primaryGoal,
+        cookingFrequency: prefModel.cookingFrequency,
+        height: prefModel.height,
+        weight: prefModel.weight,
+        activityLevel: prefModel.activityLevel,
+        updatedAt: now,
+        syncStatus: 'pending',
+      ),
+    );
+    if (!mounted) return;
+    Navigator.pop(context);
   }
 
   @override
@@ -187,7 +273,7 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
             children: [
               // Header
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding: EdgeInsets.symmetric(horizontal: 16.0.w, vertical: 8.0.h),
                 child: Row(
                   children: [
                     GestureDetector(
@@ -207,11 +293,11 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 14),
+                    SizedBox(width: 14.w),
                     Text(
                       isEn ? 'Culinary & Dietary Preferences' : 'Tùy chọn ăn uống & Kỹ năng',
-                      style: GoogleFonts.outfit(
-                        fontSize: 22,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 22.sp,
                         fontWeight: FontWeight.w900,
                         color: titleColor,
                       ),
@@ -225,13 +311,13 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
                     ? const Center(child: CircularProgressIndicator(color: Color(0xFF4CAF50)))
                     : SingleChildScrollView(
                         physics: const BouncingScrollPhysics(),
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+                        padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 12.0.h),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // 1. Primary Goal
                             _buildSectionHeader(isEn ? 'Primary Goal' : 'Mục tiêu chính của bạn', isDark),
-                            const SizedBox(height: 8),
+                            SizedBox(height: 8.h),
                             _buildSelectCard(
                               cardBg: cardBg,
                               cardBorder: cardBorder,
@@ -246,11 +332,11 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
                               isDark: isDark,
                             ),
 
-                            const SizedBox(height: 20),
+                            SizedBox(height: 20.h),
 
                             // 2. Cooking Frequency
                             _buildSectionHeader(isEn ? 'Cooking Frequency' : 'Tần suất nấu ăn', isDark),
-                            const SizedBox(height: 8),
+                            SizedBox(height: 8.h),
                             _buildSelectCard(
                               cardBg: cardBg,
                               cardBorder: cardBorder,
@@ -265,11 +351,11 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
                               isDark: isDark,
                             ),
 
-                            const SizedBox(height: 20),
+                            SizedBox(height: 20.h),
 
                             // 3. Dietary Style
                             _buildSectionHeader(isEn ? 'Dietary Style' : 'Chế độ ăn uống', isDark),
-                            const SizedBox(height: 8),
+                            SizedBox(height: 8.h),
                             _buildSelectCard(
                               cardBg: cardBg,
                               cardBorder: cardBorder,
@@ -285,11 +371,11 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
                               isDark: isDark,
                             ),
 
-                            const SizedBox(height: 20),
+                            SizedBox(height: 20.h),
 
                             // 4. Cooking Skill Level
                             _buildSectionHeader(isEn ? 'Cooking Skill Level' : 'Kỹ năng nấu ăn', isDark),
-                            const SizedBox(height: 8),
+                            SizedBox(height: 8.h),
                             _buildSelectCard(
                               cardBg: cardBg,
                               cardBorder: cardBorder,
@@ -303,11 +389,11 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
                               isDark: isDark,
                             ),
 
-                            const SizedBox(height: 20),
+                            SizedBox(height: 20.h),
 
                             // 5. Activity Level
                             _buildSectionHeader(isEn ? 'Daily Activity Level' : 'Mức độ vận động', isDark),
-                            const SizedBox(height: 8),
+                            SizedBox(height: 8.h),
                             _buildSelectCard(
                               cardBg: cardBg,
                               cardBorder: cardBorder,
@@ -322,11 +408,11 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
                               isDark: isDark,
                             ),
 
-                            const SizedBox(height: 20),
+                            SizedBox(height: 20.h),
 
                             // 6. AI Assistant Personality
                             _buildSectionHeader(isEn ? 'AI Assistant Personality' : 'Tính cách trợ lý AI', isDark),
-                            const SizedBox(height: 8),
+                            SizedBox(height: 8.h),
                             _buildSelectCard(
                               cardBg: cardBg,
                               cardBorder: cardBorder,
@@ -340,14 +426,14 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
                               isDark: isDark,
                             ),
 
-                            const SizedBox(height: 20),
+                            SizedBox(height: 20.h),
 
                             // 7. Simple Recipes Preference Toggle
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                               decoration: BoxDecoration(
                                 color: cardBg,
-                                borderRadius: BorderRadius.circular(18),
+                                borderRadius: BorderRadius.circular(18.r),
                                 border: Border.all(color: cardBorder, width: 1.2),
                               ),
                               child: Row(
@@ -359,17 +445,17 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
                                       children: [
                                         Text(
                                           isEn ? 'Prefer Simple Recipes' : 'Ưu tiên công thức nấu ăn đơn giản',
-                                          style: GoogleFonts.outfit(
-                                            fontSize: 15,
+                                          style: GoogleFonts.plusJakartaSans(
+                                            fontSize: 15.sp,
                                             fontWeight: FontWeight.bold,
                                             color: isDark ? Colors.white : const Color(0xFF19221C),
                                           ),
                                         ),
-                                        const SizedBox(height: 4),
+                                        SizedBox(height: 4.h),
                                         Text(
                                           isEn ? 'AI will favor quick & easy 15-20 min recipes' : 'AI sẽ ưu tiên các món ngon chế biến nhanh 15-20 phút',
                                           style: GoogleFonts.plusJakartaSans(
-                                            fontSize: 12,
+                                            fontSize: 12.sp,
                                             color: isDark ? Colors.white60 : Colors.black54,
                                           ),
                                         ),
@@ -385,16 +471,16 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
                               ),
                             ),
 
-                            const SizedBox(height: 20),
+                            SizedBox(height: 20.h),
 
                             // 4. Budget & Calorie Targets
                             _buildSectionHeader(isEn ? 'Budget & Calories' : 'Ngân sách & Calo', isDark),
-                            const SizedBox(height: 8),
+                            SizedBox(height: 8.h),
                             Container(
-                              padding: const EdgeInsets.all(18),
+                              padding: EdgeInsets.all(18.w),
                               decoration: BoxDecoration(
                                 color: cardBg,
-                                borderRadius: BorderRadius.circular(22),
+                                borderRadius: BorderRadius.circular(22.r),
                                 border: Border.all(color: cardBorder, width: 1.2),
                               ),
                               child: Column(
@@ -406,7 +492,7 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
                                     hint: 'VD: 500000',
                                     isDark: isDark,
                                   ),
-                                  const SizedBox(height: 14),
+                                  SizedBox(height: 14.h),
                                   _buildInputField(
                                     label: isEn ? 'Daily Calorie Target (kcal)' : 'Mục tiêu Calo hàng ngày (kcal)',
                                     controller: _calorieController,
@@ -414,7 +500,7 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
                                     hint: 'VD: 2000',
                                     isDark: isDark,
                                   ),
-                                  const SizedBox(height: 14),
+                                  SizedBox(height: 14.h),
                                   _buildInputField(
                                     label: isEn ? 'Max Cooking Time (minutes)' : 'Thời gian nấu tối đa (phút)',
                                     controller: _maxCookTimeController,
@@ -422,7 +508,7 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
                                     hint: 'VD: 30',
                                     isDark: isDark,
                                   ),
-                                  const SizedBox(height: 14),
+                                  SizedBox(height: 14.h),
                                   _buildInputField(
                                     label: isEn ? 'Household Size' : 'Số người ăn trong gia đình',
                                     controller: _householdSizeController,
@@ -434,16 +520,16 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
                               ),
                             ),
 
-                            const SizedBox(height: 20),
+                            SizedBox(height: 20.h),
 
                             // 5. Body Metrics (Height & Weight)
                             _buildSectionHeader(isEn ? 'Body Metrics' : 'Chỉ số cơ thể (Tùy chọn)', isDark),
-                            const SizedBox(height: 8),
+                            SizedBox(height: 8.h),
                             Container(
-                              padding: const EdgeInsets.all(18),
+                              padding: EdgeInsets.all(18.w),
                               decoration: BoxDecoration(
                                 color: cardBg,
-                                borderRadius: BorderRadius.circular(22),
+                                borderRadius: BorderRadius.circular(22.r),
                                 border: Border.all(color: cardBorder, width: 1.2),
                               ),
                               child: Column(
@@ -459,7 +545,7 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
                                           isDark: isDark,
                                         ),
                                       ),
-                                      const SizedBox(width: 12),
+                                      SizedBox(width: 12.w),
                                       Expanded(
                                         child: _buildInputField(
                                           label: isEn ? 'Weight (kg)' : 'Cân nặng (kg)',
@@ -475,7 +561,7 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
                               ),
                             ),
 
-                            const SizedBox(height: 28),
+                            SizedBox(height: 28.h),
 
                             // Save Button
                             SizedBox(
@@ -485,10 +571,10 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
                                 onPressed: _isSaving ? null : _savePreferences,
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: isDark ? const Color(0xFF81C784) : const Color(0xFF4CAF50),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28.r)),
                                 ),
                                 child: _isSaving
-                                    ? const SizedBox(
+                                    ? SizedBox(
                                         width: 22,
                                         height: 22,
                                         child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.5),
@@ -496,7 +582,7 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
                                     : Text(
                                         isEn ? 'Save Preferences' : 'Lưu tùy chọn cá nhân',
                                         style: GoogleFonts.plusJakartaSans(
-                                          fontSize: 16,
+                                          fontSize: 16.sp,
                                           fontWeight: FontWeight.w900,
                                           color: isDark ? const Color(0xFF0E1611) : Colors.white,
                                         ),
@@ -504,7 +590,7 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
                               ),
                             ),
 
-                            const SizedBox(height: 24),
+                            SizedBox(height: 24.h),
                           ],
                         ),
                       ),
@@ -519,8 +605,8 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
   Widget _buildSectionHeader(String title, bool isDark) {
     return Text(
       title,
-      style: GoogleFonts.outfit(
-        fontSize: 16,
+      style: GoogleFonts.plusJakartaSans(
+        fontSize: 16.sp,
         fontWeight: FontWeight.w800,
         color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
       ),
@@ -538,7 +624,7 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
     return Container(
       decoration: BoxDecoration(
         color: cardBg,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(22.r),
         border: Border.all(color: cardBorder, width: 1.2),
       ),
       child: Column(
@@ -551,7 +637,7 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
                 title: Text(
                   entry.value,
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 14.5,
+                    fontSize: 14.5.sp,
                     fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
                     color: isSelected
                         ? (isDark ? const Color(0xFF81C784) : const Color(0xFF008435))
@@ -591,18 +677,18 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
       children: [
         Text(
           label,
-          style: GoogleFonts.outfit(
-            fontSize: 13.5,
+          style: GoogleFonts.plusJakartaSans(
+            fontSize: 13.5.sp,
             fontWeight: FontWeight.w700,
             color: isDark ? Colors.white : const Color(0xFF006428),
           ),
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6.h),
         TextField(
           controller: controller,
           keyboardType: TextInputType.number,
           style: GoogleFonts.plusJakartaSans(
-            fontSize: 14,
+            fontSize: 14.sp,
             fontWeight: FontWeight.w700,
             color: isDark ? Colors.white : const Color(0xFF19221C),
           ),
@@ -618,21 +704,21 @@ class _UserPreferencesScreenState extends State<UserPreferencesScreen> {
             ),
             filled: true,
             fillColor: isDark ? const Color(0xFF0E1611) : const Color(0xFFF5FCF4),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            contentPadding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16.r),
               borderSide: BorderSide(
                 color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5D6A7),
               ),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16.r),
               borderSide: BorderSide(
                 color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5D6A7),
               ),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16.r),
               borderSide: BorderSide(
                 color: isDark ? const Color(0xFF81C784) : const Color(0xFF4CAF50),
                 width: 1.8,

@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../l10n/app_localizations.dart';
 
@@ -197,7 +198,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           ),
           backgroundColor: const Color(0xFF008435),
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14.r)),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -289,7 +290,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               // Top Bar Header
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    EdgeInsets.symmetric(horizontal: 16.0.w, vertical: 8.0.h),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -324,11 +325,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: 12.w),
                         Text(
                           isEn ? 'Notifications' : 'Thông báo',
-                          style: GoogleFonts.outfit(
-                            fontSize: 22,
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 22.sp,
                             fontWeight: FontWeight.w900,
                             color: isDark ? Colors.white : const Color(0xFF006428),
                           ),
@@ -343,7 +344,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         child: Text(
                           isEn ? 'Mark all as read' : 'Đã đọc tất cả',
                           style: GoogleFonts.plusJakartaSans(
-                            fontSize: 13,
+                            fontSize: 13.sp,
                             fontWeight: FontWeight.w700,
                             color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
                           ),
@@ -353,13 +354,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 ),
               ),
 
-              const SizedBox(height: 10),
+              SizedBox(height: 10.h),
 
               // Categories Filter Row
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   children: categories.map((catObj) {
                     final catKey = catObj['key']!;
@@ -367,7 +368,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     final isSelected = _selectedCategoryKey == catKey;
 
                     return Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
+                      padding: EdgeInsets.only(right: 8.0.w),
                       child: GestureDetector(
                         onTap: () => setState(() {
                           _selectedCategoryKey = catKey;
@@ -375,7 +376,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         }),
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 180),
-                          padding: const EdgeInsets.symmetric(
+                          padding: EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 8,
                           ),
@@ -383,7 +384,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             color: isSelected
                                 ? const Color(0xFF008435)
                                 : (isDark ? const Color(0xFF19271E) : Colors.white),
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(20.r),
                             border: Border.all(
                               color: isSelected
                                   ? const Color(0xFF008435)
@@ -394,7 +395,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           child: Text(
                             catLabel,
                             style: GoogleFonts.plusJakartaSans(
-                              fontSize: 13,
+                              fontSize: 13.sp,
                               fontWeight: FontWeight.w700,
                               color: isSelected
                                   ? Colors.white
@@ -408,7 +409,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 ),
               ),
 
-              const SizedBox(height: 14),
+              SizedBox(height: 14.h),
 
               // Notification List view
               Expanded(
@@ -422,7 +423,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              padding: const EdgeInsets.all(20),
+                              padding: EdgeInsets.all(20.w),
                               decoration: BoxDecoration(
                                 color: isDark
                                     ? const Color(0xFF233629)
@@ -437,11 +438,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                     : const Color(0xFF4CAF50),
                               ),
                             ),
-                            const SizedBox(height: 14),
+                            SizedBox(height: 14.h),
                             Text(
                               isEn ? 'No Notifications' : 'Không có thông báo nào',
-                              style: GoogleFonts.outfit(
-                                fontSize: 18,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 18.sp,
                                 fontWeight: FontWeight.w800,
                                 color: isDark ? Colors.white : const Color(0xFF006428),
                               ),
@@ -451,7 +452,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                   ? 'You are all caught up with the latest updates!'
                                   : 'Bạn đã cập nhật tất cả thông tin mới nhất!',
                               style: GoogleFonts.plusJakartaSans(
-                                fontSize: 13,
+                                fontSize: 13.sp,
                                 color: isDark
                                     ? const Color(0xFF9DA8A0)
                                     : const Color(0xFF757575),
@@ -467,12 +468,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
                           return ListView.builder(
                             physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            padding: EdgeInsets.symmetric(horizontal: 20),
                             itemCount: displayList.length + (showExpandButton ? 1 : 0),
                             itemBuilder: (context, index) {
                               if (showExpandButton && index == displayList.length) {
                                 return Padding(
-                                  padding: const EdgeInsets.only(top: 4.0, bottom: 28.0),
+                                  padding: EdgeInsets.only(top: 4.0.h, bottom: 28.0.h),
                                   child: Material(
                                     color: Colors.transparent,
                                     child: InkWell(
@@ -481,16 +482,16 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                           _showAll = true;
                                         });
                                       },
-                                      borderRadius: BorderRadius.circular(22),
+                                      borderRadius: BorderRadius.circular(22.r),
                                       child: Container(
                                         width: double.infinity,
-                                        padding: const EdgeInsets.symmetric(
+                                        padding: EdgeInsets.symmetric(
                                           horizontal: 20,
                                           vertical: 16,
                                         ),
                                         decoration: BoxDecoration(
                                           color: isDark ? const Color(0xFF19271E) : Colors.white,
-                                          borderRadius: BorderRadius.circular(22),
+                                          borderRadius: BorderRadius.circular(22.r),
                                           border: Border.all(
                                             color: isDark ? const Color(0xFF2E4D36) : const Color(0xFF008435),
                                             width: 1.5,
@@ -511,12 +512,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                   ? 'View all notifications (${filteredList.length})'
                                                   : 'Xem toàn bộ thông báo (${filteredList.length})',
                                               style: GoogleFonts.plusJakartaSans(
-                                                fontSize: 15,
+                                                fontSize: 15.sp,
                                                 fontWeight: FontWeight.w800,
                                                 color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
                                               ),
                                             ),
-                                            const SizedBox(width: 8),
+                                            SizedBox(width: 8.w),
                                             Icon(
                                               Icons.keyboard_arrow_down_rounded,
                                               size: 24,
@@ -537,11 +538,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 onDismissed: (_) => _deleteNotification(item.id),
                                 background: Container(
                                   alignment: Alignment.centerRight,
-                                  padding: const EdgeInsets.only(right: 20),
-                                  margin: const EdgeInsets.only(bottom: 12),
+                                  padding: EdgeInsets.only(right: 20.w),
+                                  margin: EdgeInsets.only(bottom: 12.h),
                                   decoration: BoxDecoration(
                                     color: const Color(0xFFE53935),
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(20.r),
                               ),
                               child: const Icon(
                                 Icons.delete_outline_rounded,
@@ -552,8 +553,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             child: GestureDetector(
                               onTap: () => _toggleRead(item),
                               child: Container(
-                                margin: const EdgeInsets.only(bottom: 12),
-                                padding: const EdgeInsets.all(16),
+                                margin: EdgeInsets.only(bottom: 12.h),
+                                padding: EdgeInsets.all(16.w),
                                 decoration: BoxDecoration(
                                   color: item.isRead
                                       ? (isDark
@@ -562,7 +563,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                       : (isDark
                                           ? const Color(0xFF233629)
                                           : const Color(0xFFF1F8E9)),
-                                  borderRadius: BorderRadius.circular(22),
+                                  borderRadius: BorderRadius.circular(22.r),
                                   border: Border.all(
                                     color: isDark
                                         ? const Color(0xFF2E4D36)
@@ -585,12 +586,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                   children: [
                                     // Left Icon with Category Color
                                     Container(
-                                      padding: const EdgeInsets.all(10),
+                                      padding: EdgeInsets.all(10.w),
                                       decoration: BoxDecoration(
                                         color: isDark
                                             ? item.iconBgColor.withValues(alpha: 0.2)
                                             : item.iconBgColor,
-                                        borderRadius: BorderRadius.circular(16),
+                                        borderRadius: BorderRadius.circular(16.r),
                                       ),
                                       child: Icon(
                                         item.icon,
@@ -598,7 +599,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                         size: 22,
                                       ),
                                     ),
-                                    const SizedBox(width: 14),
+                                    SizedBox(width: 14.w),
 
                                     // Content Text
                                     Expanded(
@@ -614,7 +615,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                 child: Text(
                                                   item.displayTitle(isEn),
                                                   style: GoogleFonts.plusJakartaSans(
-                                                    fontSize: 15,
+                                                    fontSize: 15.sp,
                                                     fontWeight: item.isRead
                                                         ? FontWeight.w700
                                                         : FontWeight.w900,
@@ -626,11 +627,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                               ),
                                             ],
                                           ),
-                                          const SizedBox(height: 4),
+                                          SizedBox(height: 4.h),
                                           Text(
                                             item.displayMessage(isEn),
                                             style: GoogleFonts.plusJakartaSans(
-                                              fontSize: 13,
+                                              fontSize: 13.sp,
                                               fontWeight: item.isRead
                                                   ? FontWeight.w500
                                                   : FontWeight.w600,
@@ -640,7 +641,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                               height: 1.35,
                                             ),
                                           ),
-                                          const SizedBox(height: 8),
+                                          SizedBox(height: 8.h),
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
@@ -649,7 +650,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                 item.displayTime(isEn),
                                                 style:
                                                     GoogleFonts.plusJakartaSans(
-                                                  fontSize: 11.5,
+                                                  fontSize: 11.5.sp,
                                                   fontWeight: FontWeight.w600,
                                                   color:
                                                       const Color(0xFF757575),
@@ -657,7 +658,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                               ),
                                               Container(
                                                 padding:
-                                                    const EdgeInsets.symmetric(
+                                                    EdgeInsets.symmetric(
                                                   horizontal: 8,
                                                   vertical: 2,
                                                 ),
@@ -665,13 +666,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                   color:
                                                       const Color(0xFFE8F5E9),
                                                   borderRadius:
-                                                      BorderRadius.circular(10),
+                                                      BorderRadius.circular(10.r),
                                                 ),
                                                 child: Text(
                                                   item.displayCategory(isEn),
                                                   style:
                                                       GoogleFonts.plusJakartaSans(
-                                                    fontSize: 11,
+                                                    fontSize: 11.sp,
                                                     fontWeight: FontWeight.w700,
                                                     color:
                                                         const Color(0xFF006428),

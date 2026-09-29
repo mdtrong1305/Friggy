@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../data/local/storage_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/home_header.dart';
@@ -28,6 +29,9 @@ import 'notifications_screen.dart';
 import '../data/services/api_service.dart';
 import 'package_management_screen.dart';
 import '../widgets/family_plan_modal.dart';
+import '../sqlite/services/background_sync_service.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'dart:async';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -50,6 +54,8 @@ class _HomeScreenState extends State<HomeScreen>
       GlobalKey<FridgeInventoryScreenState>();
   String _userName = 'Trần Quốc Lâm';
   bool _isFamilyPlan = false;
+  StreamSubscription<List<ConnectivityResult>>? _connectivitySub;
+  bool _wasOffline = false; // Theo dõi trạng thái mạng trước đó
 
   late AnimationController _animController;
   late Animation<double> _headerFade;
@@ -64,6 +70,10 @@ class _HomeScreenState extends State<HomeScreen>
     super.initState();
     _loadUserData();
     _loadSubscriptionData();
+    // Sync tất cả data vào SQLite ngay khi vào trang chủ (chạy nền, không block UI)
+    BackgroundSyncService().syncAll();
+    // Lắng nghe thay đổi kết nối mạng để sync pending items khi có mạng trở lại
+    _startConnectivityListener();
 
     _animController = AnimationController(
       vsync: this,
@@ -72,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen>
 
     _headerFade = CurvedAnimation(
       parent: _animController,
-      curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
+      curve: Interval(0.0, 0.5, curve: Curves.easeOut),
     );
     _headerSlide = Tween<Offset>(
       begin: const Offset(0.0, -0.15),
@@ -81,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen>
 
     _bodyFade = CurvedAnimation(
       parent: _animController,
-      curve: const Interval(0.15, 0.75, curve: Curves.easeOut),
+      curve: Interval(0.15, 0.75, curve: Curves.easeOut),
     );
     _bodySlide = Tween<Offset>(
       begin: const Offset(0.0, 0.08),
@@ -90,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen>
 
     _bottomNavFade = CurvedAnimation(
       parent: _animController,
-      curve: const Interval(0.3, 0.85, curve: Curves.easeOut),
+      curve: Interval(0.3, 0.85, curve: Curves.easeOut),
     );
     _bottomNavSlide = Tween<Offset>(
       begin: const Offset(0.0, 0.2),
@@ -98,6 +108,18 @@ class _HomeScreenState extends State<HomeScreen>
     ).animate(_bottomNavFade);
 
     _animController.forward();
+  }
+
+  void _startConnectivityListener() {
+    _connectivitySub = Connectivity().onConnectivityChanged.listen((results) {
+      final isOnline = results.any((r) => r != ConnectivityResult.none);
+      if (isOnline && _wasOffline) {
+        // Mạng vừa khôi phục → sync các pending items lên server
+        debugPrint('[HomeScreen] Network restored → triggering background sync...');
+        BackgroundSyncService().forceSync();
+      }
+      _wasOffline = !isOnline;
+    });
   }
 
   Future<void> _loadUserData() async {
@@ -138,6 +160,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void dispose() {
+    _connectivitySub?.cancel();
     _searchController.dispose();
     _animController.dispose();
     super.dispose();
@@ -230,7 +253,7 @@ class _HomeScreenState extends State<HomeScreen>
                       },
                       onFilterTap: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
+                          SnackBar(
                             content: Text('Filter tapped'),
                             duration: Duration(seconds: 1),
                           ),
@@ -252,12 +275,12 @@ class _HomeScreenState extends State<HomeScreen>
                         // Index 0: Home Dashboard
                         SingleChildScrollView(
                           physics: const BouncingScrollPhysics(),
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          padding: EdgeInsets.symmetric(horizontal: 20.w),
                           child: Column(
                             children: [
-                              const SizedBox(height: 8),
+                              SizedBox(height: 8.h),
                               GreetingBanner(userName: _userName),
-                              const SizedBox(height: 16),
+                              SizedBox(height: 16.h),
 
                               // 2 Summary Cards (Expired & Available Ingredients)
                               FridgeSummaryCards(
@@ -280,7 +303,7 @@ class _HomeScreenState extends State<HomeScreen>
                                   );
                                 },
                               ),
-                              const SizedBox(height: 16),
+                              SizedBox(height: 16.h),
 
                               // Premium Friggy Upgrade Banner
                               PremiumBanner(
@@ -303,7 +326,7 @@ class _HomeScreenState extends State<HomeScreen>
                                   }
                                 },
                               ),
-                              const SizedBox(height: 18),
+                              SizedBox(height: 18.h),
                               WeeklyStatisticsSection(
                                 key: _statsKey,
                                 onDetailTap: () {
@@ -336,7 +359,7 @@ class _HomeScreenState extends State<HomeScreen>
                                   );
                                 },
                               ),
-                              const SizedBox(height: 24),
+                              SizedBox(height: 24.h),
                               CookingSuggestionsSection(
                                 key: _cookingSuggestionsKey,
                                 onMealToggled: () {
@@ -344,7 +367,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 },
                                 onUpgradeTap: () {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
+                                    SnackBar(
                                       content: Text('Upgrade to Premium tapped!'),
                                       duration: Duration(seconds: 1),
                                     ),
@@ -360,7 +383,7 @@ class _HomeScreenState extends State<HomeScreen>
                                   );
                                 },
                               ),
-                              const SizedBox(height: 28),
+                              SizedBox(height: 28.h),
                             ],
                           ),
                         ),

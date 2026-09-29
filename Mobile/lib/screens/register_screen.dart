@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../data/services/auth_service.dart';
 import '../l10n/app_localizations.dart';
@@ -76,12 +77,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String label = _getPasswordStrengthLabel(strength);
     Color color = _getPasswordStrengthColor(strength);
 
-    if (password.isEmpty) return const SizedBox(height: 10);
+    if (password.isEmpty) return SizedBox(height: 10.h);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 8),
+        SizedBox(height: 8.h),
         Row(
           children: List.generate(3, (index) {
             bool isFilled = index < strength;
@@ -91,22 +92,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 margin: EdgeInsets.only(right: index < 2 ? 6 : 0),
                 decoration: BoxDecoration(
                   color: isFilled ? color : const Color(0xFFE2E8E4),
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(2.r),
                 ),
               ),
             );
           }),
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6.h),
         Text(
           label,
           style: TextStyle(
-            fontSize: 12,
+            fontSize: 12.sp,
             fontWeight: FontWeight.bold,
             color: color,
           ),
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10.h),
       ],
     );
   }
@@ -124,7 +125,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           );
           return SlideTransition(
             position: Tween<Offset>(
-              begin: const Offset(-1.0, 0.0), // Slide in from left to right
+              begin: Offset(-1.0, 0.0), // Slide in from left to right
               end: Offset.zero,
             ).animate(curvedAnimation),
             child: FadeTransition(
@@ -174,10 +175,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
               child: Container(
-                padding: const EdgeInsets.all(24),
+                padding: EdgeInsets.all(24.w),
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF19271E) : Colors.white,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(28.r)),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -187,37 +188,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: 4,
                       decoration: BoxDecoration(
                         color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFE2E8E4),
-                        borderRadius: BorderRadius.circular(2),
+                        borderRadius: BorderRadius.circular(2.r),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
                     Text(
                       isEn ? 'Enter OTP Code' : 'Nhập mã OTP',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 22,
+                        fontSize: 22.sp,
                         fontWeight: FontWeight.w900,
                         color: isDark ? Colors.white : AppColors.textPrimary,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     Text(
                       isEn
                           ? '6-digit verification OTP code was sent to $email'
                           : 'Mã OTP 6 chữ số đã được gửi đến $email',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 14.sp,
                         color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF6B786F),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
                     CustomTextField(
                       controller: otpController,
                       hintText: isEn ? 'Enter 6-digit OTP (e.g. 123456)' : 'Nhập mã OTP 6 chữ số (VD: 123456)',
                       prefixIcon: Icons.security_rounded,
                       keyboardType: TextInputType.number,
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
                     SizedBox(
                       width: double.infinity,
                       height: 50,
@@ -274,22 +275,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
+                            borderRadius: BorderRadius.circular(24.r),
                           ),
                         ),
                         child: isVerifying
-                            ? const SizedBox(
+                            ? SizedBox(
                                 width: 22,
                                 height: 22,
                                 child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                               )
                             : Text(
                                 isEn ? 'Verify & Register' : 'Xác nhận & Đăng ký',
-                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
                               ),
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: 12.h),
                   ],
                 ),
               ),
@@ -323,9 +324,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: [
               // 1. Top Curved Decorative Background
               Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
+                top: 0.h,
+                left: 0.w,
+                right: 0.w,
                 height: topHeaderHeight + 60,
                 child: Container(
                   decoration: BoxDecoration(
@@ -355,7 +356,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               // 2. Mascot Header Image
               Positioned(
                 top: topPadding + 52,
-                right: 0,
+                right: 0.w,
                 width: 193,
                 height: topHeaderHeight - 60,
                 child: Image.asset(
@@ -367,11 +368,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
               // 3. Top-Left App Title "< Friggy"
               Positioned(
                 top: topPadding + 12,
-                left: 16,
+                left: 16.w,
                 child: GestureDetector(
                   onTap: () => _navigateToLogin(context),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -381,11 +382,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           color: isDark ? Colors.white : AppColors.textPrimary,
                           size: 18,
                         ),
-                        const SizedBox(width: 4),
+                        SizedBox(width: 4.w),
                         RichText(
                           text: TextSpan(
-                            style: const TextStyle(
-                              fontSize: 26,
+                            style: TextStyle(
+                              fontSize: 26.sp,
                               fontWeight: FontWeight.w900,
                               letterSpacing: 0.5,
                             ),
@@ -420,18 +421,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF0E1611) : Colors.white,
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(36),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(36.r),
                   ),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.12),
                       blurRadius: 16,
-                      offset: const Offset(0, -6),
+                      offset: Offset(0, -6),
                     ),
                   ],
                 ),
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 28,
                   vertical: 24,
                 ),
@@ -444,13 +445,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       Text(
                         isEn ? 'Create Account' : 'Tạo tài khoản',
                         style: GoogleFonts.plusJakartaSans(
-                          fontSize: 30,
+                          fontSize: 30.sp,
                           fontWeight: FontWeight.w900,
                           color: isDark ? Colors.white : AppColors.textPrimary,
                           letterSpacing: -0.5,
                         ),
                       ),
-                      const SizedBox(height: 14),
+                      SizedBox(height: 14.h),
 
                       // 1. Full Name Input Field
                       CustomTextField(
@@ -464,7 +465,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10.h),
 
                       // 2. Email Address Input Field
                       CustomTextField(
@@ -484,7 +485,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10.h),
 
                       // 3. Password Input Field
                       CustomTextField(
@@ -549,7 +550,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 18),
+                      SizedBox(height: 18.h),
 
                       // 6. Main Sign Up Button
                       SizedBox(
@@ -563,26 +564,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             elevation: 2,
                             shadowColor: AppColors.primary.withValues(alpha: 0.3),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(28),
+                              borderRadius: BorderRadius.circular(28.r),
                             ),
                           ),
                           child: _isLoading
-                              ? const SizedBox(
+                              ? SizedBox(
                                   width: 22,
                                   height: 22,
                                   child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                                 )
                               : Text(
                                   isEn ? 'Register' : 'Đăng ký',
-                                  style: const TextStyle(
-                                    fontSize: 18,
+                                  style: TextStyle(
+                                    fontSize: 18.sp,
                                     fontWeight: FontWeight.bold,
                                     letterSpacing: 0.5,
                                   ),
                                 ),
                         ),
                       ),
-                      const SizedBox(height: 14),
+                      SizedBox(height: 14.h),
 
                       // 7. Social Login Divider ("Or Sign Up With")
                       Row(
@@ -596,11 +597,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            padding: EdgeInsets.symmetric(horizontal: 16),
                             child: Text(
                               isEn ? 'Or register with' : 'Hoặc đăng ký bằng',
                               style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 13.sp,
                                 fontWeight: FontWeight.w500,
                                 color: isDark ? const Color(0xFF9DA8A0) : AppColors.hintText,
                               ),
@@ -616,7 +617,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 14),
+                      SizedBox(height: 14.h),
 
                       // 8. Social Button (Google Full Width)
                       Row(
@@ -648,7 +649,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 18),
+                      SizedBox(height: 18.h),
 
                       // 9. Footer Link: "Already have an account? Log In"
                       Center(
@@ -658,7 +659,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             Text(
                               isEn ? 'Already have an account? ' : 'Bạn đã có tài khoản? ',
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 14.sp,
                                 color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF6B786F),
                               ),
                             ),
@@ -667,7 +668,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               child: Text(
                                 isEn ? 'Log In' : 'Đăng nhập',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 14.sp,
                                   fontWeight: FontWeight.bold,
                                   color: isDark ? const Color(0xFF81C784) : AppColors.primary,
                                 ),
@@ -676,7 +677,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20.h),
                     ],
                   ),
                 ),

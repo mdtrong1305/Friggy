@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../l10n/app_localizations.dart';
 import '../data/services/api_service.dart';
+import '../sqlite/models/local_ingredient_catalog_model.dart';
+import '../sqlite/services/ingredient_catalog_local_service.dart';
 
 class ManualAddIngredientScreen extends StatefulWidget {
   const ManualAddIngredientScreen({super.key});
@@ -41,11 +44,39 @@ class _ManualAddIngredientScreenState
   List<Map<String, dynamic>> _suggestions = [];
   bool _showSuggestions = false;
   int? _selectedIngredientId;
+  final IngredientCatalogLocalService _catalogLocalService = IngredientCatalogLocalService();
 
   @override
   void initState() {
     super.initState();
     _nameController.addListener(_onNameChanged);
+    _prefetchCatalog(); // Cache danh mục nguyên liệu khi vào màn hình
+  }
+
+  /// Tiẻn tải danh mục nguyên liệu vào SQLite (nếu chưa có)
+  Future<void> _prefetchCatalog() async {
+    try {
+      final hasCached = await _catalogLocalService.hasCatalogData();
+      if (!hasCached) {
+        // Chưa có cache → tải từ API và lưu SQLite
+        final res = await ApiService().getIngredients(search: '');
+        final items = res.cast<Map<String, dynamic>>().map((item) {
+          return LocalIngredientCatalogModel(
+            id: (item['id'] as num?)?.toInt() ?? 0,
+            name: item['name'] as String? ?? '',
+            englishName: item['englishName'] as String?,
+            defaultUnit: item['defaultUnit'] as String?,
+            category: item['category'] as String?,
+            imagePath: item['imagePath'] as String?,
+            updatedAt: DateTime.now().millisecondsSinceEpoch,
+          );
+        }).where((i) => i.id > 0 && i.name.isNotEmpty).toList();
+        await _catalogLocalService.saveCatalogCache(items);
+        debugPrint('[ManualAdd] Cached ${items.length} ingredient catalog items.');
+      }
+    } catch (e) {
+      debugPrint('[ManualAdd] Could not prefetch catalog (offline?): $e');
+    }
   }
 
   void _onNameChanged() async {
@@ -55,15 +86,39 @@ class _ManualAddIngredientScreenState
       return;
     }
     try {
+      // Thử tìm từ API trước
       final res = await ApiService().getIngredients(search: val);
       if (mounted) {
+        // Cập nhật SQLite cache với kết quả mới
+        final freshItems = res.cast<Map<String, dynamic>>().map((item) {
+          return LocalIngredientCatalogModel(
+            id: (item['id'] as num?)?.toInt() ?? 0,
+            name: item['name'] as String? ?? '',
+            englishName: item['englishName'] as String?,
+            defaultUnit: item['defaultUnit'] as String?,
+            category: item['category'] as String?,
+            imagePath: item['imagePath'] as String?,
+            updatedAt: DateTime.now().millisecondsSinceEpoch,
+          );
+        }).where((i) => i.id > 0 && i.name.isNotEmpty).toList();
+        if (freshItems.isNotEmpty) {
+          await _catalogLocalService.saveCatalogCache(freshItems);
+        }
         setState(() {
           _suggestions = res.cast<Map<String, dynamic>>();
           _showSuggestions = _suggestions.isNotEmpty;
         });
       }
     } catch (e) {
-      debugPrint('Error searching ingredients: $e');
+      // Offline: fallback tìm trong SQLite
+      debugPrint('[ManualAdd] API error, searching SQLite catalog: $e');
+      final cached = await _catalogLocalService.searchCatalog(val);
+      if (mounted) {
+        setState(() {
+          _suggestions = cached.map((c) => c.toApiFormat()).toList();
+          _showSuggestions = _suggestions.isNotEmpty;
+        });
+      }
     }
   }
 
@@ -100,14 +155,14 @@ class _ManualAddIngredientScreenState
         return Container(
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF19271E) : Colors.white,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(28.r)),
             border: isDark ? Border.all(color: const Color(0xFF2E4D36), width: 1.2) : null,
           ),
-          padding: const EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 14,
-            bottom: 24,
+          padding: EdgeInsets.only(
+            left: 20.w,
+            right: 20.w,
+            top: 14.h,
+            bottom: 24.h,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -119,12 +174,12 @@ class _ManualAddIngredientScreenState
                   height: 4.5,
                   decoration: BoxDecoration(
                     color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFC8E6C9),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(10.r),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
 
               // Title Header
               Row(
@@ -132,8 +187,8 @@ class _ManualAddIngredientScreenState
                 children: [
                   Text(
                     isEn ? 'Select Unit' : 'Chọn Đơn Vị',
-                    style: GoogleFonts.outfit(
-                      fontSize: 21,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 21.sp,
                       fontWeight: FontWeight.w800,
                       color: isDark ? Colors.white : const Color(0xFF006428),
                     ),
@@ -148,7 +203,7 @@ class _ManualAddIngredientScreenState
                 ],
               ),
 
-              const SizedBox(height: 14),
+              SizedBox(height: 14.h),
 
               // Unit Chips Grid
               GridView.builder(
@@ -179,7 +234,7 @@ class _ManualAddIngredientScreenState
                         color: isSelected
                             ? (isDark ? const Color(0xFF81C784) : const Color(0xFF008435))
                             : (isDark ? const Color(0xFF0E1611) : const Color(0xFFF1F8E9)),
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(16.r),
                         border: Border.all(
                           color: isSelected
                               ? (isDark ? const Color(0xFF81C784) : const Color(0xFF008435))
@@ -200,7 +255,7 @@ class _ManualAddIngredientScreenState
                       child: Text(
                         unit,
                         style: GoogleFonts.plusJakartaSans(
-                          fontSize: 15,
+                          fontSize: 15.sp,
                           fontWeight: FontWeight.w700,
                           color: isSelected
                               ? (isDark ? const Color(0xFF0E1611) : Colors.white)
@@ -241,14 +296,14 @@ class _ManualAddIngredientScreenState
             return Container(
               decoration: BoxDecoration(
                 color: isDark ? const Color(0xFF19271E) : Colors.white,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(28.r)),
                 border: isDark ? Border.all(color: const Color(0xFF2E4D36), width: 1.2) : null,
               ),
-              padding: const EdgeInsets.only(
-                left: 20,
-                right: 20,
-                top: 14,
-                bottom: 24,
+              padding: EdgeInsets.only(
+                left: 20.w,
+                right: 20.w,
+                top: 14.h,
+                bottom: 24.h,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -260,12 +315,12 @@ class _ManualAddIngredientScreenState
                       height: 4.5,
                       decoration: BoxDecoration(
                         color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFC8E6C9),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(10.r),
                       ),
                     ),
                   ),
 
-                  const SizedBox(height: 14),
+                  SizedBox(height: 14.h),
 
                   // Title Header
                   Row(
@@ -273,8 +328,8 @@ class _ManualAddIngredientScreenState
                     children: [
                       Text(
                         isEn ? 'Select Quantity' : 'Chọn Số Lượng',
-                        style: GoogleFonts.outfit(
-                          fontSize: 21,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 21.sp,
                           fontWeight: FontWeight.w800,
                           color: isDark ? Colors.white : const Color(0xFF006428),
                         ),
@@ -289,15 +344,15 @@ class _ManualAddIngredientScreenState
                     ],
                   ),
 
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10.h),
 
                   // Large Display Number Box
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    padding: EdgeInsets.symmetric(vertical: 14),
                     decoration: BoxDecoration(
                       color: isDark ? const Color(0xFF0E1611) : const Color(0xFFF1F8E9),
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(20.r),
                       border: Border.all(
                         color: isDark ? const Color(0xFF2E4D36) : const Color(0xFF81C784),
                         width: 1.4,
@@ -306,15 +361,15 @@ class _ManualAddIngredientScreenState
                     child: Text(
                       currentText.isEmpty ? '0' : currentText,
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.outfit(
-                        fontSize: 34,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 34.sp,
                         fontWeight: FontWeight.w900,
                         color: isDark ? const Color(0xFF81C784) : const Color(0xFF008435),
                       ),
                     ),
                   ),
 
-                  const SizedBox(height: 14),
+                  SizedBox(height: 14.h),
 
                   // Quick Preset Chips (1, 2, 3, 5, 10, 12, 20)
                   Wrap(
@@ -328,7 +383,7 @@ class _ManualAddIngredientScreenState
                         onTap: () => updateVal(numStr),
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 150),
-                          padding: const EdgeInsets.symmetric(
+                          padding: EdgeInsets.symmetric(
                             horizontal: 15,
                             vertical: 7,
                           ),
@@ -336,12 +391,12 @@ class _ManualAddIngredientScreenState
                             color: isSel
                                 ? (isDark ? const Color(0xFF81C784) : const Color(0xFF008435))
                                 : (isDark ? const Color(0xFF233629) : const Color(0xFFE8F5E9)),
-                            borderRadius: BorderRadius.circular(14),
+                            borderRadius: BorderRadius.circular(14.r),
                           ),
                           child: Text(
                             numStr,
                             style: GoogleFonts.plusJakartaSans(
-                              fontSize: 14.5,
+                              fontSize: 14.5.sp,
                               fontWeight: FontWeight.w700,
                               color: isSel
                                   ? (isDark ? const Color(0xFF0E1611) : Colors.white)
@@ -353,7 +408,7 @@ class _ManualAddIngredientScreenState
                     }).toList(),
                   ),
 
-                  const SizedBox(height: 18),
+                  SizedBox(height: 18.h),
 
                   // On-Screen Keypad Grid (1-9, Backspace, 0, Done)
                   GridView.count(
@@ -376,13 +431,13 @@ class _ManualAddIngredientScreenState
                           child: Container(
                             decoration: BoxDecoration(
                               color: isDark ? const Color(0xFF0E1611) : const Color(0xFFF4F7F4),
-                              borderRadius: BorderRadius.circular(14),
+                              borderRadius: BorderRadius.circular(14.r),
                             ),
                             child: Center(
                               child: Text(
                                 digit,
-                                style: GoogleFonts.outfit(
-                                  fontSize: 22,
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 22.sp,
                                   fontWeight: FontWeight.w800,
                                   color: isDark ? Colors.white : const Color(0xFF19221C),
                                 ),
@@ -406,7 +461,7 @@ class _ManualAddIngredientScreenState
                         child: Container(
                           decoration: BoxDecoration(
                             color: isDark ? const Color(0xFF3E1D22) : const Color(0xFFFFEBEE),
-                            borderRadius: BorderRadius.circular(14),
+                            borderRadius: BorderRadius.circular(14.r),
                           ),
                           child: Center(
                             child: Icon(
@@ -428,13 +483,13 @@ class _ManualAddIngredientScreenState
                         child: Container(
                           decoration: BoxDecoration(
                             color: isDark ? const Color(0xFF0E1611) : const Color(0xFFF4F7F4),
-                            borderRadius: BorderRadius.circular(14),
+                            borderRadius: BorderRadius.circular(14.r),
                           ),
                           child: Center(
                             child: Text(
                               '0',
-                              style: GoogleFonts.outfit(
-                                fontSize: 22,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 22.sp,
                                 fontWeight: FontWeight.w800,
                                 color: isDark ? Colors.white : const Color(0xFF19221C),
                               ),
@@ -449,7 +504,7 @@ class _ManualAddIngredientScreenState
                         child: Container(
                           decoration: BoxDecoration(
                             color: isDark ? const Color(0xFF81C784) : const Color(0xFF008435),
-                            borderRadius: BorderRadius.circular(14),
+                            borderRadius: BorderRadius.circular(14.r),
                           ),
                           child: Center(
                             child: Icon(
@@ -549,7 +604,7 @@ class _ManualAddIngredientScreenState
           backgroundColor: const Color(0xFF008435),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
           ),
         ),
       );
@@ -566,7 +621,7 @@ class _ManualAddIngredientScreenState
           backgroundColor: const Color(0xFF008435),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
           ),
         ),
       );
@@ -606,7 +661,7 @@ class _ManualAddIngredientScreenState
             children: [
               // 1. Top Bar Header (Back Icon + Friggy Logo)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding: EdgeInsets.symmetric(horizontal: 16.0.w, vertical: 8.0.h),
                 child: Row(
                   children: [
                     GestureDetector(
@@ -635,7 +690,7 @@ class _ManualAddIngredientScreenState
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12.w),
 
                     // Friggy Brand Title with Leaf
                     GestureDetector(
@@ -645,7 +700,7 @@ class _ManualAddIngredientScreenState
                           RichText(
                             text: TextSpan(
                               style: GoogleFonts.plusJakartaSans(
-                                fontSize: 26,
+                                fontSize: 26.sp,
                                 fontWeight: FontWeight.w900,
                                 letterSpacing: -0.5,
                               ),
@@ -665,7 +720,7 @@ class _ManualAddIngredientScreenState
                               ],
                             ),
                           ),
-                          const SizedBox(width: 4),
+                          SizedBox(width: 4.w),
                           Icon(
                             Icons.eco_rounded,
                             color: isDark ? const Color(0xFF81C784) : const Color(0xFF4CAF50),
@@ -682,19 +737,19 @@ class _ManualAddIngredientScreenState
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16.h),
 
                       // Mascot Greeting Card Banner
                       Container(
                         width: double.infinity,
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                         decoration: BoxDecoration(
                           color: isDark ? const Color(0xFF1E3A25) : const Color(0xFF4CB93E),
-                          borderRadius: BorderRadius.circular(26),
+                          borderRadius: BorderRadius.circular(26.r),
                           border: isDark
                               ? Border.all(color: const Color(0xFF2E4D36), width: 1.2)
                               : null,
@@ -710,7 +765,7 @@ class _ManualAddIngredientScreenState
                           children: [
                             // Larger Mascot Image
                             ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(20.r),
                               child: Image.asset(
                                 'assets/images/QR.png',
                                 width: 110,
@@ -730,12 +785,12 @@ class _ManualAddIngredientScreenState
                                 },
                               ),
                             ),
-                            const SizedBox(width: 18),
+                            SizedBox(width: 18.w),
                             Expanded(
                               child: Text(
                                 isEn ? 'Add quickly, let Friggy handle the rest!' : 'Nhập nhanh chóng, để Friggy lo phần còn lại!',
-                                style: GoogleFonts.outfit(
-                                  fontSize: 18,
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 18.sp,
                                   fontWeight: FontWeight.w800,
                                   color: Colors.white,
                                   height: 1.3,
@@ -746,30 +801,30 @@ class _ManualAddIngredientScreenState
                         ),
                       ),
 
-                      const SizedBox(height: 28),
+                      SizedBox(height: 28.h),
 
                       // 1. Ingredient Name Field
                       _buildFieldTitle(isEn ? 'Ingredient Name' : 'Tên Nguyên Liệu'),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8.h),
                       _buildTextField(
                         controller: _nameController,
                         hintText: isEn ? 'e.g. Red Apple, Fresh Milk...' : 'vd: Táo đỏ, Sữa tươi...',
                       ),
 
                       if (_showSuggestions) ...[
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8.h),
                         Container(
                           constraints: const BoxConstraints(maxHeight: 180),
                           decoration: BoxDecoration(
                             color: isDark ? const Color(0xFF19271E) : Colors.white,
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16.r),
                             border: Border.all(
                               color: isDark ? const Color(0xFF2E4D36) : const Color(0xFF81C784),
                             ),
                           ),
                           child: ListView.separated(
                             shrinkWrap: true,
-                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            padding: EdgeInsets.symmetric(vertical: 4),
                             itemCount: _suggestions.length,
                             separatorBuilder: (context, index) => Divider(
                               height: 1,
@@ -784,7 +839,7 @@ class _ManualAddIngredientScreenState
                                 title: Text(
                                   sugName,
                                   style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 14.5,
+                                    fontSize: 14.5.sp,
                                     fontWeight: FontWeight.w700,
                                     color: isDark ? Colors.white : const Color(0xFF19221C),
                                   ),
@@ -792,7 +847,7 @@ class _ManualAddIngredientScreenState
                                 subtitle: Text(
                                   isEn ? 'Default unit: $sugUnit' : 'Đơn vị mặc định: $sugUnit',
                                   style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 12.5,
+                                    fontSize: 12.5.sp,
                                     color: isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32),
                                   ),
                                 ),
@@ -804,7 +859,7 @@ class _ManualAddIngredientScreenState
                         ),
                       ],
 
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24.h),
 
                       // 2. Row: Quantity & Unit
                       Row(
@@ -814,18 +869,18 @@ class _ManualAddIngredientScreenState
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 _buildFieldTitle(isEn ? 'Quantity' : 'Số Lượng'),
-                                const SizedBox(height: 8),
+                                SizedBox(height: 8.h),
                                 _buildQuantityStepperField(isEn),
                               ],
                             ),
                           ),
-                          const SizedBox(width: 16),
+                          SizedBox(width: 16.w),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 _buildFieldTitle(isEn ? 'Unit' : 'Đơn Vị'),
-                                const SizedBox(height: 8),
+                                SizedBox(height: 8.h),
                                 _buildSelectField(
                                   value: _selectedUnit,
                                   onTap: () => _showUnitPicker(isEn),
@@ -836,19 +891,19 @@ class _ManualAddIngredientScreenState
                         ],
                       ),
 
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24.h),
 
                       // 3. Expiration Date (Auto-calculated or custom picker)
                       _buildFieldTitle(isEn ? 'Expiration Date' : 'Ngày Hết Hạn (Tùy chọn)'),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8.h),
                       GestureDetector(
                         onTap: _pickExpirationDate,
                         child: Container(
                           height: 56,
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          padding: EdgeInsets.symmetric(horizontal: 16),
                           decoration: BoxDecoration(
                             color: isDark ? const Color(0xFF19271E) : Colors.white,
-                            borderRadius: BorderRadius.circular(18),
+                            borderRadius: BorderRadius.circular(18.r),
                             border: Border.all(
                               color: isDark ? const Color(0xFF2E4D36) : const Color(0xFF81C784),
                               width: 1.2,
@@ -862,7 +917,7 @@ class _ManualAddIngredientScreenState
                                       ? (isEn ? 'Tap to set date (Optional)' : 'Bấm để chọn ngày (Không bắt buộc)')
                                       : '${_selectedExpirationDate!.day.toString().padLeft(2, '0')}/${_selectedExpirationDate!.month.toString().padLeft(2, '0')}/${_selectedExpirationDate!.year}',
                                   style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 14.5,
+                                    fontSize: 14.5.sp,
                                     fontWeight: FontWeight.w600,
                                     color: _selectedExpirationDate == null
                                         ? (isDark ? const Color(0xFF9DA8A0) : const Color(0xFFA5D6A7))
@@ -878,7 +933,7 @@ class _ManualAddIngredientScreenState
                                     });
                                   },
                                   child: Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
+                                    padding: EdgeInsets.only(right: 8.0.w),
                                     child: Icon(
                                       Icons.cancel_rounded,
                                       size: 18,
@@ -896,7 +951,7 @@ class _ManualAddIngredientScreenState
                         ),
                       ),
 
-                      const SizedBox(height: 24),
+                      SizedBox(height: 24.h),
 
                       // 4. Storage Area (Pills: Fridge, Freezer, Pantry)
                       Row(
@@ -905,24 +960,24 @@ class _ManualAddIngredientScreenState
                           _buildFieldTitle(isEn ? 'Storage Area' : 'Vị Trí Lưu Trữ'),
                         ],
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10.h),
                       Row(
                         children: [
                           Expanded(
                             child: _buildStoragePill('Fridge', isEn ? 'Cooler' : 'Ngăn mát'),
                           ),
-                          const SizedBox(width: 10),
+                          SizedBox(width: 10.w),
                           Expanded(
                             child: _buildStoragePill('Freezer', isEn ? 'Freezer' : 'Ngăn đông'),
                           ),
-                          const SizedBox(width: 10),
+                          SizedBox(width: 10.w),
                           Expanded(
                             child: _buildStoragePill('Pantry', isEn ? 'Pantry' : 'Tủ khô'),
                           ),
                         ],
                       ),
 
-                      const SizedBox(height: 36),
+                      SizedBox(height: 36.h),
 
                       // 6. Save / Add Button
                       GestureDetector(
@@ -932,7 +987,7 @@ class _ManualAddIngredientScreenState
                           height: 56,
                           decoration: BoxDecoration(
                             color: isDark ? const Color(0xFF81C784) : const Color(0xFF008435),
-                            borderRadius: BorderRadius.circular(28),
+                            borderRadius: BorderRadius.circular(28.r),
                             boxShadow: [
                               BoxShadow(
                                 color: (isDark ? const Color(0xFF81C784) : const Color(0xFF008435))
@@ -950,11 +1005,11 @@ class _ManualAddIngredientScreenState
                                 color: isDark ? const Color(0xFF0E1611) : Colors.white,
                                 size: 24,
                               ),
-                              const SizedBox(width: 8),
+                              SizedBox(width: 8.w),
                               Text(
                                 isEn ? 'Add to Fridge' : 'Thêm Vào Tủ Lạnh',
-                                style: GoogleFonts.outfit(
-                                  fontSize: 18,
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 18.sp,
                                   fontWeight: FontWeight.w800,
                                   color: isDark ? const Color(0xFF0E1611) : Colors.white,
                                 ),
@@ -964,7 +1019,7 @@ class _ManualAddIngredientScreenState
                         ),
                       ),
 
-                      const SizedBox(height: 32),
+                      SizedBox(height: 32.h),
                     ],
                   ),
                 ),
@@ -981,8 +1036,8 @@ class _ManualAddIngredientScreenState
 
     return Text(
       title,
-      style: GoogleFonts.outfit(
-        fontSize: 15.5,
+      style: GoogleFonts.plusJakartaSans(
+        fontSize: 15.5.sp,
         fontWeight: FontWeight.w800,
         color: isDark ? Colors.white : const Color(0xFF006428),
       ),
@@ -1000,7 +1055,7 @@ class _ManualAddIngredientScreenState
     return Container(
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF19271E) : Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         border: Border.all(
           color: isDark ? const Color(0xFF2E4D36) : const Color(0xFF81C784),
           width: 1.2,
@@ -1011,18 +1066,18 @@ class _ManualAddIngredientScreenState
         keyboardType: keyboardType,
         maxLines: maxLines,
         style: GoogleFonts.plusJakartaSans(
-          fontSize: 14.5,
+          fontSize: 14.5.sp,
           fontWeight: FontWeight.w600,
           color: isDark ? Colors.white : const Color(0xFF19221C),
         ),
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: GoogleFonts.plusJakartaSans(
-            fontSize: 14,
+            fontSize: 14.sp,
             fontWeight: FontWeight.w500,
             color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFFA5D6A7),
           ),
-          contentPadding: const EdgeInsets.symmetric(
+          contentPadding: EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 14,
           ),
@@ -1055,7 +1110,7 @@ class _ManualAddIngredientScreenState
       height: 52,
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF19271E) : Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(16.r),
         border: Border.all(
           color: isDark ? const Color(0xFF2E4D36) : const Color(0xFF81C784),
           width: 1.2,
@@ -1069,7 +1124,7 @@ class _ManualAddIngredientScreenState
             child: Container(
               width: 34,
               height: 34,
-              margin: const EdgeInsets.only(left: 6),
+              margin: EdgeInsets.only(left: 6.w),
               decoration: BoxDecoration(
                 color: isDark ? const Color(0xFF233629) : const Color(0xFFF1F8E9),
                 shape: BoxShape.circle,
@@ -1096,7 +1151,7 @@ class _ManualAddIngredientScreenState
                       : _quantityController.text,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w800,
                     color: isDark ? Colors.white : const Color(0xFF19221C),
                   ),
@@ -1111,7 +1166,7 @@ class _ManualAddIngredientScreenState
             child: Container(
               width: 34,
               height: 34,
-              margin: const EdgeInsets.only(right: 6),
+              margin: EdgeInsets.only(right: 6.w),
               decoration: BoxDecoration(
                 color: isDark ? const Color(0xFF233629) : const Color(0xFFF1F8E9),
                 shape: BoxShape.circle,
@@ -1139,10 +1194,10 @@ class _ManualAddIngredientScreenState
       onTap: onTap,
       child: Container(
         height: 56,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           color: isDark ? const Color(0xFF19271E) : Colors.white,
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(18.r),
           border: Border.all(
             color: isDark ? const Color(0xFF2E4D36) : const Color(0xFF81C784),
             width: 1.2,
@@ -1156,13 +1211,13 @@ class _ManualAddIngredientScreenState
                 size: 20,
                 color: isDark ? const Color(0xFF81C784) : const Color(0xFF008435),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8.w),
             ],
             Expanded(
               child: Text(
                 value,
                 style: GoogleFonts.plusJakartaSans(
-                  fontSize: 14.5,
+                  fontSize: 14.5.sp,
                   fontWeight: FontWeight.w600,
                   color: isDark ? Colors.white : const Color(0xFF19221C),
                 ),
@@ -1197,7 +1252,7 @@ class _ManualAddIngredientScreenState
           color: isSelected
               ? (isDark ? const Color(0xFF81C784) : const Color(0xFF008435))
               : (isDark ? const Color(0xFF19271E) : Colors.white),
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(24.r),
           border: Border.all(
             color: isSelected
                 ? (isDark ? const Color(0xFF81C784) : const Color(0xFF008435))
@@ -1218,7 +1273,7 @@ class _ManualAddIngredientScreenState
         child: Text(
           label,
           style: GoogleFonts.plusJakartaSans(
-            fontSize: 13.5,
+            fontSize: 13.5.sp,
             fontWeight: FontWeight.w700,
             color: isSelected
                 ? (isDark ? const Color(0xFF0E1611) : Colors.white)

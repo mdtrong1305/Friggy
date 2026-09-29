@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
@@ -21,7 +22,7 @@ class SplashScreen extends StatelessWidget {
           );
           return SlideTransition(
             position: Tween<Offset>(
-              begin: const Offset(1.0, 0.0),
+              begin: Offset(1.0, 0.0),
               end: Offset.zero,
             ).animate(curvedAnimation),
             child: FadeTransition(
@@ -47,7 +48,7 @@ class SplashScreen extends StatelessWidget {
           );
           return SlideTransition(
             position: Tween<Offset>(
-              begin: const Offset(1.0, 0.0),
+              begin: Offset(1.0, 0.0),
               end: Offset.zero,
             ).animate(curvedAnimation),
             child: FadeTransition(
@@ -89,24 +90,24 @@ class SplashScreen extends StatelessWidget {
                   children: [
                     // Sparkle accents
                     Positioned(
-                      top: 75,
-                      left: 45,
+                      top: 75.h,
+                      left: 45.w,
                       child: Text(
                         '✦',
                         style: TextStyle(
                           color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFC4EAD0),
-                          fontSize: 22,
+                          fontSize: 22.sp,
                         ),
                       ),
                     ),
                     Positioned(
-                      top: 140,
-                      right: 40,
+                      top: 140.h,
+                      right: 40.w,
                       child: Text(
                         '✦',
                         style: TextStyle(
                           color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFC4EAD0),
-                          fontSize: 20,
+                          fontSize: 20.sp,
                         ),
                       ),
                     ),
@@ -114,23 +115,23 @@ class SplashScreen extends StatelessWidget {
                     // App Title Header
                     Positioned(
                       top: topPadding + 24,
-                      left: 0,
-                      right: 0,
+                      left: 0.w,
+                      right: 0.w,
                       child: Column(
                         children: [
                           Text(
                             isEn ? 'Welcome to' : 'Chào mừng tới',
                             style: GoogleFonts.plusJakartaSans(
-                              fontSize: 30,
+                              fontSize: 30.sp,
                               fontWeight: FontWeight.w900,
                               color: isDark ? const Color(0xFF81C784) : const Color(0xFF159936),
                               letterSpacing: 0.5,
                               height: 1.0,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: 4.h),
                           Padding(
-                            padding: const EdgeInsets.only(left: 35.0),
+                            padding: EdgeInsets.only(left: 35.0.w),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,7 +139,7 @@ class SplashScreen extends StatelessWidget {
                                 RichText(
                                   text: TextSpan(
                                     style: GoogleFonts.plusJakartaSans(
-                                      fontSize: 62,
+                                      fontSize: 62.sp,
                                       fontWeight: FontWeight.w900,
                                       letterSpacing: 3.0,
                                       height: 1.0,
@@ -159,9 +160,9 @@ class SplashScreen extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                const SizedBox(width: 4),
+                                SizedBox(width: 4.w),
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 6.0),
+                                  padding: EdgeInsets.only(top: 6.0.h),
                                   child: Transform.rotate(
                                     angle: 0.35,
                                     child: Icon(
@@ -180,9 +181,9 @@ class SplashScreen extends StatelessWidget {
 
                     // Centered 3D Fridge Mascot Image
                     Positioned(
-                      bottom: 20,
-                      left: 0,
-                      right: 0,
+                      bottom: 20.h,
+                      left: 0.w,
+                      right: 0.w,
                       child: SizedBox(
                         height: screenHeight * 0.40,
                         child: Image.asset(
@@ -208,7 +209,7 @@ class SplashScreen extends StatelessWidget {
               child: Container(
                 width: double.infinity,
                 color: isDark ? const Color(0xFF0E1611) : Colors.white,
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 24,
                   vertical: 12,
                 ),
@@ -223,7 +224,7 @@ class SplashScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                         maxLines: 1,
                         style: GoogleFonts.plusJakartaSans(
-                          fontSize: 28,
+                          fontSize: 28.sp,
                           fontWeight: FontWeight.w900,
                           color: isDark ? Colors.white : const Color(0xFF008435),
                           letterSpacing: -0.5,
@@ -238,7 +239,7 @@ class SplashScreen extends StatelessWidget {
                           : 'Theo dõi thực phẩm, gợi ý món ăn ngon và giảm lãng phí mỗi ngày.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 15.sp,
                         fontWeight: FontWeight.w600,
                         color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF1E8435),
                         height: 1.4,
@@ -257,7 +258,7 @@ class SplashScreen extends StatelessWidget {
                           elevation: 2,
                           shadowColor: AppColors.primary.withValues(alpha: 0.3),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(28),
+                            borderRadius: BorderRadius.circular(28.r),
                           ),
                         ),
                         child: Row(
@@ -265,14 +266,14 @@ class SplashScreen extends StatelessWidget {
                           children: [
                             Text(
                               isEn ? 'Get Started' : 'Bắt đầu ngay',
-                              style: const TextStyle(
-                                fontSize: 18,
+                              style: TextStyle(
+                                fontSize: 18.sp,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 0.5,
                               ),
                             ),
-                            const SizedBox(width: 8),
-                            const Icon(
+                            SizedBox(width: 8.w),
+                            Icon(
                               Icons.arrow_forward_rounded,
                               size: 22,
                               color: Colors.white,
@@ -291,7 +292,7 @@ class SplashScreen extends StatelessWidget {
                           Text(
                             isEn ? "Don't have an account? " : "Bạn chưa có tài khoản? ",
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF1E8435),
                               fontWeight: FontWeight.w500,
                             ),
@@ -299,7 +300,7 @@ class SplashScreen extends StatelessWidget {
                           Text(
                             isEn ? 'Register' : 'Đăng ký',
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.bold,
                               color: isDark ? const Color(0xFF81C784) : const Color(0xFF008435),
                             ),

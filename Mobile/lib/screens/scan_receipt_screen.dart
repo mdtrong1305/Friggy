@@ -1,5 +1,6 @@
-import 'dart:io';
+﻿import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import '../data/services/api_service.dart';
@@ -155,7 +156,7 @@ class _ScanReceiptScreenState extends State<ScanReceiptScreen>
             children: [
               // Top Header
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                padding: EdgeInsets.symmetric(horizontal: 16.0.w, vertical: 12.0.h),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -168,8 +169,8 @@ class _ScanReceiptScreenState extends State<ScanReceiptScreen>
                     ),
                     Text(
                       isEn ? 'AI Receipt Scanner' : 'Quét Hóa Đơn AI',
-                      style: GoogleFonts.outfit(
-                        fontSize: 20,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 20.sp,
                         fontWeight: FontWeight.bold,
                         color: isDark ? Colors.white : const Color(0xFF19221C),
                       ),
@@ -188,17 +189,17 @@ class _ScanReceiptScreenState extends State<ScanReceiptScreen>
               // Receipt Scanner Frame
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(24.0),
+                  padding: EdgeInsets.all(24.0.w),
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(20.r),
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
                             color: isDark ? const Color(0xFF19271E) : Colors.white,
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(20.r),
                             border: isDark
                                 ? Border.all(color: const Color(0xFF2E4D36), width: 1.5)
                                 : null,
@@ -218,11 +219,11 @@ class _ScanReceiptScreenState extends State<ScanReceiptScreen>
                                       size: 72,
                                       color: isDark ? const Color(0xFF81C784) : const Color(0xFF4CAF50),
                                     ),
-                                    const SizedBox(height: 12),
+                                    SizedBox(height: 12.h),
                                     Text(
                                       isEn ? 'Align receipt inside frame' : 'Căn chỉnh hóa đơn vào khung hình',
                                       style: GoogleFonts.plusJakartaSans(
-                                        fontSize: 14,
+                                        fontSize: 14.sp,
                                         fontWeight: FontWeight.w600,
                                         color: isDark ? Colors.white : const Color(0xFF19221C),
                                       ),
@@ -250,7 +251,7 @@ class _ScanReceiptScreenState extends State<ScanReceiptScreen>
                         Container(
                           decoration: BoxDecoration(
                             color: Colors.black54,
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(20.r),
                           ),
                           child: Center(
                             child: CircularProgressIndicator(
@@ -265,7 +266,7 @@ class _ScanReceiptScreenState extends State<ScanReceiptScreen>
 
               // Bottom Toolbar
               Padding(
-                padding: const EdgeInsets.only(bottom: 24.0),
+                padding: EdgeInsets.only(bottom: 24.0.h),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -297,7 +298,7 @@ class _ScanReceiptScreenState extends State<ScanReceiptScreen>
                         ),
                       ),
                     ),
-                    const SizedBox(width: 32),
+                    SizedBox(width: 32.w),
                   ],
                 ),
               ),

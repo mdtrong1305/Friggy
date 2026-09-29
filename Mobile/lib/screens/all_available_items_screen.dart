@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../data/models/ingredient_model.dart';
 import '../l10n/app_localizations.dart';
@@ -151,11 +152,11 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
             children: [
               // 1. Top Header with Back Chevron
               Padding(
-                padding: const EdgeInsets.only(
-                  left: 8.0,
-                  right: 16.0,
-                  top: 8.0,
-                  bottom: 8.0,
+                padding: EdgeInsets.only(
+                  left: 8.0.w,
+                  right: 16.0.w,
+                  top: 8.0.h,
+                  bottom: 8.0.h,
                 ),
                 child: Row(
                   children: [
@@ -170,7 +171,7 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
                     Text(
                       isEn ? 'Available Ingredients' : 'Nguyên Liệu Sẵn Có',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 22,
+                        fontSize: 22.sp,
                         fontWeight: FontWeight.w900,
                         color: isDark ? Colors.white : const Color(0xFF006428),
                       ),
@@ -179,11 +180,11 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
                 ),
               ),
 
-              const SizedBox(height: 4),
+              SizedBox(height: 4.h),
 
               // Title & Total Badge Section
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -194,17 +195,17 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
                           Text(
                             isEn ? 'All Fresh Food' : 'Tất cả thực phẩm tươi',
                             style: GoogleFonts.plusJakartaSans(
-                              fontSize: 21,
+                              fontSize: 21.sp,
                               fontWeight: FontWeight.w900,
                               color: isDark ? Colors.white : const Color(0xFF006428),
                               letterSpacing: -0.3,
                             ),
                           ),
-                          const SizedBox(height: 2),
+                          SizedBox(height: 2.h),
                           Text(
                             isEn ? 'Combined from all your fridges' : 'Tổng hợp từ tất cả các tủ lạnh của bạn',
                             style: GoogleFonts.plusJakartaSans(
-                              fontSize: 13.5,
+                              fontSize: 13.5.sp,
                               fontWeight: FontWeight.w600,
                               color: isDark
                                   ? const Color(0xFF9DA8A0)
@@ -215,13 +216,13 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 14,
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
                         color: const Color(0xFF008435),
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(16.r),
                         boxShadow: [
                           BoxShadow(
                             color: const Color(0xFF008435)
@@ -233,8 +234,8 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
                       ),
                       child: Text(
                         isEn ? '${_availableItems.length} items' : '${_availableItems.length} món',
-                        style: GoogleFonts.outfit(
-                          fontSize: 15,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 15.sp,
                           fontWeight: FontWeight.w900,
                           color: Colors.white,
                         ),
@@ -244,11 +245,11 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
                 ),
               ),
 
-              const SizedBox(height: 14),
+              SizedBox(height: 14.h),
 
               // Quick Action Bar (Meal Suggestions)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -263,10 +264,10 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
                   },
                   child: Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    padding: EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
                       color: isDark ? const Color(0xFF19271E) : Colors.white,
-                      borderRadius: BorderRadius.circular(18),
+                      borderRadius: BorderRadius.circular(18.r),
                       border: Border.all(
                         color: isDark
                             ? const Color(0xFF2E4D36)
@@ -291,13 +292,13 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
                               : const Color(0xFF008435),
                           size: 20,
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8.w),
                         Text(
                           isEn
                               ? 'AI Recipe suggestions from all food'
                               : 'Gợi ý món ăn AI từ tất cả thực phẩm',
-                          style: GoogleFonts.outfit(
-                            fontSize: 14.5,
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 14.5.sp,
                             fontWeight: FontWeight.w800,
                             color: isDark
                                 ? const Color(0xFF81C784)
@@ -310,11 +311,11 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
                 ),
               ),
 
-              const SizedBox(height: 12),
+              SizedBox(height: 12.h),
 
               // Search Bar & View Mode Toggle
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: Row(
                   children: [
                     Expanded(
@@ -322,7 +323,7 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
                         height: 44,
                         decoration: BoxDecoration(
                           color: isDark ? const Color(0xFF19271E) : Colors.white,
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(16.r),
                           border: Border.all(
                             color: isDark ? const Color(0xFF2E4D36) : const Color(0xFF81C784),
                             width: 1.2,
@@ -332,14 +333,14 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
                           controller: _searchController,
                           onChanged: (val) => setState(() {}),
                           style: GoogleFonts.plusJakartaSans(
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w600,
                             color: isDark ? Colors.white : const Color(0xFF19221C),
                           ),
                           decoration: InputDecoration(
                             hintText: isEn ? 'Search ingredients in fridge...' : 'Tìm kiếm nguyên liệu trong tủ...',
                             hintStyle: GoogleFonts.plusJakartaSans(
-                              fontSize: 13.5,
+                              fontSize: 13.5.sp,
                               color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFFA5D6A7),
                             ),
                             prefixIcon: Icon(
@@ -348,13 +349,13 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
                               size: 22,
                             ),
                             border: InputBorder.none,
-                            contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                            contentPadding: EdgeInsets.symmetric(vertical: 10),
                           ),
                         ),
                       ),
                     ),
 
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8.w),
 
                     // View Mode Toggle
                     GestureDetector(
@@ -364,7 +365,7 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
                         height: 44,
                         decoration: BoxDecoration(
                           color: isDark ? const Color(0xFF19271E) : Colors.white,
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(16.r),
                           border: Border.all(
                             color: isDark ? const Color(0xFF2E4D36) : const Color(0xFF81C784),
                             width: 1.2,
@@ -381,12 +382,12 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
                 ),
               ),
 
-              const SizedBox(height: 12),
+              SizedBox(height: 12.h),
 
               // Available Items List / Grid Across All Fridges
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: EdgeInsets.symmetric(horizontal: 20.0),
                   child: _isLoading
                       ? const Center(child: CircularProgressIndicator(color: Color(0xFF008435)))
                       : _isGridView
@@ -395,7 +396,7 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
                           physics: const BouncingScrollPhysics(),
                           itemCount: filteredItems.length,
                           separatorBuilder: (context, index) =>
-                              const SizedBox(height: 12),
+                              SizedBox(height: 12.h),
                           itemBuilder: (context, index) {
                             final item = filteredItems[index];
                             final name = isEn && item.englishName.isNotEmpty ? item.englishName : item.name;
@@ -404,10 +405,10 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
                             final exp = _getLocalizedExpiry(item.expiryText, isEn);
 
                             return Container(
-                              padding: const EdgeInsets.all(12),
+                              padding: EdgeInsets.all(12.w),
                               decoration: BoxDecoration(
                                 color: isDark ? const Color(0xFF19271E) : Colors.white,
-                                borderRadius: BorderRadius.circular(20),
+                                borderRadius: BorderRadius.circular(20.r),
                                 border: isDark
                                     ? Border.all(
                                         color: const Color(0xFF2E4D36), width: 1)
@@ -423,24 +424,24 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
                               child: Row(
                                 children: [
                                   IngredientAvatarWidget(item: item, size: 54),
-                                  const SizedBox(width: 14),
+                                  SizedBox(width: 14.w),
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           name,
-                                          style: GoogleFonts.outfit(
-                                            fontSize: 18,
+                                          style: GoogleFonts.plusJakartaSans(
+                                            fontSize: 18.sp,
                                             fontWeight: FontWeight.w800,
                                             color: isDark ? Colors.white : const Color(0xFF19221C),
                                           ),
                                         ),
-                                        const SizedBox(height: 4),
+                                        SizedBox(height: 4.h),
                                         Text(
                                           '$fName • $qty',
                                           style: GoogleFonts.plusJakartaSans(
-                                            fontSize: 12.5,
+                                            fontSize: 12.5.sp,
                                             fontWeight: FontWeight.w600,
                                             color: isDark
                                                 ? const Color(0xFF9DA8A0)
@@ -451,7 +452,7 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
                                     ),
                                   ),
                                   Container(
-                                    padding: const EdgeInsets.symmetric(
+                                    padding: EdgeInsets.symmetric(
                                       horizontal: 14,
                                       vertical: 7,
                                     ),
@@ -459,12 +460,12 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
                                       color: isDark
                                           ? item.badgeBgColor.withValues(alpha: 0.2)
                                           : item.badgeBgColor,
-                                      borderRadius: BorderRadius.circular(20),
+                                      borderRadius: BorderRadius.circular(20.r),
                                     ),
                                     child: Text(
                                       exp,
                                       style: GoogleFonts.plusJakartaSans(
-                                        fontSize: 13,
+                                        fontSize: 13.sp,
                                         fontWeight: FontWeight.w700,
                                         color: isDark
                                             ? const Color(0xFF81C784)
@@ -512,7 +513,7 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
     return Container(
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF19271E) : Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
         border: Border.all(
           color: isDark
               ? const Color(0xFF2E4D36)
@@ -530,37 +531,37 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
       child: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+            padding: EdgeInsets.symmetric(horizontal: 8.0.w, vertical: 10.0.h),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 14),
+                SizedBox(height: 14.h),
                 Expanded(
                   child: Center(
                     child: IngredientAvatarWidget(item: item, size: 54),
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 Text(
                   name,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.outfit(
-                    fontSize: 13.5,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 13.5.sp,
                     fontWeight: FontWeight.w800,
                     color: isDark ? Colors.white : const Color(0xFF19221C),
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2.h),
                 Text(
                   qty,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w600,
                     color: isDark
                         ? const Color(0xFF9DA8A0)
@@ -571,10 +572,10 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
             ),
           ),
           Positioned(
-            top: 7,
-            right: 7,
+            top: 7.h,
+            right: 7.w,
             child: Container(
-              padding: const EdgeInsets.symmetric(
+              padding: EdgeInsets.symmetric(
                 horizontal: 7,
                 vertical: 3,
               ),
@@ -582,12 +583,12 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
                 color: isDark
                     ? item.badgeBgColor.withValues(alpha: 0.25)
                     : item.badgeBgColor,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(10.r),
               ),
               child: Text(
                 exp,
                 style: GoogleFonts.plusJakartaSans(
-                  fontSize: 10.5,
+                  fontSize: 10.5.sp,
                   fontWeight: FontWeight.w700,
                   color: item.badgeTextColor,
                 ),
@@ -608,7 +609,7 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
 
     return ListView.builder(
       physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.only(bottom: 24),
+      padding: EdgeInsets.only(bottom: 24.h),
       itemCount: categories.length,
       itemBuilder: (context, catIdx) {
         final categoryKey = categories[catIdx];
@@ -619,7 +620,7 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 4, bottom: 8),
+              padding: EdgeInsets.only(top: 4.h, bottom: 8.h),
               child: Row(
                 children: [
                   Container(
@@ -627,23 +628,23 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
                     height: 16,
                     decoration: BoxDecoration(
                       color: const Color(0xFF008435),
-                      borderRadius: BorderRadius.circular(2),
+                      borderRadius: BorderRadius.circular(2.r),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8.w),
                   Text(
                     categoryTitle,
-                    style: GoogleFonts.outfit(
-                      fontSize: 16,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w800,
                       color: isDark ? Colors.white : const Color(0xFF19221C),
                     ),
                   ),
-                  const SizedBox(width: 6),
+                  SizedBox(width: 6.w),
                   Text(
                     '(${items.length})',
                     style: GoogleFonts.plusJakartaSans(
-                      fontSize: 13,
+                      fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
                       color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF6B786F),
                     ),
@@ -665,7 +666,7 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
                 return _buildSquareFoodCard(items[index], isEn, isDark);
               },
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12.h),
           ],
         );
       },

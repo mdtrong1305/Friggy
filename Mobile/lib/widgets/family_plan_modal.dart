@@ -1,6 +1,7 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../data/models/user_models.dart';
 import '../data/services/api_service.dart';
@@ -110,7 +111,7 @@ class __FamilySubscriptionModalContentState
           setState(() => _isLoading = false);
           Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
+            SnackBar(
               content: Text('⚡ Đã khôi phục mã QR thanh toán đang chờ xử lý...'),
               backgroundColor: Color(0xFF2E7D32),
               behavior: SnackBarBehavior.floating,
@@ -136,7 +137,7 @@ class __FamilySubscriptionModalContentState
         setState(() => _isLoading = false);
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text('⚡ Đã khôi phục mã QR thanh toán đang chờ xử lý...'),
             backgroundColor: Color(0xFF2E7D32),
             behavior: SnackBarBehavior.floating,
@@ -183,7 +184,7 @@ class __FamilySubscriptionModalContentState
               if (context.mounted) {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                  SnackBar(
                     content: Text('🎉 Kích hoạt thành công Gói Gia Đình!'),
                     backgroundColor: Color(0xFF2E7D32),
                     behavior: SnackBarBehavior.floating,
@@ -201,7 +202,7 @@ class __FamilySubscriptionModalContentState
               if (context.mounted) {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                  SnackBar(
                     content: Text('🎉 Kích hoạt thành công Gói Gia Đình!'),
                     backgroundColor: Color(0xFF2E7D32),
                     behavior: SnackBarBehavior.floating,
@@ -222,10 +223,10 @@ class __FamilySubscriptionModalContentState
                 }
               },
               child: Container(
-                padding: const EdgeInsets.all(24),
+                padding: EdgeInsets.all(24.w),
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF19271E) : Colors.white,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(28.r)),
                 ),
                 child: SingleChildScrollView(
                   child: Column(
@@ -236,27 +237,27 @@ class __FamilySubscriptionModalContentState
                         height: 4,
                         decoration: BoxDecoration(
                           color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFE2E8E4),
-                          borderRadius: BorderRadius.circular(2),
+                          borderRadius: BorderRadius.circular(2.r),
                         ),
                       ),
-                      const SizedBox(height: 18),
+                      SizedBox(height: 18.h),
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.qr_code_2_rounded, color: Color(0xFF4CAF50), size: 28),
-                          const SizedBox(width: 8),
+                          Icon(Icons.qr_code_2_rounded, color: Color(0xFF4CAF50), size: 28),
+                          SizedBox(width: 8.w),
                           Text(
                             isEn ? 'Payment QR Code' : 'Mã QR Thanh Toán PayOS',
-                            style: GoogleFonts.outfit(
-                              fontSize: 22,
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 22.sp,
                               fontWeight: FontWeight.bold,
                               color: isDark ? Colors.white : const Color(0xFF006428),
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
 
                       Text(
                         isEn
@@ -264,34 +265,34 @@ class __FamilySubscriptionModalContentState
                             : 'Quét mã QR bên dưới bằng ứng dụng Ngân hàng / MoMo / VNPay để thanh toán Gói Gia Đình',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 13.5,
+                          fontSize: 13.5.sp,
                           color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF6B786F),
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16.h),
 
                       Container(
-                        padding: const EdgeInsets.all(16),
+                        padding: EdgeInsets.all(16.w),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(20.r),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 10,
-                              offset: const Offset(0, 4),
+                              offset: Offset(0, 4),
                             ),
                           ],
                         ),
                         child: _buildQrCodeWidget(data.qrCodeUrl),
                       ),
-                      const SizedBox(height: 18),
+                      SizedBox(height: 18.h),
 
                       Container(
-                        padding: const EdgeInsets.all(14),
+                        padding: EdgeInsets.all(14.w),
                         decoration: BoxDecoration(
                           color: isDark ? const Color(0xFF233629) : const Color(0xFFF1F8E9),
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(16.r),
                           border: Border.all(
                             color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5E69C),
                           ),
@@ -304,40 +305,40 @@ class __FamilySubscriptionModalContentState
                                 Text(
                                   isEn ? 'Amount:' : 'Số tiền thanh toán:',
                                   style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 13.5,
+                                    fontSize: 13.5.sp,
                                     fontWeight: FontWeight.w600,
                                     color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF616161),
                                   ),
                                 ),
                                 Text(
                                   _formatPrice(data.amount),
-                                  style: GoogleFonts.outfit(
-                                    fontSize: 17,
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 17.sp,
                                     fontWeight: FontWeight.w900,
                                     color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
                                   ),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 6),
+                            SizedBox(height: 6.h),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   isEn ? 'Payment Ref:' : 'Mã tham chiếu:',
                                   style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 13.5,
+                                    fontSize: 13.5.sp,
                                     fontWeight: FontWeight.w600,
                                     color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF616161),
                                   ),
                                 ),
-                                const SizedBox(width: 8),
+                                SizedBox(width: 8.w),
                                 Flexible(
                                   child: Text(
                                     data.paymentRef,
                                     overflow: TextOverflow.ellipsis,
                                     style: GoogleFonts.plusJakartaSans(
-                                      fontSize: 13.5,
+                                      fontSize: 13.5.sp,
                                       fontWeight: FontWeight.w800,
                                       color: isDark ? Colors.white : const Color(0xFF19221C),
                                     ),
@@ -348,7 +349,7 @@ class __FamilySubscriptionModalContentState
                           ],
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20.h),
 
                       SizedBox(
                         width: double.infinity,
@@ -368,7 +369,7 @@ class __FamilySubscriptionModalContentState
                                         setModalState(() => isChecking = false);
                                         Navigator.pop(context);
                                         ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(
+                                          SnackBar(
                                             content: Text('🎉 Kích hoạt thành công Gói Gia Đình!'),
                                             backgroundColor: Color(0xFF2E7D32),
                                             behavior: SnackBarBehavior.floating,
@@ -388,7 +389,7 @@ class __FamilySubscriptionModalContentState
                                         pollTimer?.cancel();
                                         Navigator.pop(context);
                                         ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(
+                                          SnackBar(
                                             content: Text('🎉 Kích hoạt thành công Gói Gia Đình!'),
                                             backgroundColor: Color(0xFF2E7D32),
                                             behavior: SnackBarBehavior.floating,
@@ -397,7 +398,7 @@ class __FamilySubscriptionModalContentState
                                         widget.onSuccess?.call();
                                       } else {
                                         ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(
+                                          SnackBar(
                                             content: Text('Hệ thống chưa nhận được thanh toán. Vui lòng quét mã QR bằng App Ngân hàng và thử lại!'),
                                             backgroundColor: Color(0xFFE65100),
                                             behavior: SnackBarBehavior.floating,
@@ -422,11 +423,11 @@ class __FamilySubscriptionModalContentState
                             backgroundColor: const Color(0xFF008435),
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24),
+                              borderRadius: BorderRadius.circular(24.r),
                             ),
                           ),
                           child: isChecking
-                              ? const SizedBox(
+                              ? SizedBox(
                                   width: 22,
                                   height: 22,
                                   child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
@@ -434,8 +435,8 @@ class __FamilySubscriptionModalContentState
                               : Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Icon(Icons.published_with_changes_rounded, size: 20),
-                                    const SizedBox(width: 6),
+                                    Icon(Icons.published_with_changes_rounded, size: 20),
+                                    SizedBox(width: 6.w),
                                     Flexible(
                                       child: Text(
                                         isEn
@@ -444,7 +445,7 @@ class __FamilySubscriptionModalContentState
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
                                         style: GoogleFonts.plusJakartaSans(
-                                          fontSize: 13.5,
+                                          fontSize: 13.5.sp,
                                           fontWeight: FontWeight.w800,
                                         ),
                                       ),
@@ -453,7 +454,7 @@ class __FamilySubscriptionModalContentState
                                 ),
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
                     ],
                   ),
                 ),
@@ -489,10 +490,10 @@ class __FamilySubscriptionModalContentState
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height * 0.80,
       ),
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(24.w),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF142017) : Colors.white,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(30.r)),
       ),
       child: SingleChildScrollView(
         child: Column(
@@ -505,11 +506,11 @@ class __FamilySubscriptionModalContentState
                 height: 5,
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF2E4D36) : Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(10.r),
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
 
             Row(
               children: [
@@ -518,32 +519,32 @@ class __FamilySubscriptionModalContentState
                   color: isDark ? Colors.white : const Color(0xFF006428),
                   size: 28,
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: 10.w),
                 Text(
                   isEn ? 'Friggy Service Plans' : 'Các gói dịch vụ Friggy',
-                  style: GoogleFonts.outfit(
-                    fontSize: 22,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 22.sp,
                     fontWeight: FontWeight.w900,
                     color: isDark ? Colors.white : const Color(0xFF006428),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 18),
+            SizedBox(height: 18.h),
 
             if (_isLoadingPlans)
-              const Padding(
-                padding: EdgeInsets.all(40.0),
+              Padding(
+                padding: EdgeInsets.all(40.0.w),
                 child: Center(
                   child: CircularProgressIndicator(color: Color(0xFF008435)),
                 ),
               )
             else
               Container(
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(20.w),
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF1E3A25) : const Color(0xFFF1F8E9),
-                  borderRadius: BorderRadius.circular(24),
+                  borderRadius: BorderRadius.circular(24.r),
                   border: Border.all(
                     color: const Color(0xFF4CAF50),
                     width: 2,
@@ -552,7 +553,7 @@ class __FamilySubscriptionModalContentState
                     BoxShadow(
                       color: const Color(0xFF4CAF50).withValues(alpha: 0.15),
                       blurRadius: 10,
-                      offset: const Offset(0, 4),
+                      offset: Offset(0, 4),
                     ),
                   ],
                 ),
@@ -569,34 +570,34 @@ class __FamilySubscriptionModalContentState
                             children: [
                               Text(
                                 displayTitle,
-                                style: GoogleFonts.outfit(
-                                  fontSize: 20,
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 20.sp,
                                   fontWeight: FontWeight.w900,
                                   color: isDark ? Colors.white : const Color(0xFF006428),
                                 ),
                               ),
-                              const SizedBox(height: 4),
+                              SizedBox(height: 4.h),
                               Text(
                                 isEn
                                     ? 'Unlimited AI features for up to 5 family members'
                                     : 'Đầy đủ tính năng AI không giới hạn cho tối đa 5 người dùng',
                                 style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 13,
+                                  fontSize: 13.sp,
                                   color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF616161),
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8.w),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.baseline,
                           textBaseline: TextBaseline.alphabetic,
                           children: [
                             Text(
                               displayPrice,
-                              style: GoogleFonts.outfit(
-                                fontSize: 18,
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 18.sp,
                                 fontWeight: FontWeight.w900,
                                 color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
                               ),
@@ -604,7 +605,7 @@ class __FamilySubscriptionModalContentState
                             Text(
                               isEn ? '/ month' : '/ tháng',
                               style: GoogleFonts.plusJakartaSans(
-                                fontSize: 11.5,
+                                fontSize: 11.5.sp,
                                 color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF757575),
                               ),
                             ),
@@ -612,24 +613,24 @@ class __FamilySubscriptionModalContentState
                         ),
                       ],
                     ),
-                    const SizedBox(height: 14),
+                    SizedBox(height: 14.h),
 
                     ...displayFeatures.map(
                       (feat) => Padding(
-                        padding: const EdgeInsets.only(bottom: 6),
+                        padding: EdgeInsets.only(bottom: 6.h),
                         child: Row(
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.check_circle_rounded,
                               color: Color(0xFF4CAF50),
                               size: 18,
                             ),
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8.w),
                             Expanded(
                               child: Text(
                                 feat,
                                 style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 13.5,
+                                  fontSize: 13.5.sp,
                                   fontWeight: FontWeight.w600,
                                   color: isDark ? Colors.white : const Color(0xFF19221C),
                                 ),
@@ -640,7 +641,7 @@ class __FamilySubscriptionModalContentState
                       ),
                     ),
 
-                    const SizedBox(height: 18),
+                    SizedBox(height: 18.h),
 
                     SizedBox(
                       width: double.infinity,
@@ -652,19 +653,19 @@ class __FamilySubscriptionModalContentState
                           foregroundColor: Colors.white,
                           elevation: 0,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16.r),
                           ),
                         ),
                         child: _isLoading
-                            ? const SizedBox(
+                            ? SizedBox(
                                 width: 22,
                                 height: 22,
                                 child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                               )
                             : Text(
                                 isEn ? 'Upgrade $displayTitle' : 'Nâng cấp $displayTitle',
-                                style: GoogleFonts.outfit(
-                                  fontSize: 16,
+                                style: GoogleFonts.plusJakartaSans(
+                                  fontSize: 16.sp,
                                   fontWeight: FontWeight.w800,
                                   color: Colors.white,
                                 ),
@@ -675,7 +676,7 @@ class __FamilySubscriptionModalContentState
                 ),
               ),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
           ],
         ),
       ),
@@ -685,7 +686,7 @@ class __FamilySubscriptionModalContentState
   Widget _buildQrCodeWidget(String qrCodeStr) {
     final cleanStr = qrCodeStr.trim();
     if (cleanStr.isEmpty) {
-      return const Icon(
+      return Icon(
         Icons.qr_code_rounded,
         size: 140,
         color: Colors.grey,
@@ -703,7 +704,7 @@ class __FamilySubscriptionModalContentState
           width: 200,
           height: 200,
           fit: BoxFit.contain,
-          errorBuilder: (context, error, stackTrace) => const Icon(
+          errorBuilder: (context, error, stackTrace) => Icon(
             Icons.qr_code_rounded,
             size: 140,
             color: Colors.grey,
@@ -742,14 +743,14 @@ class __FamilySubscriptionModalContentState
             width: 200,
             height: 200,
             fit: BoxFit.contain,
-            errorBuilder: (context, error, stackTrace) => const Icon(
+            errorBuilder: (context, error, stackTrace) => Icon(
               Icons.qr_code_rounded,
               size: 140,
               color: Colors.grey,
             ),
           );
         }
-        return const Icon(
+        return Icon(
           Icons.qr_code_rounded,
           size: 140,
           color: Colors.grey,

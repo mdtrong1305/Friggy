@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../l10n/app_localizations.dart';
 
@@ -30,16 +31,16 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.only(
-        left: 16.0,
-        right: 16.0,
-        bottom: bottomInset > 0 ? bottomInset + 4 : 16.0,
+        left: 16.w,
+        right: 16.w,
+        bottom: bottomInset > 0 ? bottomInset + 4 : 16.h,
       ),
       child: Container(
-        height: 64,
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        height: 62.h,
+        padding: EdgeInsets.symmetric(horizontal: 8.w),
         decoration: BoxDecoration(
           color: navBg,
-          borderRadius: BorderRadius.circular(32),
+          borderRadius: BorderRadius.circular(32.r),
           border: Border.all(
             color: navBorder,
             width: 0.8,
@@ -123,11 +124,11 @@ class CustomBottomNavigationBar extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         scale: isSelected ? 1.08 : 1.0,
         child: Container(
-          width: 56,
-          height: 56,
+          width: 54.w,
+          height: 54.w,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: accentColor, // Pure Deep Forest Green (No white border ring!)
+            color: accentColor,
             boxShadow: [
               BoxShadow(
                 color: accentColor.withValues(alpha: 0.35),
@@ -137,10 +138,10 @@ class CustomBottomNavigationBar extends StatelessWidget {
               ),
             ],
           ),
-          child: const Icon(
+          child: Icon(
             Icons.add_rounded,
             color: Colors.white,
-            size: 34,
+            size: 32.sp,
           ),
         ),
       ),
@@ -165,7 +166,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -175,11 +176,11 @@ class CustomBottomNavigationBar extends StatelessWidget {
               scale: isSelected ? 1.10 : 1.0,
               child: iconWidget(iconColor),
             ),
-            const SizedBox(height: 3),
+            SizedBox(height: 3.h),
             Text(
               label,
               style: GoogleFonts.plusJakartaSans(
-                fontSize: 10.5,
+                fontSize: 10.sp,
                 fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,
                 color: iconColor,
               ),
@@ -231,20 +232,20 @@ class _FridgePainter extends CustomPainter {
     // Top Freezer Door
     final topDoorRect = RRect.fromRectAndCorners(
       Rect.fromLTRB(1.5, 0, w - 1.5, h * 0.38),
-      topLeft: const Radius.circular(5),
-      topRight: const Radius.circular(5),
-      bottomLeft: const Radius.circular(1.5),
-      bottomRight: const Radius.circular(1.5),
+      topLeft: Radius.circular(5.r),
+      topRight: Radius.circular(5.r),
+      bottomLeft: Radius.circular(1.5.r),
+      bottomRight: Radius.circular(1.5.r),
     );
     canvas.drawRRect(topDoorRect, paint);
 
     // Bottom Fridge Door
     final bottomDoorRect = RRect.fromRectAndCorners(
       Rect.fromLTRB(1.5, h * 0.42, w - 1.5, h - 3),
-      topLeft: const Radius.circular(1.5),
-      topRight: const Radius.circular(1.5),
-      bottomLeft: const Radius.circular(5),
-      bottomRight: const Radius.circular(5),
+      topLeft: Radius.circular(1.5.r),
+      topRight: Radius.circular(1.5.r),
+      bottomLeft: Radius.circular(5.r),
+      bottomRight: Radius.circular(5.r),
     );
     canvas.drawRRect(bottomDoorRect, paint);
 

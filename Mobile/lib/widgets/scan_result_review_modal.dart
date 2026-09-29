@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../data/models/fridge_models.dart';
 import '../data/services/api_service.dart';
@@ -214,10 +215,10 @@ class _ScanResultReviewModalState extends State<ScanResultReviewModal> {
         ),
         decoration: BoxDecoration(
           color: isDark ? const Color(0xFF19271E) : Colors.white,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(28.r)),
           border: isDark ? Border.all(color: const Color(0xFF2E4D36), width: 1.2) : null,
         ),
-        padding: const EdgeInsets.only(top: 14, left: 20, right: 20, bottom: 20),
+        padding: EdgeInsets.only(top: 14.h, left: 20.w, right: 20.w, bottom: 20.h),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,11 +230,11 @@ class _ScanResultReviewModalState extends State<ScanResultReviewModal> {
                 height: 4.5,
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFC8E6C9),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(10.r),
                 ),
               ),
             ),
-            const SizedBox(height: 14),
+            SizedBox(height: 14.h),
 
             // Header Title
             Row(
@@ -244,19 +245,19 @@ class _ScanResultReviewModalState extends State<ScanResultReviewModal> {
                   children: [
                     Text(
                       isEn ? 'Review & Edit Items' : 'Kiểm Tra & Chỉnh Sửa',
-                      style: GoogleFonts.outfit(
-                        fontSize: 20,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 20.sp,
                         fontWeight: FontWeight.w800,
                         color: isDark ? Colors.white : const Color(0xFF006428),
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2.h),
                     Text(
                       isEn
                           ? 'Review AI scan results before adding to fridge'
                           : 'Chỉnh sửa lại số lượng, đơn vị trước khi thêm vào tủ',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 12,
+                        fontSize: 12.sp,
                         color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF6B786F),
                       ),
                     ),
@@ -271,7 +272,7 @@ class _ScanResultReviewModalState extends State<ScanResultReviewModal> {
                 ),
               ],
             ),
-            const SizedBox(height: 14),
+            SizedBox(height: 14.h),
 
             // Editable Item List
             Flexible(
@@ -279,15 +280,15 @@ class _ScanResultReviewModalState extends State<ScanResultReviewModal> {
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(),
                 itemCount: _editableItems.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 12),
+                separatorBuilder: (context, index) => SizedBox(height: 12.h),
                 itemBuilder: (context, index) {
                   final item = _editableItems[index];
 
                   return Container(
-                    padding: const EdgeInsets.all(14),
+                    padding: EdgeInsets.all(14.w),
                     decoration: BoxDecoration(
                       color: isDark ? const Color(0xFF0E1611) : const Color(0xFFF4FAF2),
-                      borderRadius: BorderRadius.circular(18),
+                      borderRadius: BorderRadius.circular(18.r),
                       border: Border.all(
                         color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5E69C),
                         width: 1,
@@ -303,7 +304,7 @@ class _ScanResultReviewModalState extends State<ScanResultReviewModal> {
                               child: TextFormField(
                                 controller: item.nameController,
                                 style: GoogleFonts.plusJakartaSans(
-                                  fontSize: 15,
+                                  fontSize: 15.sp,
                                   fontWeight: FontWeight.bold,
                                   color: isDark ? Colors.white : const Color(0xFF19221C),
                                 ),
@@ -315,19 +316,19 @@ class _ScanResultReviewModalState extends State<ScanResultReviewModal> {
                               ),
                             ),
                             if (item.allergyWarning)
-                              const Padding(
-                                padding: EdgeInsets.only(right: 6),
+                              Padding(
+                                padding: EdgeInsets.only(right: 6.w),
                                 child: Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 20),
                               ),
                             IconButton(
-                              icon: const Icon(Icons.delete_outline_rounded, color: Colors.redAccent, size: 20),
+                              icon: Icon(Icons.delete_outline_rounded, color: Colors.redAccent, size: 20),
                               onPressed: () => _removeItem(index),
                               padding: EdgeInsets.zero,
                               constraints: const BoxConstraints(),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8.h),
 
                         // Quantity & Unit Row
                         Row(
@@ -337,7 +338,7 @@ class _ScanResultReviewModalState extends State<ScanResultReviewModal> {
                               height: 38,
                               decoration: BoxDecoration(
                                 color: isDark ? const Color(0xFF19271E) : Colors.white,
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(12.r),
                                 border: Border.all(
                                   color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFC8E6C9),
                                 ),
@@ -346,7 +347,7 @@ class _ScanResultReviewModalState extends State<ScanResultReviewModal> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   IconButton(
-                                    icon: const Icon(Icons.remove_rounded, size: 16),
+                                    icon: Icon(Icons.remove_rounded, size: 16),
                                     onPressed: () {
                                       final current = double.tryParse(item.qtyController.text) ?? 1.0;
                                       if (current > 0.5) {
@@ -365,12 +366,12 @@ class _ScanResultReviewModalState extends State<ScanResultReviewModal> {
                                       controller: item.qtyController,
                                       textAlign: TextAlign.center,
                                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                      style: GoogleFonts.outfit(
-                                        fontSize: 14,
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 14.sp,
                                         fontWeight: FontWeight.bold,
                                         color: isDark ? Colors.white : const Color(0xFF006428),
                                       ),
-                                      decoration: const InputDecoration(
+                                      decoration: InputDecoration(
                                         border: InputBorder.none,
                                         isDense: true,
                                         contentPadding: EdgeInsets.zero,
@@ -378,7 +379,7 @@ class _ScanResultReviewModalState extends State<ScanResultReviewModal> {
                                     ),
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.add_rounded, size: 16),
+                                    icon: Icon(Icons.add_rounded, size: 16),
                                     onPressed: () {
                                       final current = double.tryParse(item.qtyController.text) ?? 1.0;
                                       final nextVal = current + 1;
@@ -392,15 +393,15 @@ class _ScanResultReviewModalState extends State<ScanResultReviewModal> {
                                 ],
                               ),
                             ),
-                            const SizedBox(width: 10),
+                            SizedBox(width: 10.w),
 
                             // Unit Dropdown
                             Container(
                               height: 38,
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              padding: EdgeInsets.symmetric(horizontal: 10),
                               decoration: BoxDecoration(
                                 color: isDark ? const Color(0xFF19271E) : Colors.white,
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(12.r),
                                 border: Border.all(
                                   color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFC8E6C9),
                                 ),
@@ -411,7 +412,7 @@ class _ScanResultReviewModalState extends State<ScanResultReviewModal> {
                                   isDense: true,
                                   dropdownColor: isDark ? const Color(0xFF19271E) : Colors.white,
                                   style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 13,
+                                    fontSize: 13.sp,
                                     fontWeight: FontWeight.w600,
                                     color: isDark ? Colors.white : const Color(0xFF19221C),
                                   ),
@@ -433,7 +434,7 @@ class _ScanResultReviewModalState extends State<ScanResultReviewModal> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10.h),
 
                         // Storage Location Pills
                         Row(
@@ -451,13 +452,13 @@ class _ScanResultReviewModalState extends State<ScanResultReviewModal> {
                                 onTap: () => setState(() => item.storageLocation = locKey),
                                 child: Container(
                                   height: 32,
-                                  margin: const EdgeInsets.symmetric(horizontal: 2),
+                                  margin: EdgeInsets.symmetric(horizontal: 2),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     color: isSelected
                                         ? const Color(0xFF008435)
                                         : (isDark ? const Color(0xFF19271E) : Colors.white),
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(10.r),
                                     border: Border.all(
                                       color: isSelected
                                           ? const Color(0xFF008435)
@@ -468,7 +469,7 @@ class _ScanResultReviewModalState extends State<ScanResultReviewModal> {
                                   child: Text(
                                     locLabel,
                                     style: GoogleFonts.plusJakartaSans(
-                                      fontSize: 11,
+                                      fontSize: 11.sp,
                                       fontWeight: FontWeight.bold,
                                       color: isSelected
                                           ? Colors.white
@@ -486,22 +487,22 @@ class _ScanResultReviewModalState extends State<ScanResultReviewModal> {
                 },
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12.h),
 
             // Add Another Item Button
             TextButton.icon(
               onPressed: _addNewItem,
-              icon: const Icon(Icons.add_circle_outline_rounded, color: Color(0xFF008435)),
+              icon: Icon(Icons.add_circle_outline_rounded, color: Color(0xFF008435)),
               label: Text(
                 isEn ? '+ Add another item' : '+ Thêm thực phẩm khác',
-                style: GoogleFonts.outfit(
-                  fontSize: 14,
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.bold,
                   color: const Color(0xFF008435),
                 ),
               ),
             ),
-            const SizedBox(height: 14),
+            SizedBox(height: 14.h),
 
             // Confirm Button
             SizedBox(
@@ -510,23 +511,23 @@ class _ScanResultReviewModalState extends State<ScanResultReviewModal> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF008435),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
                   elevation: 2,
                 ),
                 onPressed: _isConfirming ? null : _confirmAndSave,
                 child: _isConfirming
-                    ? const CircularProgressIndicator(color: Colors.white)
+                    ? CircularProgressIndicator(color: Colors.white)
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
-                          const SizedBox(width: 8),
+                          Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
+                          SizedBox(width: 8.w),
                           Text(
                             isEn ? 'Confirm & Add to Fridge' : 'Xác Nhận & Thêm Vào Tủ',
-                            style: GoogleFonts.outfit(
+                            style: GoogleFonts.plusJakartaSans(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                              fontSize: 16.sp,
                             ),
                           ),
                         ],

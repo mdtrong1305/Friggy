@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
 import '../data/models/recipe_model.dart';
@@ -312,10 +313,10 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
       final confirm = await showDialog<bool>(
         context: context,
         builder: (ctx) => AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
           title: Text(
             isEn ? 'Confirm Cooked Meal?' : 'Xác nhận đã nấu món này?',
-            style: GoogleFonts.outfit(fontWeight: FontWeight.w800),
+            style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w800),
           ),
           content: Text(
             isEn
@@ -335,12 +336,12 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF008435),
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
               ),
               onPressed: () => Navigator.of(ctx).pop(true),
               child: Text(
                 isEn ? 'Confirm' : 'Xác nhận',
-                style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
+                style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.bold),
               ),
             ),
           ],
@@ -465,12 +466,12 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
             content: Row(
               children: [
                 const Icon(Icons.stars_rounded, color: Color(0xFFFFD54F), size: 20),
-                const SizedBox(width: 8),
+                SizedBox(width: 8.w),
                 Expanded(
                   child: Text(
                     errorMessage,
                     style: GoogleFonts.plusJakartaSans(
-                      fontSize: 13,
+                      fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
@@ -480,8 +481,8 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
             ),
             backgroundColor: const Color(0xFF006428),
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            margin: const EdgeInsets.all(16),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+            margin: EdgeInsets.all(16.w),
             action: isLimitError
                 ? SnackBarAction(
                     label: isEn ? 'Upgrade' : 'Nâng cấp',
@@ -567,18 +568,18 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
             children: [
               Text(
                 isEn ? "Today's Meal Suggestions" : 'Gợi Ý Món Ăn Hôm Nay',
-                style: GoogleFonts.outfit(
-                  fontSize: 20,
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 20.sp,
                   fontWeight: FontWeight.w800,
                   color: Colors.white,
                   letterSpacing: 0.2,
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.18),
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(14.r),
                   border: Border.all(
                     color: Colors.white.withValues(alpha: 0.3),
                     width: 1,
@@ -587,16 +588,16 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.auto_awesome_rounded,
-                      color: Color(0xFFFFD54F),
-                      size: 14,
+                      color: const Color(0xFFFFD54F),
+                      size: 14.sp,
                     ),
-                    const SizedBox(width: 4),
+                    SizedBox(width: 4.w),
                     Text(
                       isEn ? '3 meals' : '3 bữa ăn',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 12,
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
                       ),
@@ -607,16 +608,16 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
             ],
           ),
 
-          const SizedBox(height: 14),
+          SizedBox(height: 14.h),
         ],
 
         // 2. Main Daily Meals Card Container
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(16.w),
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF19271E) : Colors.white,
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(24.r),
             border: Border.all(
               color: isDark
                   ? const Color(0xFF2E4D36)
@@ -638,50 +639,56 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(7),
-                        decoration: BoxDecoration(
-                          color: isDark
-                              ? const Color(0xFF233629)
-                              : const Color(0xFFE8F5E9),
-                          borderRadius: BorderRadius.circular(10),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(7.w),
+                          decoration: BoxDecoration(
+                            color: isDark
+                                ? const Color(0xFF233629)
+                                : const Color(0xFFE8F5E9),
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                          child: Icon(
+                            Icons.restaurant_menu_rounded,
+                            size: 18.sp,
+                            color: isDark
+                                ? const Color(0xFF81C784)
+                                : const Color(0xFF008435),
+                          ),
                         ),
-                        child: Icon(
-                          Icons.restaurant_menu_rounded,
-                          size: 18,
-                          color: isDark
-                              ? const Color(0xFF81C784)
-                              : const Color(0xFF008435),
+                        SizedBox(width: 9.w),
+                        Flexible(
+                          child: Text(
+                            isEn ? 'Meals for $dayName' : 'Các bữa ăn trong $dayName',
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.w800,
+                              color: isDark ? Colors.white : const Color(0xFF1B5E20),
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 9),
-                      Text(
-                        isEn ? 'Meals for $dayName' : 'Các bữa ăn trong $dayName',
-                        style: GoogleFonts.outfit(
-                          fontSize: 16.5,
-                          fontWeight: FontWeight.w800,
-                          color: isDark ? Colors.white : const Color(0xFF1B5E20),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
+                  SizedBox(width: 8.w),
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 9,
-                      vertical: 3.5,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 9.w,
+                      vertical: 3.5.h,
                     ),
                     decoration: BoxDecoration(
                       color: isDark
                           ? const Color(0xFF233629)
                           : const Color(0xFFE8F5E9),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: Text(
                       isEn ? '3 meals' : '3 bữa ăn',
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 11.5,
+                        fontSize: 11.sp,
                         fontWeight: FontWeight.w700,
                         color: isDark
                             ? const Color(0xFF81C784)
@@ -692,7 +699,7 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
                 ],
               ),
 
-              const SizedBox(height: 14),
+              SizedBox(height: 14.h),
 
               if (_isLoading)
                 const Padding(
@@ -707,10 +714,10 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
               else if (_dailySlots.isEmpty)
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+                  padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
                   decoration: BoxDecoration(
                     color: isDark ? const Color(0xFF19271E) : const Color(0xFFF8FAFC),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(20.r),
                     border: Border.all(
                       color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFE2E8E4),
                     ),
@@ -718,66 +725,66 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
                   child: Column(
                     children: [
                       Container(
-                        width: 52,
-                        height: 52,
+                        width: 52.w,
+                        height: 52.w,
                         decoration: BoxDecoration(
                           color: isDark ? const Color(0xFF233629) : const Color(0xFFE8F5E9),
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
                           Icons.restaurant_menu_rounded,
-                          size: 28,
+                          size: 28.sp,
                           color: isDark ? const Color(0xFF81C784) : const Color(0xFF008435),
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
                       Text(
                         isEn ? 'No meal plan for today' : 'Chưa có thực đơn cho hôm nay',
                         style: GoogleFonts.plusJakartaSans(
-                          fontSize: 16,
+                          fontSize: 15.sp,
                           fontWeight: FontWeight.bold,
                           color: isDark ? Colors.white : AppColors.textPrimary,
                         ),
                       ),
-                      const SizedBox(height: 6),
+                      SizedBox(height: 6.h),
                       Text(
                         isEn
                             ? 'Generate a meal plan with AI to get customized recipes for your day.'
                             : 'Hãy tạo thực đơn bằng AI để tự động lên lịch bữa ăn phù hợp cho bạn.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 12.sp,
                           color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF6B786F),
                           height: 1.4,
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16.h),
                       ElevatedButton.icon(
                         onPressed: _isGenerating ? null : _generateTodayMealPlan,
                         icon: _isGenerating
-                            ? const SizedBox(
-                                width: 16,
-                                height: 16,
-                                child: CircularProgressIndicator(
+                            ? SizedBox(
+                                width: 16.w,
+                                height: 16.w,
+                                child: const CircularProgressIndicator(
                                   color: Colors.white,
                                   strokeWidth: 2,
                                 ),
                               )
-                            : const Icon(Icons.auto_awesome_rounded, size: 18),
+                            : Icon(Icons.auto_awesome_rounded, size: 18.sp),
                         label: Text(
                           _isGenerating
                               ? (isEn ? 'AI is creating your plan...' : 'AI đang phân tích & lên thực đơn...')
                               : (isEn ? 'Generate Today\'s Meal Plan' : 'Tạo thực đơn AI'),
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.sp),
                         ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF008435),
                           foregroundColor: Colors.white,
                           disabledBackgroundColor: const Color(0xFF008435).withValues(alpha: 0.8),
                           disabledForegroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(20.r),
                           ),
                           elevation: 0,
                         ),
@@ -834,13 +841,13 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
     }
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(13),
+      margin: EdgeInsets.only(bottom: 12.h),
+      padding: EdgeInsets.all(13.w),
       decoration: BoxDecoration(
         color: slot.isCompleted
             ? (isDark ? const Color(0xFF1B2E21) : const Color(0xFFEAF5E1))
             : (isDark ? const Color(0xFF233629) : const Color(0xFFF8FAFC)),
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(18.r),
         border: Border.all(
           color: slot.isCompleted
               ? const Color(0xFF008435)
@@ -857,20 +864,20 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
             children: [
               // Meal Type Tag
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 9.w, vertical: 4.h),
                 decoration: BoxDecoration(
                   color: mealBgColor,
-                  borderRadius: BorderRadius.circular(9),
+                  borderRadius: BorderRadius.circular(9.r),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(mealIcon, size: 14, color: mealTagColor),
-                    const SizedBox(width: 4),
+                    Icon(mealIcon, size: 14.sp, color: mealTagColor),
+                    SizedBox(width: 4.w),
                     Text(
                       mealLabel,
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 12,
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.w700,
                         color: mealTagColor,
                       ),
@@ -882,17 +889,17 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
               // Status Toggle Button (Nấu xong / Chưa nấu)
               InkWell(
                 onTap: () => _toggleMealCompletion(index),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20.r),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 9,
-                    vertical: 4,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 9.w,
+                    vertical: 4.h,
                   ),
                   decoration: BoxDecoration(
                     color: slot.isCompleted
                         ? const Color(0xFF008435)
                         : Colors.transparent,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(20.r),
                     border: Border.all(
                       color: slot.isCompleted
                           ? const Color(0xFF008435)
@@ -907,18 +914,18 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
                         slot.isCompleted
                             ? Icons.check_circle_rounded
                             : Icons.radio_button_unchecked_rounded,
-                        size: 14,
+                        size: 14.sp,
                         color: slot.isCompleted
                             ? Colors.white
                             : (isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32)),
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4.w),
                       Text(
                         isEn
                             ? (slot.isCompleted ? 'Cooked' : 'Pending')
                             : (slot.isCompleted ? 'Nấu xong' : 'Chưa nấu'),
                         style: GoogleFonts.plusJakartaSans(
-                          fontSize: 11.5,
+                          fontSize: 11.sp,
                           fontWeight: FontWeight.w700,
                           color: slot.isCompleted
                               ? Colors.white
@@ -932,19 +939,21 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
             ],
           ),
 
-          const SizedBox(height: 9),
+          SizedBox(height: 9.h),
 
           // Recipe Title
           Text(
             slot.recipeTitle,
-            style: GoogleFonts.outfit(
-              fontSize: 16.5,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 15.sp,
               fontWeight: FontWeight.w800,
               color: isDark ? Colors.white : const Color(0xFF1E293B),
             ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
 
-          const SizedBox(height: 2),
+          SizedBox(height: 2.h),
 
           // Servings info
           Text(
@@ -952,13 +961,13 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
                 ? '${slot.servings} serving • ${slot.cookTimeMinutes} mins'
                 : '${slot.servings} người ăn • ${slot.cookTimeMinutes} phút',
             style: GoogleFonts.plusJakartaSans(
-              fontSize: 12,
+              fontSize: 11.5.sp,
               fontWeight: FontWeight.w600,
               color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
             ),
           ),
 
-          const SizedBox(height: 10),
+          SizedBox(height: 10.h),
 
           // Action Buttons: [📖 Xem công thức]  [🔄 Đổi món AI]
           Row(
@@ -966,11 +975,11 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: () => _openRecipeDetail(slot),
-                  icon: const Icon(Icons.menu_book_rounded, size: 14),
+                  icon: Icon(Icons.menu_book_rounded, size: 14.sp),
                   label: Text(
                     isEn ? 'Recipe' : 'Xem công thức',
                     style: GoogleFonts.plusJakartaSans(
-                      fontSize: 12,
+                      fontSize: 11.5.sp,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -983,33 +992,33 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
                           ? const Color(0xFF2E4D36)
                           : const Color(0xFF008435).withValues(alpha: 0.4),
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 7),
+                    padding: EdgeInsets.symmetric(vertical: 7.h),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(10.r),
                     ),
                   ),
                 ),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8.w),
               Expanded(
                 child: ElevatedButton.icon(
                   onPressed: isRegenerating ? null : () => _swapDishWithAi(index),
                   icon: isRegenerating
-                      ? const SizedBox(
-                          width: 14,
-                          height: 14,
-                          child: CircularProgressIndicator(
+                      ? SizedBox(
+                          width: 14.w,
+                          height: 14.w,
+                          child: const CircularProgressIndicator(
                             strokeWidth: 2,
                             color: Colors.white,
                           ),
                         )
-                      : const Icon(Icons.sync_rounded, size: 14),
+                      : Icon(Icons.sync_rounded, size: 14.sp),
                   label: Text(
                     isRegenerating
                         ? (isEn ? 'Swapping...' : 'Đang đổi...')
                         : (isEn ? 'AI Swap' : 'Đổi món AI'),
                     style: GoogleFonts.plusJakartaSans(
-                      fontSize: 12,
+                      fontSize: 11.5.sp,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -1017,9 +1026,9 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
                     backgroundColor: const Color(0xFF008435),
                     foregroundColor: Colors.white,
                     elevation: 0,
-                    padding: const EdgeInsets.symmetric(vertical: 7),
+                    padding: EdgeInsets.symmetric(vertical: 7.h),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(10.r),
                     ),
                   ),
                 ),

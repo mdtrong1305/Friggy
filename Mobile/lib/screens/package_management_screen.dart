@@ -1,6 +1,7 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../data/models/user_models.dart';
 import '../data/services/api_service.dart';
@@ -122,10 +123,10 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
         constraints: BoxConstraints(
           maxHeight: MediaQuery.of(context).size.height * 0.85,
         ),
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(24.w),
         decoration: BoxDecoration(
           color: isDark ? const Color(0xFF142017) : Colors.white,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(30.r)),
         ),
         child: SingleChildScrollView(
           child: Column(
@@ -138,11 +139,11 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                   height: 5,
                   decoration: BoxDecoration(
                     color: isDark ? const Color(0xFF2E4D36) : Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(10.r),
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               Row(
                 children: [
                   Icon(
@@ -150,23 +151,23 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                     color: isDark ? Colors.white : const Color(0xFF006428),
                     size: 28,
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10.w),
                   Text(
                     isEn ? 'Friggy Service Plans' : 'Các gói dịch vụ Friggy',
-                    style: GoogleFonts.outfit(
-                      fontSize: 22,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 22.sp,
                       fontWeight: FontWeight.w900,
                       color: isDark ? Colors.white : const Color(0xFF006428),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 18),
+              SizedBox(height: 18.h),
 
               if (displayedPlans.isEmpty)
                 Center(
                   child: Padding(
-                    padding: const EdgeInsets.all(24.0),
+                    padding: EdgeInsets.all(24.0.w),
                     child: Text(
                       isEn ? 'No plans available' : 'Không có gói dịch vụ nào',
                       style: TextStyle(color: isDark ? Colors.white70 : Colors.black54),
@@ -220,7 +221,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                   }
 
                   return Padding(
-                    padding: const EdgeInsets.only(bottom: 16.0),
+                    padding: EdgeInsets.only(bottom: 16.0.h),
                     child: _buildPlanCard(
                       title: plan.displayName,
                       price: _formatPrice(plan.priceVnd),
@@ -239,7 +240,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                   );
                 }),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
             ],
           ),
         ),
@@ -256,7 +257,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
         if (mounted) {
           setState(() => _isLoading = false);
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
+            SnackBar(
               content: Text('⚡ Đã khôi phục mã QR thanh toán đang chờ xử lý...'),
               backgroundColor: Color(0xFF2E7D32),
               behavior: SnackBarBehavior.floating,
@@ -282,7 +283,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
       if (pending != null && mounted) {
         setState(() => _isLoading = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text('⚡ Đã khôi phục mã QR thanh toán đang chờ xử lý...'),
             backgroundColor: Color(0xFF2E7D32),
             behavior: SnackBarBehavior.floating,
@@ -329,7 +330,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
               if (context.mounted) {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                  SnackBar(
                     content: Text('🎉 Kích hoạt thành công gói dịch vụ!'),
                     backgroundColor: Color(0xFF2E7D32),
                     behavior: SnackBarBehavior.floating,
@@ -368,10 +369,10 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                 }
               },
               child: Container(
-                padding: const EdgeInsets.all(24),
+                padding: EdgeInsets.all(24.w),
                 decoration: BoxDecoration(
                   color: isDark ? const Color(0xFF19271E) : Colors.white,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(28.r)),
                 ),
                 child: SingleChildScrollView(
                   child: Column(
@@ -382,27 +383,27 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                         height: 4,
                         decoration: BoxDecoration(
                           color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFE2E8E4),
-                          borderRadius: BorderRadius.circular(2),
+                          borderRadius: BorderRadius.circular(2.r),
                         ),
                       ),
-                      const SizedBox(height: 18),
+                      SizedBox(height: 18.h),
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Icon(Icons.qr_code_2_rounded, color: Color(0xFF4CAF50), size: 28),
-                          const SizedBox(width: 8),
+                          SizedBox(width: 8.w),
                           Text(
                             isEn ? 'Payment QR Code' : 'Mã QR Thanh Toán PayOS',
-                            style: GoogleFonts.outfit(
-                              fontSize: 22,
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 22.sp,
                               fontWeight: FontWeight.bold,
                               color: isDark ? Colors.white : const Color(0xFF006428),
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
 
                       Text(
                         isEn
@@ -410,18 +411,18 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                             : 'Quét mã QR bên dưới bằng Ngân hàng / MoMo / VNPay để hoàn tất thanh toán',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 13.5,
+                          fontSize: 13.5.sp,
                           color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF6B786F),
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16.h),
 
                       // QR Code Image Container
                       Container(
-                        padding: const EdgeInsets.all(16),
+                        padding: EdgeInsets.all(16.w),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(20.r),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withValues(alpha: 0.1),
@@ -432,14 +433,14 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                         ),
                         child: _buildQrCodeWidget(data.qrCodeUrl),
                       ),
-                      const SizedBox(height: 18),
+                      SizedBox(height: 18.h),
 
                       // Info Rows: Amount & Payment Ref
                       Container(
-                        padding: const EdgeInsets.all(14),
+                        padding: EdgeInsets.all(14.w),
                         decoration: BoxDecoration(
                           color: isDark ? const Color(0xFF233629) : const Color(0xFFF1F8E9),
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(16.r),
                           border: Border.all(
                             color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5E69C),
                           ),
@@ -452,40 +453,40 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                                 Text(
                                   isEn ? 'Amount:' : 'Số tiền thanh toán:',
                                   style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 13.5,
+                                    fontSize: 13.5.sp,
                                     fontWeight: FontWeight.w600,
                                     color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF616161),
                                   ),
                                 ),
                                 Text(
                                   _formatPrice(data.amount),
-                                  style: GoogleFonts.outfit(
-                                    fontSize: 17,
+                                  style: GoogleFonts.plusJakartaSans(
+                                    fontSize: 17.sp,
                                     fontWeight: FontWeight.w900,
                                     color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
                                   ),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 6),
+                            SizedBox(height: 6.h),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   isEn ? 'Payment Ref:' : 'Mã tham chiếu:',
                                   style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 13.5,
+                                    fontSize: 13.5.sp,
                                     fontWeight: FontWeight.w600,
                                     color: isDark ? const Color(0xFFD0D7D1) : const Color(0xFF616161),
                                   ),
                                 ),
-                                const SizedBox(width: 8),
+                                SizedBox(width: 8.w),
                                 Flexible(
                                   child: Text(
                                     data.paymentRef,
                                     overflow: TextOverflow.ellipsis,
                                     style: GoogleFonts.plusJakartaSans(
-                                      fontSize: 13.5,
+                                      fontSize: 13.5.sp,
                                       fontWeight: FontWeight.w800,
                                       color: isDark ? Colors.white : const Color(0xFF19221C),
                                     ),
@@ -496,7 +497,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20.h),
 
                       // Real Payment Check Button
                       SizedBox(
@@ -517,7 +518,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                                         setModalState(() => isChecking = false);
                                         Navigator.pop(context);
                                         ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(
+                                          SnackBar(
                                             content: Text('🎉 Kích hoạt thành công gói dịch vụ!'),
                                             backgroundColor: Color(0xFF2E7D32),
                                             behavior: SnackBarBehavior.floating,
@@ -546,7 +547,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                                         _fetchSubscriptionData();
                                       } else {
                                         ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(
+                                          SnackBar(
                                             content: Text('Hệ thống chưa nhận được thanh toán. Vui lòng quét mã QR bằng App Ngân hàng và thử lại!'),
                                             backgroundColor: Color(0xFFE65100),
                                             behavior: SnackBarBehavior.floating,
@@ -571,11 +572,11 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                             backgroundColor: const Color(0xFF008435),
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24),
+                              borderRadius: BorderRadius.circular(24.r),
                             ),
                           ),
                           child: isChecking
-                              ? const SizedBox(
+                              ? SizedBox(
                                   width: 22,
                                   height: 22,
                                   child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
@@ -584,7 +585,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     const Icon(Icons.published_with_changes_rounded, size: 20),
-                                    const SizedBox(width: 6),
+                                    SizedBox(width: 6.w),
                                     Flexible(
                                       child: Text(
                                         isEn
@@ -593,7 +594,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
                                         style: GoogleFonts.plusJakartaSans(
-                                          fontSize: 13.5,
+                                          fontSize: 13.5.sp,
                                           fontWeight: FontWeight.w800,
                                         ),
                                       ),
@@ -602,7 +603,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                                 ),
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
                     ],
                   ),
                 ),
@@ -622,7 +623,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
         if (mounted) {
           setState(() => _isLoading = false);
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
+            SnackBar(
               content: Text('⚡ Đã khôi phục mã QR gia hạn đang chờ xử lý...'),
               backgroundColor: Color(0xFF2E7D32),
               behavior: SnackBarBehavior.floating,
@@ -646,7 +647,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
       if (pending != null && mounted) {
         setState(() => _isLoading = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text('⚡ Đã khôi phục mã QR gia hạn đang chờ xử lý...'),
             backgroundColor: Color(0xFF2E7D32),
             behavior: SnackBarBehavior.floating,
@@ -677,7 +678,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
           title: Text(isEn ? 'Cancel Auto-Renewal?' : 'Hủy gia hạn tự động?'),
           content: Text(
             isEn
@@ -822,12 +823,12 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
     bool isDark = false,
   }) {
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsets.all(18.w),
       decoration: BoxDecoration(
         color: isDark
             ? (isCurrentPlan ? const Color(0xFF1E3A25) : const Color(0xFF19271E))
             : (isCurrentPlan ? const Color(0xFFF1F8E9) : Colors.white),
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(22.r),
         border: Border.all(
           color: isCurrentPlan
               ? const Color(0xFF4CAF50)
@@ -847,23 +848,23 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
         children: [
           if (badgeText != null) ...[
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
               decoration: BoxDecoration(
                 color: isCurrentPlan
                     ? const Color(0xFF4CAF50)
                     : const Color(0xFFFFB74D),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
               ),
               child: Text(
                 badgeText,
                 style: GoogleFonts.plusJakartaSans(
-                  fontSize: 11.5,
+                  fontSize: 11.5.sp,
                   fontWeight: FontWeight.w800,
                   color: Colors.white,
                 ),
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
           ],
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -875,32 +876,32 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                   children: [
                     Text(
                       title,
-                      style: GoogleFonts.outfit(
-                        fontSize: 17,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 17.sp,
                         fontWeight: FontWeight.w900,
                         color: isDark ? Colors.white : const Color(0xFF006428),
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: 2.h),
                     Text(
                       description,
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 12.5,
+                        fontSize: 12.5.sp,
                         color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF757575),
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8.w),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.alphabetic,
                 children: [
                   Text(
                     price,
-                    style: GoogleFonts.outfit(
-                      fontSize: 18,
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.w900,
                       color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
                     ),
@@ -908,7 +909,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                   Text(
                     period,
                     style: GoogleFonts.plusJakartaSans(
-                      fontSize: 11.5,
+                      fontSize: 11.5.sp,
                       color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF757575),
                     ),
                   ),
@@ -916,10 +917,10 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
           ...features.map(
             (feat) => Padding(
-              padding: const EdgeInsets.only(bottom: 4),
+              padding: EdgeInsets.only(bottom: 4.h),
               child: Row(
                 children: [
                   const Icon(
@@ -927,12 +928,12 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                     color: Color(0xFF4CAF50),
                     size: 16,
                   ),
-                  const SizedBox(width: 6),
+                  SizedBox(width: 6.w),
                   Expanded(
                     child: Text(
                       feat,
                       style: GoogleFonts.plusJakartaSans(
-                        fontSize: 13,
+                        fontSize: 13.sp,
                         fontWeight: FontWeight.w600,
                         color: isDark ? Colors.white : const Color(0xFF19221C),
                       ),
@@ -942,7 +943,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 14),
+          SizedBox(height: 14.h),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -951,13 +952,13 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                 backgroundColor: buttonColor,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(14.r),
                 ),
               ),
               child: Text(
                 buttonText,
                 style: GoogleFonts.plusJakartaSans(
-                  fontSize: 13.5,
+                  fontSize: 13.5.sp,
                   fontWeight: FontWeight.w800,
                   color: Colors.white,
                 ),
@@ -1012,7 +1013,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
               // Top Bar Header
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    EdgeInsets.symmetric(horizontal: 16.0.w, vertical: 8.0.h),
                 child: Row(
                   children: [
                     GestureDetector(
@@ -1041,11 +1042,11 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 14),
+                    SizedBox(width: 14.w),
                     Text(
                       isEn ? 'Membership Plans' : 'Thông tin gói dịch vụ',
-                      style: GoogleFonts.outfit(
-                        fontSize: 24,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 24.sp,
                         fontWeight: FontWeight.w900,
                         color: isDark ? Colors.white : const Color(0xFF006428),
                       ),
@@ -1064,14 +1065,14 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                 Expanded(
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(
+                    padding: EdgeInsets.symmetric(
                       horizontal: 20.0,
                       vertical: 12.0,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 6),
+                        SizedBox(height: 6.h),
 
                         // 1. Subscription Header Card with package.png Mascot Image
                         Stack(
@@ -1079,14 +1080,14 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                           children: [
                             Container(
                               width: double.infinity,
-                              padding: const EdgeInsets.only(
-                                left: 20,
-                                right: 120,
-                                top: 20,
-                                bottom: 20,
+                              padding: EdgeInsets.only(
+                                left: 20.w,
+                                right: 120.w,
+                                top: 20.h,
+                                bottom: 20.h,
                               ),
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(26),
+                                borderRadius: BorderRadius.circular(26.r),
                                 gradient: LinearGradient(
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
@@ -1122,8 +1123,8 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                                   Row(
                                     children: [
                                       Container(
-                                        padding: const EdgeInsets.all(4),
-                                        decoration: const BoxDecoration(
+                                        padding: EdgeInsets.all(4.w),
+                                        decoration: BoxDecoration(
                                           color: Color(0xFFFFB74D),
                                           shape: BoxShape.circle,
                                         ),
@@ -1133,11 +1134,11 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                                           size: 14,
                                         ),
                                       ),
-                                      const SizedBox(width: 6),
+                                      SizedBox(width: 6.w),
                                       Text(
                                         'FRIGGY PREMIUM',
-                                        style: GoogleFonts.outfit(
-                                          fontSize: 13,
+                                        style: GoogleFonts.plusJakartaSans(
+                                          fontSize: 13.sp,
                                           fontWeight: FontWeight.w900,
                                           color: Colors.white,
                                           letterSpacing: 0.6,
@@ -1145,23 +1146,23 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 8),
+                                  SizedBox(height: 8.h),
                                   Text(
                                     planNameDisplay,
-                                    style: GoogleFonts.outfit(
-                                      fontSize: 24,
+                                    style: GoogleFonts.plusJakartaSans(
+                                      fontSize: 24.sp,
                                       fontWeight: FontWeight.w900,
                                       color: Colors.white,
                                       height: 1.1,
                                     ),
                                   ),
-                                  const SizedBox(height: 4),
+                                  SizedBox(height: 4.h),
                                   Text(
                                     isPaidPlan
                                         ? (isEn ? 'Expires on $endDateDisplay' : 'Hết hạn vào $endDateDisplay')
                                         : (isEn ? 'Free Plan (Forever)' : 'Gói Miễn Phí (Mãi mãi)'),
                                     style: GoogleFonts.plusJakartaSans(
-                                      fontSize: 13.5,
+                                      fontSize: 13.5.sp,
                                       fontWeight: FontWeight.w600,
                                       color: Colors.white.withValues(alpha: 0.95),
                                     ),
@@ -1191,14 +1192,14 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                           ],
                         ),
 
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20.h),
 
                         // 2. Timeline Info Box (Ngày mua gói & Ngày kết thúc gói)
                         Container(
-                          padding: const EdgeInsets.all(18),
+                          padding: EdgeInsets.all(18.w),
                           decoration: BoxDecoration(
                             color: isDark ? const Color(0xFF19271E) : Colors.white,
-                            borderRadius: BorderRadius.circular(22),
+                            borderRadius: BorderRadius.circular(22.r),
                             border: Border.all(
                               color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5E69C),
                               width: 1.2,
@@ -1250,11 +1251,11 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                                         color: isDark ? const Color(0xFF81C784) : const Color(0xFF4CAF50),
                                         size: 18,
                                       ),
-                                      const SizedBox(width: 6),
+                                      SizedBox(width: 6.w),
                                       Text(
                                         isEn ? 'Status: ' : 'Trạng thái: ',
                                         style: GoogleFonts.plusJakartaSans(
-                                          fontSize: 13,
+                                          fontSize: 13.sp,
                                           fontWeight: FontWeight.w600,
                                           color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF757575),
                                         ),
@@ -1264,7 +1265,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                                             ? (isEn ? 'Active' : 'Đang hoạt động')
                                             : (_userSub?.status ?? 'active'),
                                         style: GoogleFonts.plusJakartaSans(
-                                          fontSize: 13,
+                                          fontSize: 13.sp,
                                           fontWeight: FontWeight.w800,
                                           color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
                                         ),
@@ -1273,8 +1274,8 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                                   ),
                                   Text(
                                     priceDisplay,
-                                    style: GoogleFonts.outfit(
-                                      fontSize: 14.5,
+                                    style: GoogleFonts.plusJakartaSans(
+                                      fontSize: 14.5.sp,
                                       fontWeight: FontWeight.w900,
                                       color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
                                     ),
@@ -1296,23 +1297,23 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                                         label: Text(
                                           isEn ? 'Renew (+1 Mo)' : 'Gia hạn gói',
                                           style: GoogleFonts.plusJakartaSans(
-                                            fontSize: 12.5,
+                                            fontSize: 12.5.sp,
                                             fontWeight: FontWeight.w800,
                                           ),
                                         ),
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: const Color(0xFF008435),
                                           foregroundColor: Colors.white,
-                                          padding: const EdgeInsets.symmetric(vertical: 8),
+                                          padding: EdgeInsets.symmetric(vertical: 8),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12.r),
                                           ),
                                           elevation: 0,
                                         ),
                                       ),
                                     ),
                                     if (_userSub?.autoRenew == true) ...[
-                                      const SizedBox(width: 8),
+                                      SizedBox(width: 8.w),
                                       Expanded(
                                         child: OutlinedButton.icon(
                                           onPressed: _confirmCancelAutoRenewal,
@@ -1320,16 +1321,16 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                                           label: Text(
                                             isEn ? 'Cancel Auto-Renew' : 'Hủy gia hạn tự động',
                                             style: GoogleFonts.plusJakartaSans(
-                                              fontSize: 12,
+                                              fontSize: 12.sp,
                                               fontWeight: FontWeight.w700,
                                             ),
                                           ),
                                           style: OutlinedButton.styleFrom(
                                             foregroundColor: const Color(0xFFE53935),
                                             side: const BorderSide(color: Color(0xFFE53935), width: 1.2),
-                                            padding: const EdgeInsets.symmetric(vertical: 8),
+                                            padding: EdgeInsets.symmetric(vertical: 8),
                                             shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(12),
+                                              borderRadius: BorderRadius.circular(12.r),
                                             ),
                                           ),
                                         ),
@@ -1341,28 +1342,28 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 24),
+                        SizedBox(height: 24.h),
 
                         // 3. Feature Perks Cards Grid
                         Text(
                           isEn ? 'Your Plan Benefits' : 'Đặc quyền gói của bạn',
-                          style: GoogleFonts.outfit(
-                            fontSize: 18,
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.w900,
                             color: isDark ? Colors.white : const Color(0xFF006428),
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        SizedBox(height: 12.h),
 
                         // Render Features list from plan
                         if (currentPlan != null && currentPlan.features.isNotEmpty)
                           ...currentPlan.features.map(
                             (feat) => Container(
-                              margin: const EdgeInsets.only(bottom: 10),
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                              margin: EdgeInsets.only(bottom: 10.h),
+                              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                               decoration: BoxDecoration(
                                 color: isDark ? const Color(0xFF19271E) : Colors.white,
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(16.r),
                                 border: Border.all(
                                   color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5E69C),
                                 ),
@@ -1370,7 +1371,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                               child: Row(
                                 children: [
                                   Container(
-                                    padding: const EdgeInsets.all(6),
+                                    padding: EdgeInsets.all(6.w),
                                     decoration: BoxDecoration(
                                       color: isDark ? const Color(0xFF233629) : const Color(0xFFE8F5E9),
                                       shape: BoxShape.circle,
@@ -1381,12 +1382,12 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                                       size: 18,
                                     ),
                                   ),
-                                  const SizedBox(width: 12),
+                                  SizedBox(width: 12.w),
                                   Expanded(
                                     child: Text(
                                       feat,
                                       style: GoogleFonts.plusJakartaSans(
-                                        fontSize: 14,
+                                        fontSize: 14.sp,
                                         fontWeight: FontWeight.w700,
                                         color: isDark ? Colors.white : const Color(0xFF19221C),
                                       ),
@@ -1408,7 +1409,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                             cardBgColor: isDark ? const Color(0xFF19271E) : const Color(0xFFEAF5E1),
                             isDark: isDark,
                           ),
-                          const SizedBox(height: 12),
+                          SizedBox(height: 12.h),
                           IntrinsicHeight(
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1423,7 +1424,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                                     isDark: isDark,
                                   ),
                                 ),
-                                const SizedBox(width: 12),
+                                SizedBox(width: 12.w),
                                 Expanded(
                                   child: _buildSquarePerkCard(
                                     icon: Icons.show_chart_rounded,
@@ -1439,7 +1440,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                           ),
                         ],
 
-                        const SizedBox(height: 28),
+                        SizedBox(height: 28.h),
 
                         // 4. Action Button: "Xem tất cả các gói dịch vụ"
                         SizedBox(
@@ -1451,7 +1452,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                               backgroundColor: const Color(0xFF4CAF50),
                               elevation: 2,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(28),
+                                borderRadius: BorderRadius.circular(28.r),
                               ),
                             ),
                             child: Row(
@@ -1462,11 +1463,11 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                                   color: Colors.white,
                                   size: 22,
                                 ),
-                                const SizedBox(width: 10),
+                                SizedBox(width: 10.w),
                                 Text(
                                   isEn ? 'View All Service Plans' : 'Xem tất cả các gói dịch vụ',
                                   style: GoogleFonts.plusJakartaSans(
-                                    fontSize: 15.5,
+                                    fontSize: 15.5.sp,
                                     fontWeight: FontWeight.w900,
                                     color: Colors.white,
                                   ),
@@ -1476,7 +1477,7 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
                           ),
                         ),
 
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20.h),
                       ],
                     ),
                   ),
@@ -1502,22 +1503,22 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
             Icon(icon,
                 color: isDark ? const Color(0xFF81C784) : const Color(0xFF4CAF50),
                 size: 16),
-            const SizedBox(width: 4),
+            SizedBox(width: 4.w),
             Text(
               label,
               style: GoogleFonts.plusJakartaSans(
-                fontSize: 12,
+                fontSize: 12.sp,
                 fontWeight: FontWeight.w600,
                 color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF757575),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4.h),
         Text(
           value,
           style: GoogleFonts.plusJakartaSans(
-            fontSize: 14.5,
+            fontSize: 14.5.sp,
             fontWeight: FontWeight.w900,
             color: isDark ? Colors.white : const Color(0xFF19221C),
           ),
@@ -1536,10 +1537,10 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
     bool isDark = false,
   }) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: cardBgColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
         border: Border.all(
           color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5E69C),
           width: 1.2,
@@ -1555,31 +1556,31 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(12.w),
             decoration: BoxDecoration(
               color: iconBgColor,
               shape: BoxShape.circle,
             ),
             child: Icon(icon, color: iconColor, size: 24),
           ),
-          const SizedBox(width: 14),
+          SizedBox(width: 14.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: GoogleFonts.outfit(
-                    fontSize: 16,
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 16.sp,
                     fontWeight: FontWeight.w900,
                     color: isDark ? Colors.white : const Color(0xFF006428),
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: 2.h),
                 Text(
                   subtitle,
                   style: GoogleFonts.plusJakartaSans(
-                    fontSize: 12.5,
+                    fontSize: 12.5.sp,
                     color: isDark ? const Color(0xFF9DA8A0) : const Color(0xFF757575),
                   ),
                 ),
@@ -1600,10 +1601,10 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
     bool isDark = false,
   }) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: cardBgColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
         border: Border.all(
           color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5E69C),
           width: 1.2,
@@ -1621,18 +1622,18 @@ class _PackageManagementScreenState extends State<PackageManagementScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            padding: const EdgeInsets.all(10),
+            padding: EdgeInsets.all(10.w),
             decoration: BoxDecoration(
               color: iconBgColor,
               shape: BoxShape.circle,
             ),
             child: Icon(icon, color: iconColor, size: 22),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
           Text(
             title,
-            style: GoogleFonts.outfit(
-              fontSize: 14.5,
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 14.5.sp,
               fontWeight: FontWeight.w900,
               color: isDark ? Colors.white : const Color(0xFF006428),
               height: 1.2,

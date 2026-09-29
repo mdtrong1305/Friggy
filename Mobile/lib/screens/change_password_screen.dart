@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../data/services/auth_service.dart';
 import '../l10n/app_localizations.dart';
@@ -91,7 +92,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 10),
+        SizedBox(height: 10.h),
         Row(
           children: List.generate(3, (index) {
             final isFilled = index < strength;
@@ -102,20 +103,20 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 margin: EdgeInsets.only(right: index < 2 ? 6 : 0),
                 decoration: BoxDecoration(
                   color: isFilled ? color : const Color(0xFFE2E8E4),
-                  borderRadius: BorderRadius.circular(3),
+                  borderRadius: BorderRadius.circular(3.r),
                 ),
               ),
             );
           }),
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6.h),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               'Độ mạnh mật khẩu:',
               style: GoogleFonts.plusJakartaSans(
-                fontSize: 12.5,
+                fontSize: 12.5.sp,
                 fontWeight: FontWeight.w600,
                 color: const Color(0xFF757575),
               ),
@@ -123,7 +124,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             Text(
               label,
               style: GoogleFonts.plusJakartaSans(
-                fontSize: 12.5,
+                fontSize: 12.5.sp,
                 fontWeight: FontWeight.w800,
                 color: color,
               ),
@@ -136,12 +137,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   Widget _buildRuleItem(String text, bool isSatisfied) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 6.0),
+      padding: EdgeInsets.only(bottom: 6.0.h),
       child: Row(
         children: [
           AnimatedContainer(
             duration: const Duration(milliseconds: 250),
-            padding: const EdgeInsets.all(2),
+            padding: EdgeInsets.all(2.w),
             decoration: BoxDecoration(
               color: isSatisfied
                   ? const Color(0xFF008435)
@@ -154,12 +155,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               color: Colors.white,
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8.w),
           Expanded(
             child: Text(
               text,
               style: GoogleFonts.plusJakartaSans(
-                fontSize: 12.5,
+                fontSize: 12.5.sp,
                 fontWeight: isSatisfied ? FontWeight.w700 : FontWeight.w500,
                 color: isSatisfied
                     ? const Color(0xFF006428)
@@ -239,7 +240,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               // Top Bar Header
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    EdgeInsets.symmetric(horizontal: 16.0.w, vertical: 8.0.h),
                 child: Row(
                   children: [
                     GestureDetector(
@@ -268,11 +269,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 14),
+                    SizedBox(width: 14.w),
                     Text(
                       isEn ? 'Change Password' : 'Đổi mật khẩu',
-                      style: GoogleFonts.outfit(
-                        fontSize: 24,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 24.sp,
                         fontWeight: FontWeight.w900,
                         color: isDark ? Colors.white : const Color(0xFF006428),
                       ),
@@ -284,7 +285,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(
+                  padding: EdgeInsets.symmetric(
                     horizontal: 20.0,
                     vertical: 16.0,
                   ),
@@ -292,12 +293,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     key: _formKey,
                     child: Column(
                       children: [
-                        const SizedBox(height: 4),
+                        SizedBox(height: 4.h),
 
                         // Shield Security Header Icon
                         Center(
                           child: Container(
-                            padding: const EdgeInsets.all(18),
+                            padding: EdgeInsets.all(18.w),
                             decoration: BoxDecoration(
                               color: isDark ? const Color(0xFF233629) : const Color(0xFFE8F5E9),
                               shape: BoxShape.circle,
@@ -310,14 +311,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           ),
                         ),
 
-                        const SizedBox(height: 18),
+                        SizedBox(height: 18.h),
 
                         // Form Container with Validation & Strength Meter
                         Container(
-                          padding: const EdgeInsets.all(20),
+                          padding: EdgeInsets.all(20.w),
                           decoration: BoxDecoration(
                             color: isDark ? const Color(0xFF19271E) : Colors.white,
-                            borderRadius: BorderRadius.circular(24),
+                            borderRadius: BorderRadius.circular(24.r),
                             border: Border.all(
                               color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5E69C),
                               width: 1.2,
@@ -351,7 +352,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                 },
                               ),
 
-                              const SizedBox(height: 16),
+                              SizedBox(height: 16.h),
 
                               // Mật khẩu mới
                               _buildValidatedPasswordField(
@@ -377,7 +378,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               // Live Strength Progress Meter (Like Register Screen)
                               _buildPasswordStrengthMeter(),
 
-                              const SizedBox(height: 16),
+                              SizedBox(height: 16.h),
 
                               // Xác nhận mật khẩu mới
                               _buildValidatedPasswordField(
@@ -400,14 +401,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                 },
                               ),
 
-                              const SizedBox(height: 16),
+                              SizedBox(height: 16.h),
 
                               // Requirements Checklist (Like Register Screen)
                               Container(
-                                padding: const EdgeInsets.all(12),
+                                padding: EdgeInsets.all(12.w),
                                 decoration: BoxDecoration(
                                   color: isDark ? const Color(0xFF233629) : const Color(0xFFF5FCF4),
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: BorderRadius.circular(16.r),
                                   border: Border.all(
                                     color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5D6A7),
                                   ),
@@ -417,13 +418,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                   children: [
                                     Text(
                                       isEn ? 'Password requirements:' : 'Yêu cầu mật khẩu:',
-                                      style: GoogleFonts.outfit(
-                                        fontSize: 13,
+                                      style: GoogleFonts.plusJakartaSans(
+                                        fontSize: 13.sp,
                                         fontWeight: FontWeight.w800,
                                         color: isDark ? const Color(0xFF81C784) : const Color(0xFF006428),
                                       ),
                                     ),
-                                    const SizedBox(height: 8),
+                                    SizedBox(height: 8.h),
                                     _buildRuleItem(
                                       isEn ? '8 characters or more' : 'Từ 8 ký tự trở lên',
                                       hasMinLength,
@@ -443,7 +444,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           ),
                         ),
 
-                        const SizedBox(height: 28),
+                        SizedBox(height: 28.h),
 
                         // Submit Button
                         SizedBox(
@@ -455,11 +456,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               backgroundColor: isDark ? const Color(0xFF81C784) : const Color(0xFF4CAF50),
                               elevation: 2,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(28),
+                                borderRadius: BorderRadius.circular(28.r),
                               ),
                             ),
                             child: _isLoading
-                                ? const SizedBox(
+                                ? SizedBox(
                                     width: 24,
                                     height: 24,
                                     child: CircularProgressIndicator(
@@ -470,14 +471,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                 : Text(
                                     isEn ? 'Update Password' : 'Cập nhật mật khẩu',
                                     style: GoogleFonts.plusJakartaSans(
-                                      fontSize: 16,
+                                      fontSize: 16.sp,
                                       fontWeight: FontWeight.w900,
                                       color: isDark ? const Color(0xFF0E1611) : Colors.white,
                                     ),
                                   ),
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20.h),
                       ],
                     ),
                   ),
@@ -504,20 +505,20 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       children: [
         Text(
           label,
-          style: GoogleFonts.outfit(
-            fontSize: 14,
+          style: GoogleFonts.plusJakartaSans(
+            fontSize: 14.sp,
             fontWeight: FontWeight.w800,
             color: isDark ? Colors.white : const Color(0xFF006428),
           ),
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: 6.h),
         TextFormField(
           controller: controller,
           obscureText: obscureText,
           validator: validator,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           style: GoogleFonts.plusJakartaSans(
-            fontSize: 14.5,
+            fontSize: 14.5.sp,
             fontWeight: FontWeight.w700,
             color: isDark ? Colors.white : const Color(0xFF19221C),
           ),
@@ -540,38 +541,38 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             filled: true,
             fillColor: isDark ? const Color(0xFF0E1611) : const Color(0xFFF5FCF4),
             contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16.r),
               borderSide: BorderSide(
                 color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5D6A7),
                 width: 1.2,
               ),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16.r),
               borderSide: BorderSide(
                 color: isDark ? const Color(0xFF2E4D36) : const Color(0xFFA5D6A7),
                 width: 1.2,
               ),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16.r),
               borderSide: BorderSide(
                 color: isDark ? const Color(0xFF81C784) : const Color(0xFF4CAF50),
                 width: 1.8,
               ),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16.r),
               borderSide: const BorderSide(color: Color(0xFFD32F2F), width: 1.5),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(16.r),
               borderSide: const BorderSide(color: Color(0xFFD32F2F), width: 1.8),
             ),
             errorStyle: GoogleFonts.plusJakartaSans(
-              fontSize: 12,
+              fontSize: 12.sp,
               fontWeight: FontWeight.w600,
               color: const Color(0xFFD32F2F),
             ),
