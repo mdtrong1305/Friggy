@@ -40,12 +40,22 @@ export const AdminDashboard = (props) => {
   // Helper to resolve avatar URL path
   const resolveAvatarUrl = (rawUrl) => {
     if (!rawUrl) return null;
-    if (rawUrl.startsWith('http://') || rawUrl.startsWith('https://') || rawUrl.startsWith('data:')) {
-      return rawUrl;
+    let formatted = rawUrl.trim();
+    if (formatted.includes('api.friggy.io.vn')) {
+      formatted = formatted.replace('api.friggy.io.vn', 'file.friggy.io.vn');
+    }
+    if (formatted.startsWith('http://') || formatted.startsWith('https://') || formatted.startsWith('data:')) {
+      return formatted;
+    }
+    if (formatted.startsWith('file.friggy.io.vn')) {
+      return `https://${formatted}`;
     }
     const apiBase = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'https://api.friggy.io.vn/api/v1';
-    const baseUrl = apiBase.replace(/\/api\/v1\/?$/, '').replace(/\/$/, '');
-    return `${baseUrl}${rawUrl.startsWith('/') ? '' : '/'}${rawUrl}`;
+    let fileBase = 'https://file.friggy.io.vn';
+    if (!apiBase.includes('friggy.io.vn')) {
+      fileBase = apiBase.replace(/\/api\/v1\/?$/, '').replace(/\/$/, '');
+    }
+    return `${fileBase}${formatted.startsWith('/') ? '' : '/'}${formatted}`;
   };
 
   // Synchronously get cached admin name & avatar from localStorage
@@ -264,21 +274,12 @@ export const AdminDashboard = (props) => {
             </p>
           </div>
 
-          {/* Time-of-day dynamic avatar / mascot image */}
+          {/* Time-of-day dynamic mascot image */}
           <div className="flex items-center justify-center md:justify-end shrink-0">
             <img
-              src={adminAvatarUrl ? resolveAvatarUrl(adminAvatarUrl) : timeGreeting.image}
+              src={timeGreeting.image}
               alt={timeGreeting.alt}
-              className={
-                adminAvatarUrl
-                  ? "w-44 h-44 sm:w-52 sm:h-52 md:w-60 md:h-60 rounded-3xl object-cover border-4 border-emerald-400 shadow-xl relative z-10 bg-white animate__animated animate__zoomIn"
-                  : "w-52 h-52 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 -my-3 lg:-my-6 object-contain drop-shadow-lg relative z-10 animate__animated animate__zoomIn"
-              }
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = timeGreeting.image;
-                e.target.className = "w-52 h-52 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 -my-3 lg:-my-6 object-contain drop-shadow-lg relative z-10 animate__animated animate__zoomIn";
-              }}
+              className="w-52 h-52 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 -my-3 lg:-my-6 object-contain drop-shadow-lg relative z-10 animate__animated animate__zoomIn"
             />
           </div>
         </div>

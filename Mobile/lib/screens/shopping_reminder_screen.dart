@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../data/services/api_service.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/friggy_app_bar.dart';
+import '../sqlite/services/shopping_local_service.dart';
+import '../sqlite/models/local_shopping_model.dart';
 
 class ShoppingItemModel {
   int? backendItemId;
@@ -45,6 +47,8 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
       _isLoading = true;
     });
 
+    final shoppingLocalService = ShoppingLocalService();
+
     try {
       final lists = await ApiService().getShoppingLists();
       if (lists.isNotEmpty) {
@@ -53,6 +57,8 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
         final rawItems = firstList['items'] as List<dynamic>? ?? [];
 
         final List<ShoppingItemModel> loadedItems = [];
+        final List<LocalShoppingItemModel> localItems = [];
+
         for (final item in rawItems) {
           final itemMap = item as Map<String, dynamic>;
           final bId = itemMap['id'] as int?;
@@ -71,49 +77,22 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
               isChecked: isPurchased,
             ),
           );
-        }
 
-        if (mounted) {
-          setState(() {
-            _currentListId = listId;
-            _shoppingList = loadedItems;
-            _isLoading = false;
-          });
-        }
-        return;
-      }
-
-      // If lists is empty, auto-generate from latest plan
-      final plans = await ApiService().getMealPlans();
-      if (plans.isNotEmpty && plans.first['id'] != null) {
-        final planId = plans.first['id'].toString();
-        final createdList = await ApiService().createShoppingList(
-          weeklyPlanId: planId,
-          title: 'Danh sách mua sắm tuần này',
-        );
-        final listId = createdList['id']?.toString();
-        final rawItems = createdList['items'] as List<dynamic>? ?? [];
-
-        final List<ShoppingItemModel> loadedItems = [];
-        for (final item in rawItems) {
-          final itemMap = item as Map<String, dynamic>;
-          final bId = itemMap['id'] as int?;
-          final name = itemMap['ingredientName']?.toString() ?? 'Nguyên liệu';
-          final qtyNum = itemMap['quantity'];
-          final unitStr = itemMap['unit']?.toString() ?? '';
-          final qtyStr = qtyNum != null ? '$qtyNum $unitStr'.trim() : null;
-          final isPurchased = itemMap['isPurchased'] as bool? ?? false;
-
-          loadedItems.add(
-            ShoppingItemModel(
-              backendItemId: bId,
+          localItems.add(
+            LocalShoppingItemModel(
               id: bId?.toString() ?? DateTime.now().millisecondsSinceEpoch.toString(),
-              name: name,
-              quantity: qtyStr,
-              isChecked: isPurchased,
+              ingredientId: itemMap['ingredientId'] as int? ?? 0,
+              ingredientName: name,
+              quantity: (qtyNum as num?)?.toDouble() ?? 1.0,
+              unit: unitStr,
+              isPurchased: isPurchased,
+              updatedAt: DateTime.now().millisecondsSinceEpoch,
             ),
           );
         }
+
+        // Save to SQLite
+        await shoppingLocalService.saveShoppingItemsOverwrite(localItems);
 
         if (mounted) {
           setState(() {
@@ -125,7 +104,30 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
         return;
       }
     } catch (e) {
-      debugPrint('[ShoppingReminderScreen] Error fetching shopping lists: $e');
+      debugPrint('[ShoppingReminderScreen] Error/Offline fetching shopping lists: $e. Loading from SQLite...');
+      try {
+        final cached = await shoppingLocalService.getCachedShoppingItems();
+        if (cached.isNotEmpty) {
+          final List<ShoppingItemModel> offlineItems = cached.map((item) {
+            return ShoppingItemModel(
+              id: item.id,
+              name: item.ingredientName,
+              quantity: '${item.quantity} ${item.unit}',
+              isChecked: item.isPurchased,
+            );
+          }).toList();
+
+          if (mounted) {
+            setState(() {
+              _shoppingList = offlineItems;
+              _isLoading = false;
+            });
+            return;
+          }
+        }
+      } catch (err) {
+        debugPrint('[ShoppingReminderScreen] SQLite read error: $err');
+      }
     }
 
     if (mounted) {

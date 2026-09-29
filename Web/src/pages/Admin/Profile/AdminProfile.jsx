@@ -21,6 +21,26 @@ import cuteMascotImg from '../../../assets/images/cute_mascot.png';
 import { getMeApi, updateProfileApi, uploadAvatarApi } from '../../../services/userService';
 import { showToast } from '../../../components/common/Toast';
 
+const resolveAvatarUrl = (rawUrl) => {
+  if (!rawUrl) return cuteMascotImg;
+  let formatted = rawUrl.trim();
+  if (formatted.includes('api.friggy.io.vn')) {
+    formatted = formatted.replace('api.friggy.io.vn', 'file.friggy.io.vn');
+  }
+  if (formatted.startsWith('http://') || formatted.startsWith('https://') || formatted.startsWith('data:')) {
+    return formatted;
+  }
+  if (formatted.startsWith('file.friggy.io.vn')) {
+    return `https://${formatted}`;
+  }
+  const apiBase = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'https://api.friggy.io.vn/api/v1';
+  let fileBase = 'https://file.friggy.io.vn';
+  if (!apiBase.includes('friggy.io.vn')) {
+    fileBase = apiBase.replace(/\/api\/v1\/?$/, '').replace(/\/$/, '');
+  }
+  return `${fileBase}${formatted.startsWith('/') ? '' : '/'}${formatted}`;
+};
+
 export const AdminProfile = () => {
   const [loading, setLoading] = useState(true);
   const [savingProfile, setSavingProfile] = useState(false);
@@ -81,7 +101,7 @@ export const AdminProfile = () => {
         });
 
         if (me.profile?.avatarUrl) {
-          setAvatarUrl(me.profile.avatarUrl);
+          setAvatarUrl(resolveAvatarUrl(me.profile.avatarUrl));
         }
       }
     } catch (err) {

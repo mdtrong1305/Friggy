@@ -43,6 +43,10 @@ dependencies:
   provider: ^6.1.2
   dio: ^5.11.1
   google_sign_in: ^6.2.2
+  sqflite: ^2.3.3+1
+  path: ^1.9.0
+  connectivity_plus: ^6.0.5
+
 
 dev_dependencies:
   flutter_test:

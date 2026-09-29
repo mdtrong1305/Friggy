@@ -14,14 +14,7 @@ class IngredientAvatarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rawPath = item.imagePath.trim();
-    String fullUrl = '';
-
-    if (rawPath.startsWith('http://') || rawPath.startsWith('https://')) {
-      fullUrl = rawPath;
-    } else if (rawPath.isNotEmpty && rawPath != 'null') {
-      fullUrl = '${AppConstants.serverBaseUrl}${rawPath.startsWith('/') ? '' : '/'}$rawPath';
-    }
+    final fullUrl = AppConstants.getImageUrl(item.imagePath) ?? '';
 
     return Container(
       width: size,

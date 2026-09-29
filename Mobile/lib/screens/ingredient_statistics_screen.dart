@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../config/app_constants.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/friggy_app_bar.dart';
 import 'recipe_suggestions_screen.dart';
@@ -8,6 +9,10 @@ import '../data/services/api_service.dart';
 import '../data/models/fridge_models.dart';
 
 import '../data/models/ingredient_model.dart';
+
+import '../sqlite/services/stats_local_service.dart';
+import '../sqlite/services/ingredient_local_service.dart';
+import '../sqlite/models/local_stats_model.dart';
 
 class IngredientStatisticsScreen extends StatefulWidget {
   final int initialTabIndex; // 0 for Tuần, 1 for Tháng
@@ -26,6 +31,8 @@ class _IngredientStatisticsScreenState
     extends State<IngredientStatisticsScreen> {
   late int _selectedTab;
   final ApiService _apiService = ApiService();
+  final StatsLocalService _statsLocalService = StatsLocalService();
+  final IngredientLocalService _ingredientLocalService = IngredientLocalService();
   FridgeStatsModel? _stats;
   FridgeStatsChartModel? _chartData;
   List<IngredientModel> _expiringItems = [];
@@ -56,18 +63,102 @@ class _IngredientStatisticsScreenState
         return IngredientModel.fromFridgeApi(json as Map<String, dynamic>);
       }).toList();
 
+      final parsedStats = FridgeStatsModel.fromJson(statsRes);
+      final parsedChart = FridgeStatsChartModel.fromJson(chartRes);
+
       if (mounted) {
         setState(() {
-          _stats = FridgeStatsModel.fromJson(statsRes);
-          _chartData = FridgeStatsChartModel.fromJson(chartRes);
+          _stats = parsedStats;
+          _chartData = parsedChart;
           _expiringItems = loadedExpiring;
           _allFridgeItems = loadedAll;
           _isLoading = false;
         });
       }
+
+      // Save stats to SQLite
+      await _statsLocalService.saveStatsCache(LocalStatsModel(
+        totalSpentThisMonth: parsedStats.totalSpentThisMonth,
+        wastePercent: parsedStats.wastePercent,
+        mealsCooked: parsedStats.mealsCooked,
+        expiringSoonCount: parsedStats.expiringSoonCount,
+        totalItems: parsedStats.totalItems,
+        updatedAt: DateTime.now().millisecondsSinceEpoch,
+      ));
     } catch (e) {
-      debugPrint('Error loading stats data: $e');
-      if (mounted) setState(() => _isLoading = false);
+      debugPrint('[IngredientStatisticsScreen] Error/Offline loading stats: $e. Loading from SQLite...');
+      try {
+        final cachedStats = await _statsLocalService.getCachedStats();
+        final cachedIngredients = await _ingredientLocalService.getCachedIngredients();
+
+        final List<IngredientModel> offlineAll = cachedIngredients.map((item) {
+          return IngredientModel(
+            id: item.id,
+            fridgeId: '1',
+            fridgeName: 'Tủ lạnh',
+            name: item.name,
+            englishName: item.name,
+            quantity: '${item.quantity} ${item.unit}',
+            unit: item.unit,
+            category: 'Thực phẩm',
+            storageArea: item.storageLocation,
+            daysUntilExpiry: item.daysUntilExpiry ?? 5,
+            expiryText: (item.daysUntilExpiry ?? 5) < 0
+                ? 'Quá hạn ${(item.daysUntilExpiry ?? 5).abs()} ngày'
+                : 'Còn ${item.daysUntilExpiry ?? 5} ngày',
+            imagePath: item.imagePath ?? '',
+            badgeBgColor: const Color(0xFFE8F5E9),
+            badgeTextColor: const Color(0xFF2E7D32),
+          );
+        }).toList();
+
+        final List<IngredientModel> offlineExpiring = offlineAll.where((e) => e.daysUntilExpiry <= 3).toList();
+
+        if (mounted) {
+          setState(() {
+            _stats = cachedStats != null
+                ? FridgeStatsModel(
+                    totalSpentThisMonth: cachedStats.totalSpentThisMonth,
+                    wastePercent: cachedStats.wastePercent,
+                    mealsCooked: cachedStats.mealsCooked,
+                    expiringSoonCount: cachedStats.expiringSoonCount,
+                    totalItems: cachedStats.totalItems,
+                  )
+                : FridgeStatsModel(
+                    totalSpentThisMonth: 0,
+                    wastePercent: 0.0,
+                    mealsCooked: 0,
+                    expiringSoonCount: offlineExpiring.length,
+                    totalItems: offlineAll.length,
+                  );
+
+            _chartData = FridgeStatsChartModel(
+              period: _selectedTab == 0 ? 'week' : 'month',
+              labels: _selectedTab == 0 ? ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'] : ['Tuần 1', 'Tuần 2', 'Tuần 3', 'Tuần 4'],
+              spending: _selectedTab == 0 ? [0, 0, 0, 0, 0, 0, 0] : [0, 0, 0, 0],
+              wasteItems: _selectedTab == 0 ? [0, 0, 0, 0, 0, 0, 0] : [0, 0, 0, 0],
+            );
+
+            _expiringItems = offlineExpiring;
+            _allFridgeItems = offlineAll;
+            _isLoading = false;
+          });
+        }
+      } catch (err) {
+        debugPrint('[IngredientStatisticsScreen] SQLite offline load error: $err');
+        if (mounted) {
+          setState(() {
+            _stats = FridgeStatsModel(
+              totalSpentThisMonth: 0,
+              wastePercent: 0.0,
+              mealsCooked: 0,
+              expiringSoonCount: 0,
+              totalItems: 0,
+            );
+            _isLoading = false;
+          });
+        }
+      }
     }
   }
 
@@ -76,11 +167,10 @@ class _IngredientStatisticsScreenState
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final loc = AppLocalizations.of(context);
     final isEn = loc?.locale.languageCode == 'en';
-    final hasStatsData = _stats != null || _chartData != null || _isLoading;
 
     return Scaffold(
       backgroundColor: isDark ? const Color(0xFF0E1611) : const Color(0xFFF4FAF2),
-      body: !hasStatsData ? const SizedBox.shrink() : Container(
+      body: Container(
         width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(
@@ -1517,8 +1607,30 @@ class _IngredientStatisticsScreenState
     required IconData fallbackIcon,
     required bool isDark,
   }) {
-    final bool hasValidImage = imagePath.isNotEmpty &&
-        (imagePath.startsWith('http') || imagePath.startsWith('assets/'));
+    final fullImageUrl = AppConstants.getImageUrl(imagePath);
+
+    Widget imageWidget;
+    if (fullImageUrl != null) {
+      imageWidget = Image.network(
+        fullImageUrl,
+        width: 48,
+        height: 48,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) =>
+            _buildFallbackIcon(fallbackIcon, isDark),
+      );
+    } else if (imagePath.startsWith('assets/')) {
+      imageWidget = Image.asset(
+        imagePath,
+        width: 48,
+        height: 48,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) =>
+            _buildFallbackIcon(fallbackIcon, isDark),
+      );
+    } else {
+      imageWidget = _buildFallbackIcon(fallbackIcon, isDark);
+    }
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -1540,25 +1652,7 @@ class _IngredientStatisticsScreenState
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(14),
-            child: hasValidImage
-                ? (imagePath.startsWith('http')
-                    ? Image.network(
-                        imagePath,
-                        width: 48,
-                        height: 48,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) =>
-                            _buildFallbackIcon(fallbackIcon, isDark),
-                      )
-                    : Image.asset(
-                        imagePath,
-                        width: 48,
-                        height: 48,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) =>
-                            _buildFallbackIcon(fallbackIcon, isDark),
-                      ))
-                : _buildFallbackIcon(fallbackIcon, isDark),
+            child: imageWidget,
           ),
           const SizedBox(width: 14),
           Expanded(

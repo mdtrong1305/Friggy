@@ -12,6 +12,8 @@ import AiManagement from '../pages/Admin/AiManagement/AiManagement';
 import CronManagement from '../pages/Admin/CronManagement/CronManagement';
 import SponsorManagement from '../pages/Admin/SponsorManagement/SponsorManagement';
 import IngredientManagement from '../pages/Admin/IngredientManagement/IngredientManagement';
+import RecipeManagement from '../pages/Admin/RecipeManagement/RecipeManagement';
+import PaymentTransactionsManagement from '../pages/Admin/PaymentTransactions/PaymentTransactionsManagement';
 import FamilyInviteAction from '../pages/Guest/FamilyInviteAction';
 
 const enableAdminLogin =
@@ -32,7 +34,9 @@ function Router() {
             <Route path="" element={<AdminDashboard />} />
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="ingredients" element={<IngredientManagement />} />
+            <Route path="recipes" element={<RecipeManagement />} />
             <Route path="users" element={<UserManagement />} />
+            <Route path="transactions" element={<PaymentTransactionsManagement />} />
             <Route path="ai" element={<AiManagement />} />
             <Route path="cron" element={<CronManagement />} />
             <Route path="sponsors" element={<SponsorManagement />} />

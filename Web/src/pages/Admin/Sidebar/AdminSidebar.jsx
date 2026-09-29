@@ -13,6 +13,8 @@ import {
   X,
   ChevronRight,
   Utensils,
+  ChefHat,
+  CreditCard,
 } from 'lucide-react';
 import cuteMascotImg from '../../../assets/images/cute_mascot.png';
 
@@ -38,10 +40,22 @@ export const AdminSidebar = ({
       icon: Utensils,
     },
     {
+      id: 'recipes',
+      path: '/admin/recipes',
+      label: 'Quản Lý Công Thức',
+      icon: ChefHat,
+    },
+    {
       id: 'users',
       path: '/admin/users',
       label: 'Quản Lý Người Dùng',
       icon: Users,
+    },
+    {
+      id: 'transactions',
+      path: '/admin/transactions',
+      label: 'Lịch Sử Thanh Toán',
+      icon: CreditCard,
     },
     {
       id: 'ai',

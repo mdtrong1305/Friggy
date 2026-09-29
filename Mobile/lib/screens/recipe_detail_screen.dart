@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../config/app_constants.dart';
 import '../data/models/recipe_model.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/friggy_app_bar.dart';
@@ -98,8 +99,8 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
     if (cleanPath.isEmpty || cleanPath == 'null') {
       return const SizedBox.shrink();
     }
-    if (cleanPath.startsWith('http://') || cleanPath.startsWith('https://')) {
-      return Image.network(
+    if (cleanPath.startsWith('assets/')) {
+      return Image.asset(
         cleanPath,
         width: double.infinity,
         height: 220,
@@ -107,9 +108,10 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
       );
     }
-    if (cleanPath.startsWith('assets/')) {
-      return Image.asset(
-        cleanPath,
+    final fullUrl = AppConstants.getImageUrl(cleanPath);
+    if (fullUrl != null) {
+      return Image.network(
+        fullUrl,
         width: double.infinity,
         height: 220,
         fit: BoxFit.cover,

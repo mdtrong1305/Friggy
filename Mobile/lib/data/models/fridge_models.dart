@@ -83,11 +83,11 @@ class FridgeStatsModel {
 
   factory FridgeStatsModel.fromJson(Map<String, dynamic> json) {
     return FridgeStatsModel(
-      totalSpentThisMonth: json['totalSpentThisMonth'] as int? ?? 0,
+      totalSpentThisMonth: (json['totalSpentThisMonth'] as num?)?.toInt() ?? 0,
       wastePercent: (json['wastePercent'] as num?)?.toDouble() ?? 0.0,
-      mealsCooked: json['mealsCooked'] as int? ?? 0,
-      expiringSoonCount: json['expiringSoonCount'] as int? ?? 0,
-      totalItems: json['totalItems'] as int? ?? 0,
+      mealsCooked: (json['mealsCooked'] as num?)?.toInt() ?? 0,
+      expiringSoonCount: (json['expiringSoonCount'] as num?)?.toInt() ?? 0,
+      totalItems: (json['totalItems'] as num?)?.toInt() ?? 0,
     );
   }
 }

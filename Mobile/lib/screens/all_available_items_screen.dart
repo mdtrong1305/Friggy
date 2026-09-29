@@ -5,6 +5,7 @@ import '../l10n/app_localizations.dart';
 import 'recipe_suggestions_screen.dart';
 import '../data/services/api_service.dart';
 import '../widgets/ingredient_avatar_widget.dart';
+import '../sqlite/services/ingredient_local_service.dart';
 
 class AllAvailableItemsScreen extends StatefulWidget {
   const AllAvailableItemsScreen({super.key});
@@ -29,6 +30,7 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
 
   Future<void> _loadItems() async {
     setState(() => _isLoading = true);
+    final ingredientLocalService = IngredientLocalService();
     try {
       final res = await _apiService.getFridgeItems();
       final list = res.map((e) => IngredientModel.fromFridgeApi(e)).where((i) => !i.isExpired).toList();
@@ -39,12 +41,44 @@ class _AllAvailableItemsScreenState extends State<AllAvailableItemsScreen> {
         });
       }
     } catch (e) {
-      debugPrint('Error loading all available items: $e');
-      if (mounted) {
-        setState(() {
-          _availableItems = [];
-          _isLoading = false;
-        });
+      debugPrint('[AllAvailableItemsScreen] Error/Offline loading available items: $e. Loading from SQLite...');
+      try {
+        final cached = await ingredientLocalService.getCachedIngredients();
+        final List<IngredientModel> offlineAvailable = cached
+            .where((item) => (item.daysUntilExpiry ?? 5) >= 0)
+            .map((item) {
+          return IngredientModel(
+            id: item.id,
+            fridgeId: '1',
+            fridgeName: 'Tủ lạnh',
+            name: item.name,
+            englishName: item.name,
+            quantity: '${item.quantity} ${item.unit}',
+            unit: item.unit,
+            category: 'Thực phẩm',
+            storageArea: item.storageLocation,
+            daysUntilExpiry: item.daysUntilExpiry ?? 5,
+            expiryText: 'Còn ${item.daysUntilExpiry ?? 5} ngày',
+            imagePath: item.imagePath ?? '',
+            badgeBgColor: const Color(0xFFE8F5E9),
+            badgeTextColor: const Color(0xFF2E7D32),
+          );
+        }).toList();
+
+        if (mounted) {
+          setState(() {
+            _availableItems = offlineAvailable;
+            _isLoading = false;
+          });
+        }
+      } catch (err) {
+        debugPrint('[AllAvailableItemsScreen] SQLite read error: $err');
+        if (mounted) {
+          setState(() {
+            _availableItems = [];
+            _isLoading = false;
+          });
+        }
       }
     }
   }

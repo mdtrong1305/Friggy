@@ -22,6 +22,26 @@ import {
 } from '../../../services/adminService';
 import { showToast } from '../../../components/common/Toast';
 
+const resolveAvatarUrl = (rawUrl) => {
+  if (!rawUrl) return null;
+  let formatted = rawUrl.trim();
+  if (formatted.includes('api.friggy.io.vn')) {
+    formatted = formatted.replace('api.friggy.io.vn', 'file.friggy.io.vn');
+  }
+  if (formatted.startsWith('http://') || formatted.startsWith('https://') || formatted.startsWith('data:')) {
+    return formatted;
+  }
+  if (formatted.startsWith('file.friggy.io.vn')) {
+    return `https://${formatted}`;
+  }
+  const apiBase = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'https://api.friggy.io.vn/api/v1';
+  let fileBase = 'https://file.friggy.io.vn';
+  if (!apiBase.includes('friggy.io.vn')) {
+    fileBase = apiBase.replace(/\/api\/v1\/?$/, '').replace(/\/$/, '');
+  }
+  return `${fileBase}${formatted.startsWith('/') ? '' : '/'}${formatted}`;
+};
+
 export const UserManagement = () => {
 
   const [users, setUsers] = useState([]);
@@ -223,7 +243,7 @@ export const UserManagement = () => {
               <tbody className="divide-y divide-slate-100 text-xs">
                 {users.map((u, idx) => {
                   const avatarUrl =
-                    u.profile?.avatarUrl ||
+                    resolveAvatarUrl(u.profile?.avatarUrl) ||
                     `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(
                       u.name || u.googleEmail || 'User'
                     )}`;

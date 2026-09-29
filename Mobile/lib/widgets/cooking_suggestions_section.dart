@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:convert';
 import '../data/models/recipe_model.dart';
 import '../data/services/api_exception.dart';
 import '../data/services/api_service.dart';
@@ -7,6 +8,8 @@ import '../l10n/app_localizations.dart';
 import '../screens/recipe_detail_screen.dart';
 import '../screens/package_management_screen.dart';
 import '../theme/app_theme.dart';
+import '../sqlite/services/weekly_plan_local_service.dart';
+import '../sqlite/models/local_weekly_plan_model.dart';
 
 class DailyMealSlotData {
   final String id;
@@ -89,6 +92,8 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
 
   Future<void> _loadTodayMealPlan() async {
     _dayOfWeek = DateTime.now().weekday;
+    final weeklyPlanLocalService = WeeklyPlanLocalService();
+
     try {
       final plans = await ApiService().getMealPlans();
       if (plans.isNotEmpty) {
@@ -105,6 +110,16 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
                   ?.map((e) => Map<String, dynamic>.from(e as Map))
                   .toList() ??
               [];
+
+          // Cache to SQLite
+          await weeklyPlanLocalService.saveWeeklyPlanOverwrite(
+            LocalWeeklyPlanModel(
+              id: firstPlan['id'].toString(),
+              weekStartDate: detail['weekStartDate']?.toString() ?? '',
+              daysDataJson: jsonEncode(dailyPlans),
+              updatedAt: DateTime.now().millisecondsSinceEpoch,
+            ),
+          );
 
           Map<String, dynamic>? todayPlan;
           for (final item in dailyPlans) {
@@ -148,7 +163,6 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
             }
 
             if (loadedSlots.isNotEmpty && mounted) {
-              // Ensure we have breakfast, lunch, dinner in order
               loadedSlots.sort((a, b) {
                 final order = {'breakfast': 0, 'lunch': 1, 'dinner': 2, 'snack': 3};
                 return (order[a.mealType] ?? 99).compareTo(order[b.mealType] ?? 99);
@@ -164,7 +178,59 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
         }
       }
     } catch (e) {
-      debugPrint('[CookingSuggestionsSection] Error loading today plan: $e');
+      debugPrint('[CookingSuggestionsSection] Error/Offline loading today plan: $e. Loading from SQLite...');
+      final offlineMeals = await weeklyPlanLocalService.getTodayMealsFromWeeklyPlan();
+      if (offlineMeals.isNotEmpty) {
+        final List<DailyMealSlotData> offlineSlots = [];
+        final List<dynamic> slotsToProcess = [];
+
+        for (final m in offlineMeals) {
+          if (m is Map) {
+            final mParts = Map<String, dynamic>.from(m);
+            if (mParts['mealSlots'] is List) {
+              slotsToProcess.addAll(mParts['mealSlots'] as List);
+            } else {
+              slotsToProcess.add(mParts);
+            }
+          }
+        }
+
+        for (final s in slotsToProcess) {
+          if (s is Map) {
+            final slotMap = Map<String, dynamic>.from(s);
+            final slotId = slotMap['id']?.toString() ?? '';
+            final mType = slotMap['mealType']?.toString().toLowerCase() ?? 'lunch';
+            final recipeName = slotMap['recipeName']?.toString() ??
+                slotMap['recipe']?['title']?.toString() ??
+                'Món ăn AI';
+            final recId = slotMap['recipeId']?.toString() ?? 'rec_default';
+            final servings = (slotMap['servings'] as num?)?.toInt() ?? 1;
+            final isCompleted = slotMap['completedAt'] != null || slotMap['completed'] == true;
+
+            offlineSlots.add(DailyMealSlotData(
+              id: slotId,
+              mealType: mType,
+              recipeId: recId,
+              recipeTitle: recipeName,
+              servings: servings,
+              cookTimeMinutes: mType == 'breakfast' ? 15 : (mType == 'lunch' ? 25 : 20),
+              isCompleted: isCompleted,
+            ));
+          }
+        }
+
+        if (offlineSlots.isNotEmpty && mounted) {
+          offlineSlots.sort((a, b) {
+            final order = {'breakfast': 0, 'lunch': 1, 'dinner': 2, 'snack': 3};
+            return (order[a.mealType] ?? 99).compareTo(order[b.mealType] ?? 99);
+          });
+          setState(() {
+            _dailySlots = offlineSlots.take(3).toList();
+            _isLoading = false;
+          });
+          return;
+        }
+      }
     }
 
     if (mounted) {

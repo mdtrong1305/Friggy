@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../l10n/app_localizations.dart';
 import '../data/services/api_service.dart';
 import '../data/models/fridge_models.dart';
+import '../sqlite/services/stats_local_service.dart';
+import '../sqlite/models/local_stats_model.dart';
 
 class WeeklyStatisticsSection extends StatefulWidget {
   final VoidCallback? onDetailTap;
@@ -23,6 +25,7 @@ class WeeklyStatisticsSection extends StatefulWidget {
 
 class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
   final ApiService _apiService = ApiService();
+  final StatsLocalService _statsLocalService = StatsLocalService();
   FridgeStatsModel? _stats;
 
   @override
@@ -38,13 +41,36 @@ class WeeklyStatisticsSectionState extends State<WeeklyStatisticsSection> {
   Future<void> _loadStats() async {
     try {
       final statsRes = await _apiService.getFridgeStats();
+      final statsModel = FridgeStatsModel.fromJson(statsRes);
       if (mounted) {
         setState(() {
-          _stats = FridgeStatsModel.fromJson(statsRes);
+          _stats = statsModel;
         });
       }
+
+      // Save to SQLite
+      await _statsLocalService.saveStatsCache(LocalStatsModel(
+        totalSpentThisMonth: statsModel.totalSpentThisMonth,
+        wastePercent: statsModel.wastePercent,
+        mealsCooked: statsModel.mealsCooked,
+        expiringSoonCount: statsModel.expiringSoonCount,
+        totalItems: statsModel.totalItems,
+        updatedAt: DateTime.now().millisecondsSinceEpoch,
+      ));
     } catch (e) {
-      debugPrint('[WeeklyStatisticsSection] Error loading stats: $e');
+      debugPrint('[WeeklyStatisticsSection] Error/Offline loading stats: $e. Loading from SQLite.');
+      final cached = await _statsLocalService.getCachedStats();
+      if (cached != null && mounted) {
+        setState(() {
+          _stats = FridgeStatsModel(
+            totalSpentThisMonth: cached.totalSpentThisMonth,
+            wastePercent: cached.wastePercent,
+            mealsCooked: cached.mealsCooked,
+            expiringSoonCount: cached.expiringSoonCount,
+            totalItems: cached.totalItems,
+          );
+        });
+      }
     }
   }
 

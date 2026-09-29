@@ -320,9 +320,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   }
 
   String? _getFullAvatarUrl(String? url) {
-    if (url == null || url.isEmpty) return null;
-    if (url.startsWith('http://') || url.startsWith('https://')) return url;
-    return '${AppConstants.serverBaseUrl}$url';
+    return AppConstants.getImageUrl(url);
   }
 
   @override
