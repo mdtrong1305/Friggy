@@ -41,6 +41,10 @@ export const PUBLIC_CHAT_ROUTING_KEY = 'public.chat.message'; // Phải khớp a
 // Gemini — Public SEO Chatbot (gọi trực tiếp, không qua ai-service)
 export const GEMINI_API_KEY = process.env.GEMINI_API_KEY ?? '';
 
+// Firebase — FCM Push Notifications
+export const FIREBASE_SERVICE_ACCOUNT_JSON =
+  process.env.FIREBASE_SERVICE_ACCOUNT_JSON ?? '';
+
 console.log(
   '\n',
   { PORT, NODE_ENV, DATABASE_URL, REDIS_URL, RABBIT_MQ_URL },

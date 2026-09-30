@@ -11,6 +11,7 @@ import type {
   MarkAllReadResponseDto,
   NotificationSettingsResponseDto,
 } from './dto/notifications-response.dto';
+import type { RegisterFcmTokenDto, FcmTokenResponseDto } from './dto/fcm-token.dto';
 
 @Injectable()
 export class NotificationsService {
@@ -169,5 +170,43 @@ export class NotificationsService {
       metadata: n.metadata ?? null,
       createdAt: n.createdAt.toISOString(),
     };
+  }
+
+  // ─────────────────────────────────────────────────────────
+  // FCM Token Management
+  // ─────────────────────────────────────────────────────────
+
+  async registerFcmToken(
+    userId: string,
+    dto: RegisterFcmTokenDto,
+  ): Promise<FcmTokenResponseDto> {
+    await this.prisma.userDevice.upsert({
+      where: { fcmToken: dto.token },
+      create: {
+        userId,
+        fcmToken: dto.token,
+        platform: dto.platform,
+        deviceName: dto.deviceName ?? null,
+        isActive: true,
+      },
+      update: {
+        userId,         // cập nhật userId nếu token được dùng lại trên device khác
+        platform: dto.platform,
+        deviceName: dto.deviceName ?? null,
+        isActive: true, // kích hoạt lại nếu trước đó bị deactivate
+      },
+    });
+    return { message: 'Đã đăng ký thiết bị thành công' };
+  }
+
+  async removeFcmToken(
+    userId: string,
+    token: string,
+  ): Promise<FcmTokenResponseDto> {
+    await this.prisma.userDevice.updateMany({
+      where: { fcmToken: token, userId },
+      data: { isActive: false },
+    });
+    return { message: 'Đã hủy đăng ký thiết bị' };
   }
 }

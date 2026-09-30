@@ -85,6 +85,7 @@ export const ModelName = {
   IngredientPurchaseLink: 'IngredientPurchaseLink',
   AdminActivityLog: 'AdminActivityLog',
   Notification: 'Notification',
+  UserDevice: 'UserDevice',
   CronJobConfig: 'CronJobConfig',
   SubscriptionPlan: 'SubscriptionPlan',
   UserSubscription: 'UserSubscription',
@@ -628,6 +629,20 @@ export const NotificationScalarFieldEnum = {
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
+export const UserDeviceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  fcmToken: 'fcmToken',
+  platform: 'platform',
+  deviceName: 'deviceName',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserDeviceScalarFieldEnum = (typeof UserDeviceScalarFieldEnum)[keyof typeof UserDeviceScalarFieldEnum]
+
+
 export const CronJobConfigScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -1094,6 +1109,17 @@ export const NotificationOrderByRelevanceFieldEnum = {
 } as const
 
 export type NotificationOrderByRelevanceFieldEnum = (typeof NotificationOrderByRelevanceFieldEnum)[keyof typeof NotificationOrderByRelevanceFieldEnum]
+
+
+export const UserDeviceOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  fcmToken: 'fcmToken',
+  platform: 'platform',
+  deviceName: 'deviceName'
+} as const
+
+export type UserDeviceOrderByRelevanceFieldEnum = (typeof UserDeviceOrderByRelevanceFieldEnum)[keyof typeof UserDeviceOrderByRelevanceFieldEnum]
 
 
 export const CronJobConfigOrderByRelevanceFieldEnum = {
