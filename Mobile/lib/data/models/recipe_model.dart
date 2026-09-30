@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import '../services/api_service.dart';
+import '../../sqlite/models/local_recipe_detail_model.dart';
+import '../../sqlite/services/recipe_detail_local_service.dart';
 
 class RecipeIngredientDetail {
   final String name;
@@ -563,13 +565,38 @@ class RecipeRepository {
   }
 
   /// Fetch full detail of a recipe (either by recipeId or slotId)
+  /// Offline-first: check SQLite cache → gọi API → save lại SQLite
   static Future<RecipeModel?> fetchRecipeDetail(String id, {String? slotId}) async {
+    final cacheSvc = RecipeDetailLocalService();
+
+    // ── 1. Thử đọc từ SQLite cache trước ────────────────────────────
+    if (slotId != null && slotId.isNotEmpty && !slotId.startsWith('rec_')) {
+      final cached = await cacheSvc.getRecipeDetail(slotId);
+      if (cached != null && cached.decodedDetail.isNotEmpty) {
+        debugPrint('[RecipeRepository] ✓ Cache hit (slot): $slotId');
+        return RecipeModel.fromApi(cached.decodedDetail);
+      }
+    }
+    if (id.isNotEmpty && !id.startsWith('rec_')) {
+      final cached = await cacheSvc.getRecipeDetail(id);
+      if (cached != null && cached.decodedDetail.isNotEmpty) {
+        debugPrint('[RecipeRepository] ✓ Cache hit (recipe): $id');
+        return RecipeModel.fromApi(cached.decodedDetail);
+      }
+    }
+
+    // ── 2. Gọi API (chỉ chạy khi online) ───────────────────────────
     try {
-      // 1. Try slot detail endpoint first if slotId is available
+      // 2a. Thử slot detail endpoint nếu có slotId
       if (slotId != null && slotId.isNotEmpty && !slotId.startsWith('rec_')) {
         try {
           final slotJson = await ApiService().getSlotDetail(slotId);
           if (slotJson['recipe'] != null) {
+            await cacheSvc.saveFromJson(slotId, 'slot', slotJson);
+            final recId = (slotJson['recipe'] as Map?)?['id']?.toString();
+            if (recId != null && recId.isNotEmpty) {
+              await cacheSvc.saveFromJson(recId, 'recipe', slotJson);
+            }
             return RecipeModel.fromApi(slotJson);
           }
         } catch (e) {
@@ -577,21 +604,23 @@ class RecipeRepository {
         }
       }
 
-      // 2. Try getRecipeDetail if id is valid recipe ID
+      // 2b. Thử getRecipeDetail nếu id là recipe ID hợp lệ
       if (id.isNotEmpty && !id.startsWith('rec_')) {
         try {
           final json = await ApiService().getRecipeDetail(id);
+          await cacheSvc.saveFromJson(id, 'recipe', json);
           return RecipeModel.fromApi(json);
         } catch (e) {
           debugPrint('[RecipeRepository] Notice getRecipeDetail($id) failed: $e');
         }
       }
 
-      // 3. Fallback: try id as slotId
+      // 2c. Fallback: thử id như slotId
       if (id.isNotEmpty && !id.startsWith('rec_')) {
         try {
           final slotJson = await ApiService().getSlotDetail(id);
           if (slotJson['recipe'] != null) {
+            await cacheSvc.saveFromJson(id, 'slot', slotJson);
             return RecipeModel.fromApi(slotJson);
           }
         } catch (_) {}

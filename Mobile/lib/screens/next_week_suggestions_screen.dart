@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../data/models/recipe_model.dart';
@@ -10,8 +10,11 @@ import 'recipe_detail_screen.dart';
 import 'package_management_screen.dart';
 import 'shopping_reminder_screen.dart';
 import '../sqlite/services/weekly_plan_local_service.dart';
+import '../sqlite/services/slot_completion_local_service.dart';
+import '../sqlite/services/stats_local_service.dart';
 import '../sqlite/models/local_weekly_plan_model.dart';
 import 'dart:convert';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class NextWeekSuggestionsScreen extends StatefulWidget {
   const NextWeekSuggestionsScreen({super.key});
@@ -30,6 +33,8 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
   int _selectedDayOfWeek = 1;
   String? _regeneratingSlotId;
   bool _hasShoppingList = false;
+  final SlotCompletionLocalService _slotCompletionSvc = SlotCompletionLocalService();
+  final StatsLocalService _statsLocalSvc = StatsLocalService();
   final ScrollController _dayTabScrollController = ScrollController();
 
   @override
@@ -83,35 +88,160 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
 
   Future<void> _toggleMealSlotCompleted(String slotId, bool currentlyCompleted) async {
     if (slotId.isEmpty || slotId.startsWith('rec_')) return;
-    try {
-      await ApiService().updateMealSlot(
-        slotId: slotId,
-        completed: !currentlyCompleted,
+
+    // Xác nhận trước khi toggle (chỉ khi chưa hoàn thành)
+    if (!currentlyCompleted) {
+      final isEn = AppLocalizations.of(context)?.locale.languageCode == 'en';
+      final confirmed = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (ctx) => AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: Text(
+            isEn ? 'Confirm you cooked this?' : 'Xác nhận đã nấu món này?',
+            style: GoogleFonts.plusJakartaSans(fontWeight: FontWeight.w900, fontSize: 18),
+          ),
+          content: Text(
+            isEn
+                ? 'The system will mark this meal as completed and automatically deduct the corresponding ingredients from your fridge.'
+                : 'Hệ thống sẽ đánh dấu bữa ăn là đã hoàn thành và tự động trừ nguyên liệu tương ứng trong tủ lạnh của bạn.',
+            style: GoogleFonts.plusJakartaSans(fontSize: 14, height: 1.5),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: Text(
+                isEn ? 'Cancel' : 'Hủy',
+                style: GoogleFonts.plusJakartaSans(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF008435),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              child: Text(
+                isEn ? 'Confirm' : 'Xác nhận',
+                style: GoogleFonts.plusJakartaSans(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ),
+          ],
+        ),
       );
-      if (_weeklyPlanId != null) {
-        final detail = await ApiService().getMealPlanDetail(_weeklyPlanId!);
-        final list = (detail['dailyPlans'] as List<dynamic>?)
-                ?.map((e) => Map<String, dynamic>.from(e as Map))
-                .toList() ??
-            [];
+      if (confirmed != true) return;
+    }
 
-        final Map<int, Map<String, dynamic>> mapByDay = {};
-        for (final item in list) {
-          final rawDay = item['dayOfWeek'];
-          final dOfWeek = rawDay is int
-              ? rawDay
-              : (int.tryParse(rawDay?.toString() ?? '') ?? 1);
-          mapByDay[dOfWeek] = item;
-        }
+    final newCompleted = !currentlyCompleted;
 
-        if (mounted) {
-          setState(() {
-            _dailyPlansMap = mapByDay;
-          });
+    // Kiểm tra kết nối mạng
+    final connectivityResult = await Connectivity().checkConnectivity();
+    final isOnline = connectivityResult.contains(ConnectivityResult.wifi) ||
+        connectivityResult.contains(ConnectivityResult.mobile) ||
+        connectivityResult.contains(ConnectivityResult.ethernet);
+
+    if (isOnline) {
+      // === ONLINE: gọi API và reload từ server ===
+      try {
+        await ApiService().updateMealSlot(
+          slotId: slotId,
+          completed: newCompleted,
+        );
+        // Cập nhật stats local ngay để home screen hiển thị đúng
+        if (newCompleted) {
+          await _statsLocalSvc.incrementMealsCookedLocally();
+        } else {
+          await _statsLocalSvc.decrementMealsCookedLocally();
         }
+        // Sau khi PATCH thành công → pull lại plan detail từ server
+        if (_weeklyPlanId != null) {
+          final detail = await ApiService().getMealPlanDetail(_weeklyPlanId!);
+          final list = (detail['dailyPlans'] as List<dynamic>?)
+                  ?.map((e) => Map<String, dynamic>.from(e as Map))
+                  .toList() ??
+              [];
+          final Map<int, Map<String, dynamic>> mapByDay = {};
+          for (final item in list) {
+            final rawDay = item['dayOfWeek'];
+            final dOfWeek = rawDay is int ? rawDay : (int.tryParse(rawDay?.toString() ?? '') ?? 1);
+            mapByDay[dOfWeek] = item;
+          }
+          // Cập nhật SQLite
+          await WeeklyPlanLocalService().saveWeeklyPlanOverwrite(
+            LocalWeeklyPlanModel(
+              id: _weeklyPlanId!,
+              weekStartDate: detail['weekStartDate']?.toString() ?? '',
+              daysDataJson: jsonEncode(list),
+              updatedAt: DateTime.now().millisecondsSinceEpoch,
+            ),
+          );
+          if (mounted) {
+            setState(() {
+              _dailyPlansMap = mapByDay;
+            });
+          }
+        }
+      } catch (e) {
+        debugPrint('[NextWeekSuggestionsScreen] Error toggling completed (online): $e');
       }
+    } else {
+      // === OFFLINE: cập nhật local ngay + lưu pending ===
+      // 1. Cập nhật UI ngay lập tức bằng cách sửa _dailyPlansMap trong memory
+      _updateSlotCompletedLocally(slotId, newCompleted);
+      // 2. Lưu pending vào SQLite
+      await _slotCompletionSvc.savePendingCompletion(slotId: slotId, completed: newCompleted);
+      // 3. Cập nhật stats local ngay để home screen hiển thị đúng
+      if (newCompleted) {
+        await _statsLocalSvc.incrementMealsCookedLocally();
+      } else {
+        await _statsLocalSvc.decrementMealsCookedLocally();
+      }
+      // 4. Cập nhật SQLite local_weekly_plans
+      await _saveWeeklyPlanToSQLite();
+    }
+  }
+
+
+  /// Cập nhật completedAt của slot trong _dailyPlansMap ngay lập tức (offline UI update)
+  void _updateSlotCompletedLocally(String slotId, bool completed) {
+    final newMap = <int, Map<String, dynamic>>{};
+    for (final entry in _dailyPlansMap.entries) {
+      final dayData = Map<String, dynamic>.from(entry.value);
+      final slots = (dayData['mealSlots'] as List<dynamic>? ?? []).map((s) {
+        final slot = Map<String, dynamic>.from(s as Map);
+        if (slot['id']?.toString() == slotId) {
+          slot['completed'] = completed;
+          slot['completedAt'] = completed ? DateTime.now().toIso8601String() : null;
+        }
+        return slot;
+      }).toList();
+      dayData['mealSlots'] = slots;
+      newMap[entry.key] = dayData;
+    }
+    if (mounted) setState(() => _dailyPlansMap = newMap);
+  }
+
+  /// Lưu _dailyPlansMap hiện tại vào SQLite local_weekly_plans
+  Future<void> _saveWeeklyPlanToSQLite() async {
+    if (_weeklyPlanId == null) return;
+    try {
+      final list = _dailyPlansMap.values.toList();
+      await WeeklyPlanLocalService().saveWeeklyPlanOverwrite(
+        LocalWeeklyPlanModel(
+          id: _weeklyPlanId!,
+          weekStartDate: '',
+          daysDataJson: jsonEncode(list),
+          updatedAt: DateTime.now().millisecondsSinceEpoch,
+        ),
+      );
     } catch (e) {
-      debugPrint('[NextWeekSuggestionsScreen] Error toggling completed: $e');
+      debugPrint('[NextWeekSuggestionsScreen] Error saving weekly plan to SQLite: $e');
     }
   }
 
@@ -1157,6 +1287,7 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
     final isCompleted = slot['completedAt'] != null || slot['completed'] == true;
     final isRegenerating = _regeneratingSlotId == slotId;
 
+
     String mealLabel = 'Bữa Trưa';
     IconData mealIcon = Icons.wb_sunny_rounded;
     Color mealColor = const Color(0xFFFFA726);
@@ -1223,48 +1354,61 @@ class _NextWeekSuggestionsScreenState extends State<NextWeekSuggestionsScreen> {
               ),
               const Spacer(),
               // Nút Đánh dấu đã nấu xong / Toggle completed
-              InkWell(
-                onTap: () => _toggleMealSlotCompleted(slotId, isCompleted),
-                borderRadius: BorderRadius.circular(10.r),
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-                  decoration: BoxDecoration(
-                    color: isCompleted
-                        ? const Color(0xFF008435).withValues(alpha: isDark ? 0.3 : 0.15)
-                        : (isDark ? const Color(0xFF19271E) : Colors.white),
+              FutureBuilder<bool>(
+                future: (slotId.isEmpty || slotId.startsWith('rec_'))
+                    ? Future.value(false)
+                    : _slotCompletionSvc.isPending(slotId),
+                builder: (context, snapshot) {
+                  final isPendingSync = isCompleted && (snapshot.data == true);
+                  // isPendingSync vẫn hiện xanh giống isCompleted — chỉ khác text nếu muốn
+                  final showAsCompleted = isCompleted || isPendingSync;
+                  return InkWell(
+                    onTap: () => _toggleMealSlotCompleted(slotId, isCompleted),
                     borderRadius: BorderRadius.circular(10.r),
-                    border: Border.all(
-                      color: isCompleted
-                          ? const Color(0xFF008435)
-                          : (isDark ? const Color(0xFF2E4D36) : const Color(0xFFC8E6C9)),
-                      width: 1,
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        isCompleted ? Icons.check_circle_rounded : Icons.circle_outlined,
-                        size: 15,
-                        color: isCompleted
-                            ? const Color(0xFF008435)
-                            : (isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32)),
-                      ),
-                      SizedBox(width: 5.w),
-                      Text(
-                        isCompleted ? (isEn ? 'Cooked' : 'Đã nấu xong') : (isEn ? 'Mark Cooked' : 'Nấu xong'),
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w800,
-                          color: isCompleted
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                      decoration: BoxDecoration(
+                        color: showAsCompleted
+                            ? const Color(0xFF008435).withValues(alpha: isDark ? 0.3 : 0.15)
+                            : (isDark ? const Color(0xFF19271E) : Colors.white),
+                        borderRadius: BorderRadius.circular(10.r),
+                        border: Border.all(
+                          color: showAsCompleted
                               ? const Color(0xFF008435)
-                              : (isDark ? const Color(0xFF81C784) : const Color(0xFF006428)),
+                              : (isDark ? const Color(0xFF2E4D36) : const Color(0xFFC8E6C9)),
+                          width: 1,
                         ),
                       ),
-                    ],
-                  ),
-                ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            showAsCompleted ? Icons.check_circle_rounded : Icons.circle_outlined,
+                            size: 15,
+                            color: showAsCompleted
+                                ? const Color(0xFF008435)
+                                : (isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32)),
+                          ),
+                          SizedBox(width: 5.w),
+                          Text(
+                            showAsCompleted
+                                ? (isEn ? 'Cooked' : 'Đã nấu xong')
+                                : (isEn ? 'Mark Cooked' : 'Nấu xong'),
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w800,
+                              color: showAsCompleted
+                                  ? const Color(0xFF008435)
+                                  : (isDark ? const Color(0xFF81C784) : const Color(0xFF006428)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
+
             ],
           ),
           SizedBox(height: 10.h),

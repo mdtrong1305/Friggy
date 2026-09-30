@@ -117,6 +117,13 @@ class _HomeScreenState extends State<HomeScreen>
         // Mạng vừa khôi phục → sync các pending items lên server
         debugPrint('[HomeScreen] Network restored → triggering background sync...');
         BackgroundSyncService().forceSync();
+        // Đợi sync xong (~4s) rồi reload stats và cooking suggestions để cập nhật UI
+        Future.delayed(const Duration(seconds: 4), () {
+          if (mounted) {
+            _statsKey.currentState?.reload();
+            _cookingSuggestionsKey.currentState?.reload();
+          }
+        });
       }
       _wasOffline = !isOnline;
     });

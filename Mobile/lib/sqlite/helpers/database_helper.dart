@@ -4,7 +4,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
   static const String _dbName = 'friggy_offline.db';
-  static const int _dbVersion = 5; // v5: thêm sync_status cho profile & preferences
+  static const int _dbVersion = 10; // v10: thêm local_pending_fridge_ops cho offline edit/consume/delete nguyên liệu
 
   static final DatabaseHelper instance = DatabaseHelper._internal();
   static Database? _database;
@@ -39,10 +39,28 @@ class DatabaseHelper {
     debugPrint('[DatabaseHelper] Running onOpen safety checks...');
 
     // 4 bảng cốt lõi (tạo inline vì không có method riêng)
-    await db.execute('CREATE TABLE IF NOT EXISTS local_ingredients (id TEXT PRIMARY KEY, ingredient_id INTEGER, name TEXT, quantity REAL, unit TEXT, storage_location TEXT, expires_at TEXT, days_until_expiry INTEGER, image_path TEXT, updated_at INTEGER)');
+    await db.execute('CREATE TABLE IF NOT EXISTS local_ingredients (id TEXT PRIMARY KEY, ingredient_id INTEGER, name TEXT, quantity REAL, unit TEXT, storage_location TEXT, expires_at TEXT, days_until_expiry INTEGER, image_path TEXT, updated_at INTEGER, sync_status TEXT NOT NULL DEFAULT \'synced\')');
     await db.execute('CREATE TABLE IF NOT EXISTS local_fridge_stats (id INTEGER PRIMARY KEY DEFAULT 1, total_spent_this_month INTEGER, waste_percent REAL, meals_cooked INTEGER, expiring_soon_count INTEGER, total_items INTEGER, chart_json TEXT, updated_at INTEGER)');
     await db.execute('CREATE TABLE IF NOT EXISTS local_weekly_plans (id TEXT PRIMARY KEY, week_start_date TEXT, days_data_json TEXT, updated_at INTEGER)');
-    await db.execute('CREATE TABLE IF NOT EXISTS local_shopping_items (id TEXT PRIMARY KEY, ingredient_id INTEGER, ingredient_name TEXT, quantity REAL, unit TEXT, is_purchased INTEGER DEFAULT 0, updated_at INTEGER)');
+    await db.execute('CREATE TABLE IF NOT EXISTS local_shopping_items (id TEXT PRIMARY KEY, ingredient_id INTEGER, ingredient_name TEXT, quantity REAL, unit TEXT, is_purchased INTEGER DEFAULT 0, updated_at INTEGER, sync_status TEXT NOT NULL DEFAULT \'synced\', list_id TEXT, backend_item_id INTEGER)');
+    // Thêm các cột mới vào local_shopping_items nếu chưa có (migration an toàn)
+    try { await db.execute("ALTER TABLE local_shopping_items ADD COLUMN sync_status TEXT NOT NULL DEFAULT 'synced'"); } catch (_) {}
+    try { await db.execute('ALTER TABLE local_shopping_items ADD COLUMN list_id TEXT'); } catch (_) {}
+    try { await db.execute('ALTER TABLE local_shopping_items ADD COLUMN backend_item_id INTEGER'); } catch (_) {}
+    await db.execute('CREATE TABLE IF NOT EXISTS local_recipe_details (id TEXT PRIMARY KEY, id_type TEXT, detail_json TEXT, updated_at INTEGER)');
+    // Bảng pending slot completions (nấu xong offline)
+    await db.execute('CREATE TABLE IF NOT EXISTS local_pending_slot_completions (slot_id TEXT PRIMARY KEY, completed INTEGER NOT NULL DEFAULT 1, created_at INTEGER NOT NULL)');
+    // Bảng pending fridge operations (update/consume/delete offline)
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS local_pending_fridge_ops (
+        id TEXT PRIMARY KEY,
+        item_id TEXT NOT NULL,
+        action TEXT NOT NULL,
+        quantity REAL,
+        unit TEXT,
+        created_at INTEGER NOT NULL
+      )
+    ''');
 
     // 4 bảng mở rộng (có method riêng)
     await _createUserProfileTable(db);
@@ -50,6 +68,12 @@ class DatabaseHelper {
     await _createAllergiesTable(db);
     await _createIngredientCatalogTable(db);
 
+    // Thêm cột sync_status vào local_ingredients nếu chưa có
+    try {
+      await db.execute(
+        "ALTER TABLE local_ingredients ADD COLUMN sync_status TEXT NOT NULL DEFAULT 'synced'",
+      );
+    } catch (_) {} // Cột đã tồn tại → bỏ qua
     // Thêm cột sync_status vào allergies nếu chưa có
     try {
       await db.execute(
@@ -87,7 +111,8 @@ class DatabaseHelper {
         expires_at TEXT,
         days_until_expiry INTEGER,
         image_path TEXT,
-        updated_at INTEGER
+        updated_at INTEGER,
+        sync_status TEXT NOT NULL DEFAULT 'synced'
       )
     ''');
 
@@ -124,7 +149,10 @@ class DatabaseHelper {
         quantity REAL,
         unit TEXT,
         is_purchased INTEGER DEFAULT 0,
-        updated_at INTEGER
+        updated_at INTEGER,
+        sync_status TEXT NOT NULL DEFAULT 'synced',
+        list_id TEXT,
+        backend_item_id INTEGER
       )
     ''');
 
@@ -139,6 +167,15 @@ class DatabaseHelper {
 
     // 8. Table: local_ingredient_catalog (Danh mục nguyên liệu toàn hệ thống)
     await _createIngredientCatalogTable(db);
+    // 9. Table: local_recipe_details (Chi tiết công thức cache — hiển thị offline)
+    await db.execute('''
+      CREATE TABLE local_recipe_details (
+        id TEXT PRIMARY KEY,
+        id_type TEXT,
+        detail_json TEXT,
+        updated_at INTEGER
+      )
+    ''');
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
@@ -183,6 +220,77 @@ class DatabaseHelper {
         debugPrint('[DatabaseHelper] sync_status (preferences) may already exist: $e');
       }
       debugPrint('[DatabaseHelper] Migration v4->v5: Added sync_status to profile & preferences.');
+    }
+    if (oldVersion < 6) {
+      try {
+        await db.execute(
+          "ALTER TABLE local_ingredients ADD COLUMN sync_status TEXT NOT NULL DEFAULT 'synced'",
+        );
+        debugPrint('[DatabaseHelper] Migration v5->v6: Added sync_status to local_ingredients.');
+      } catch (e) {
+        debugPrint('[DatabaseHelper] sync_status (ingredients) may already exist: $e');
+      }
+    }
+    if (oldVersion < 7) {
+      try {
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS local_recipe_details (
+            id TEXT PRIMARY KEY,
+            id_type TEXT,
+            detail_json TEXT,
+            updated_at INTEGER
+          )
+        ''');
+        debugPrint('[DatabaseHelper] Migration v6->v7: Added local_recipe_details table.');
+      } catch (e) {
+        debugPrint('[DatabaseHelper] local_recipe_details may already exist: $e');
+      }
+    }
+    if (oldVersion < 9) {
+      try {
+        await db.execute('CREATE TABLE IF NOT EXISTS local_pending_slot_completions (slot_id TEXT PRIMARY KEY, completed INTEGER NOT NULL DEFAULT 1, created_at INTEGER NOT NULL)');
+        debugPrint('[DatabaseHelper] Migration v8->v9: Added local_pending_slot_completions table.');
+      } catch (e) {
+        debugPrint('[DatabaseHelper] local_pending_slot_completions may already exist: $e');
+      }
+    }
+    if (oldVersion < 10) {
+      try {
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS local_pending_fridge_ops (
+            id TEXT PRIMARY KEY,
+            item_id TEXT NOT NULL,
+            action TEXT NOT NULL,
+            quantity REAL,
+            unit TEXT,
+            created_at INTEGER NOT NULL
+          )
+        ''');
+        debugPrint('[DatabaseHelper] Migration v9->v10: Added local_pending_fridge_ops table.');
+      } catch (e) {
+        debugPrint('[DatabaseHelper] local_pending_fridge_ops may already exist: $e');
+      }
+    }
+    if (oldVersion < 8) {
+      // Thêm cột sync_status, list_id, backend_item_id vào local_shopping_items
+      try {
+        await db.execute("ALTER TABLE local_shopping_items ADD COLUMN sync_status TEXT NOT NULL DEFAULT 'synced'");
+        debugPrint('[DatabaseHelper] Migration v7->v8: Added sync_status to local_shopping_items.');
+      } catch (e) {
+        debugPrint('[DatabaseHelper] sync_status (shopping) may already exist: $e');
+      }
+      try {
+        await db.execute('ALTER TABLE local_shopping_items ADD COLUMN list_id TEXT');
+        debugPrint('[DatabaseHelper] Migration v7->v8: Added list_id to local_shopping_items.');
+      } catch (e) {
+        debugPrint('[DatabaseHelper] list_id may already exist: $e');
+      }
+      try {
+        await db.execute('ALTER TABLE local_shopping_items ADD COLUMN backend_item_id INTEGER');
+        debugPrint('[DatabaseHelper] Migration v7->v8: Added backend_item_id to local_shopping_items.');
+      } catch (e) {
+        debugPrint('[DatabaseHelper] backend_item_id may already exist: $e');
+      }
     }
   }
 

@@ -3,8 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../l10n/app_localizations.dart';
 import '../data/services/api_service.dart';
+import '../sqlite/helpers/sync_helper.dart';
+import '../sqlite/models/local_ingredient_model.dart';
 import '../sqlite/models/local_ingredient_catalog_model.dart';
 import '../sqlite/services/ingredient_catalog_local_service.dart';
+import '../sqlite/services/ingredient_local_service.dart';
 
 class ManualAddIngredientScreen extends StatefulWidget {
   const ManualAddIngredientScreen({super.key});
@@ -45,6 +48,7 @@ class _ManualAddIngredientScreenState
   bool _showSuggestions = false;
   int? _selectedIngredientId;
   final IngredientCatalogLocalService _catalogLocalService = IngredientCatalogLocalService();
+  final IngredientLocalService _ingredientLocalService = IngredientLocalService();
 
   @override
   void initState() {
@@ -578,11 +582,40 @@ class _ManualAddIngredientScreenState
     }
 
     final qtyNum = double.tryParse(_quantityController.text.trim()) ?? 1.0;
-    
+
     String storageLoc = 'fridge';
     if (_selectedStorageArea == 'Freezer') storageLoc = 'freezer';
     if (_selectedStorageArea == 'Pantry') storageLoc = 'pantry';
 
+    final expiresAtStr = _selectedExpirationDate != null
+        ? _selectedExpirationDate!.toIso8601String().split('T')[0]
+        : null;
+
+    // Kiểm tra kết nối mạng
+    final isOnline = await SyncHelper.instance.checkCurrentConnection();
+
+    if (!isOnline) {
+      // ─── OFFLINE: lưu thẳng vào SQLite với sync_status='pending' ───
+      final localId = 'pending_${DateTime.now().millisecondsSinceEpoch}';
+      final offlineItem = LocalIngredientModel(
+        id: localId,
+        ingredientId: _selectedIngredientId ?? 0,
+        name: name,
+        quantity: qtyNum,
+        unit: _selectedUnit,
+        storageLocation: storageLoc,
+        expiresAt: expiresAtStr,
+        updatedAt: DateTime.now().millisecondsSinceEpoch,
+        syncStatus: 'pending',
+      );
+      await _ingredientLocalService.saveOfflineIngredient(offlineItem);
+
+      if (!mounted) return;
+      Navigator.pop(context, true); // true = có thay đổi, reload danh sách
+      return;
+    }
+
+    // ─── ONLINE: gọi API như cũ ───
     try {
       await ApiService().addFridgeItem({
         if (_selectedIngredientId != null && _selectedIngredientId! > 0)
@@ -590,8 +623,7 @@ class _ManualAddIngredientScreenState
         'name': name,
         'quantity': qtyNum,
         'unit': _selectedUnit,
-        if (_selectedExpirationDate != null)
-          'expiresAt': _selectedExpirationDate!.toIso8601String().split('T')[0],
+        if (expiresAtStr != null) 'expiresAt': expiresAtStr,
         'storageLocation': storageLoc,
       });
 

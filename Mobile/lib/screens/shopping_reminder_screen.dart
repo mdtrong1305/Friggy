@@ -1,11 +1,14 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import '../data/services/api_service.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/friggy_app_bar.dart';
 import '../sqlite/services/shopping_local_service.dart';
+import '../sqlite/services/ingredient_local_service.dart';
 import '../sqlite/models/local_shopping_model.dart';
+import '../sqlite/models/local_ingredient_model.dart';
 
 class ShoppingItemModel {
   int? backendItemId;
@@ -88,6 +91,9 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
               unit: unitStr,
               isPurchased: isPurchased,
               updatedAt: DateTime.now().millisecondsSinceEpoch,
+              syncStatus: 'synced',
+              listId: listId,           // lưu để dùng khi toggle offline
+              backendItemId: bId,       // lưu để dùng khi toggle offline
             ),
           );
         }
@@ -214,19 +220,81 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
   }
 
   Future<void> _toggleCheckItem(ShoppingItemModel item) async {
+    // Cập nhật UI ngay lập tức
     setState(() {
       item.isChecked = !item.isChecked;
     });
 
-    if (_currentListId != null && item.backendItemId != null) {
+    final shoppingLocalService = ShoppingLocalService();
+    final ingredientLocalService = IngredientLocalService();
+
+    // Kiểm tra kết nối mạng
+    final connectivity = await Connectivity().checkConnectivity();
+    final isOnline = connectivity.contains(ConnectivityResult.wifi) ||
+        connectivity.contains(ConnectivityResult.mobile) ||
+        connectivity.contains(ConnectivityResult.ethernet);
+
+    if (isOnline && _currentListId != null && item.backendItemId != null) {
+      // ONLINE: Gọi API toggle ngay, cập nhật SQLite thành synced
       try {
         await ApiService().toggleShoppingListItem(
           listId: _currentListId!,
           itemId: item.backendItemId!,
         );
+        await shoppingLocalService.markToggleSynced(item.id);
+        // Nếu online check → xóa shopping_tick cũ nếu có (tủ lạnh sẽ pull data thật từ server)
+        if (item.isChecked) {
+          await ingredientLocalService.clearShoppingTickByName(item.name);
+        }
+        debugPrint('[ShoppingReminderScreen] Toggle synced online: ${item.name}');
       } catch (e) {
-        debugPrint('[ShoppingReminderScreen] Error toggling item: $e');
+        debugPrint('[ShoppingReminderScreen] Error toggling item online: $e');
+        // Nếu lỗi API → lưu pending_toggle và cập nhật tủ lạnh offline
+        await shoppingLocalService.markPendingToggle(item.id, item.isChecked);
+        await _updateFridgeForOfflineTick(item, ingredientLocalService);
       }
+    } else {
+      // OFFLINE: Lưu trạng thái pending_toggle vào SQLite
+      await shoppingLocalService.markPendingToggle(item.id, item.isChecked);
+      // Cập nhật hiển thị tủ lạnh offline
+      await _updateFridgeForOfflineTick(item, ingredientLocalService);
+      debugPrint('[ShoppingReminderScreen] Offline toggle saved as pending: ${item.name}');
+    }
+  }
+
+  /// Khi offline tick → thêm vào local_ingredients (shopping_tick) để hiển thị tủ lạnh
+  /// Khi bỏ tick → xóa khỏi local_ingredients
+  Future<void> _updateFridgeForOfflineTick(
+    ShoppingItemModel item,
+    IngredientLocalService ingredientSvc,
+  ) async {
+    if (item.isChecked) {
+      // Đánh dấu đã mua → thêm vào tủ lạnh SQLite với shopping_tick
+      final now = DateTime.now().millisecondsSinceEpoch;
+      // Tính quantity từ cậu trúc item.quantity (ví dụ: '1.5 kg')
+      double qty = 1.0;
+      String unit = 'cái';
+      if (item.quantity != null && item.quantity!.isNotEmpty) {
+        final parts = item.quantity!.trim().split(' ');
+        qty = double.tryParse(parts.first) ?? 1.0;
+        if (parts.length > 1) unit = parts.sublist(1).join(' ');
+      }
+      final fridgeEntry = LocalIngredientModel(
+        id: 'shopping_tick_${item.id}',
+        ingredientId: 0,
+        name: item.name,
+        quantity: qty,
+        unit: unit,
+        storageLocation: 'fridge',
+        updatedAt: now,
+        syncStatus: 'shopping_tick',
+      );
+      await ingredientSvc.saveOfflineIngredient(fridgeEntry);
+      debugPrint('[ShoppingReminderScreen] Added "${item.name}" to fridge (shopping_tick).');
+    } else {
+      // Bỏ tick → xóa khỏi tủ lạnh offline
+      await ingredientSvc.clearShoppingTickByName(item.name);
+      debugPrint('[ShoppingReminderScreen] Removed "${item.name}" from fridge (uncheck offline).');
     }
   }
 
@@ -663,16 +731,9 @@ class _ShoppingReminderScreenState extends State<ShoppingReminderScreen> {
             SizedBox(width: 8.w),
           ],
 
-          IconButton(
-            icon: Icon(
-              Icons.delete_outline_rounded,
-              color: isDark ? const Color(0xFFE57373) : const Color(0xFFD32F2F),
-              size: 20,
-            ),
-            onPressed: () => _deleteItem(item),
-          ),
+
         ],
       ),
     );
-  }
+}
 }

@@ -1,10 +1,11 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../data/models/user_models.dart';
 import '../data/services/api_service.dart';
+import '../data/services/notification_service.dart';
 import '../l10n/app_localizations.dart';
 import '../l10n/language_provider.dart';
 import '../theme/theme_provider.dart';
@@ -22,11 +23,18 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
   bool _pushNotifications = true;
   bool _shoppingReminder = false;
   bool _expiryAlert = true;
+  bool _notifPermGranted = true; // Trang thai quyen notification he thong
 
   @override
   void initState() {
     super.initState();
     _fetchNotificationSettings();
+    _checkNotifPermission();
+  }
+
+  Future<void> _checkNotifPermission() async {
+    final granted = await NotificationService.instance.isPermissionGranted();
+    if (mounted) setState(() => _notifPermGranted = granted);
   }
 
   Future<void> _fetchNotificationSettings() async {
@@ -333,6 +341,73 @@ class _AppSettingsScreenState extends State<AppSettingsScreen> {
                         titleColor,
                       ),
                       SizedBox(height: 8.h),
+
+                      // Banner canh bao neu quyen notification bi tat tren he thong
+                      if (!_notifPermGranted)
+                        GestureDetector(
+                          onTap: () async {
+                            await NotificationService.instance.openNotificationSettings();
+                            await Future.delayed(const Duration(milliseconds: 800));
+                            _checkNotifPermission();
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(bottom: 12.h),
+                            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                            decoration: BoxDecoration(
+                              color: isDark ? const Color(0xFF3D2010) : const Color(0xFFFFF3E0),
+                              borderRadius: BorderRadius.circular(16.r),
+                              border: Border.all(
+                                color: isDark ? const Color(0xFF8B4513) : const Color(0xFFFFB74D),
+                                width: 1.2,
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(8.w),
+                                  decoration: BoxDecoration(
+                                    color: isDark ? const Color(0xFF5C2E00) : const Color(0xFFFFE0B2),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(
+                                    Icons.notifications_off_rounded,
+                                    color: isDark ? const Color(0xFFFFB74D) : const Color(0xFFE65100),
+                                    size: 20,
+                                  ),
+                                ),
+                                SizedBox(width: 12.w),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Thong bao dang bi tat',
+                                        style: GoogleFonts.plusJakartaSans(
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.w700,
+                                          color: isDark ? const Color(0xFFFFB74D) : const Color(0xFFE65100),
+                                        ),
+                                      ),
+                                      SizedBox(height: 2.h),
+                                      Text(
+                                        'Nhan vao day de bat quyen thong bao trong Cai dat',
+                                        style: GoogleFonts.plusJakartaSans(
+                                          fontSize: 12.sp,
+                                          color: isDark ? const Color(0xFFBB9270) : const Color(0xFF8D6E63),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.open_in_new_rounded,
+                                  color: isDark ? const Color(0xFFFFB74D) : const Color(0xFFE65100),
+                                  size: 18,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       _buildCard(cardBg, cardBorder, [
                         _buildSwitchTile(
                           icon: Icons.notifications_rounded,

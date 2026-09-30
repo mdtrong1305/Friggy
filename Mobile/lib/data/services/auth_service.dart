@@ -7,6 +7,7 @@ import '../../config/app_constants.dart';
 import '../local/storage_service.dart';
 import 'api_exception.dart';
 import 'api_service.dart';
+import 'notification_service.dart';
 
 class AuthService {
   final ApiService _apiService;
@@ -110,6 +111,8 @@ class AuthService {
         await storage.saveUserData(jsonEncode(userDataToSave));
 
         debugPrint('[AuthService] Google Login successful. User (${userDataToSave['name']}) saved in StorageService.');
+        // Dang ky FCM token sau khi dang nhap Google thanh cong
+        NotificationService.instance.initAndRegister();
         return true;
       } else {
         if (context.mounted) {
@@ -189,6 +192,8 @@ class AuthService {
       await storage.saveUserData(jsonEncode(userDataToSave));
 
       debugPrint('[$logTag] Login/Auth successful. User saved in StorageService.');
+      // Dang ky FCM token sau khi dang nhap thanh cong
+      NotificationService.instance.initAndRegister();
       return true;
     } else {
       if (context.mounted) {
@@ -406,6 +411,8 @@ class AuthService {
         await storage.saveUserData(jsonEncode(userDataToSave));
 
         debugPrint('[AuthService] Phone Login successful. User saved in StorageService.');
+        // Dang ky FCM token sau khi dang nhap Phone thanh cong
+        NotificationService.instance.initAndRegister();
         return true;
       } else {
         if (context.mounted) {
@@ -481,6 +488,8 @@ class AuthService {
               await storage.saveUserData(jsonEncode(user));
             }
             debugPrint('[AuthService] Auto-login refresh token succeeded!');
+            // Re-register FCM token sau khi tu dong dang nhap lai
+            NotificationService.instance.initAndRegister();
             return true;
           }
         }
@@ -521,6 +530,8 @@ class AuthService {
       final storage = await StorageService.getInstance();
       final refreshToken = storage.getRefreshToken();
       if (refreshToken != null && refreshToken.isNotEmpty) {
+        // Xoa FCM token khoi BE TRUOC khi logout (can accessToken con hop le)
+        await NotificationService.instance.unregister();
         await _apiService.logout(refreshToken);
         debugPrint('[AuthService] Successfully revoked refresh token on backend.');
       }

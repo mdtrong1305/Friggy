@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "717739810642",
+    "project_id": "friggy-61bee",
+    "storage_bucket": "friggy-61bee.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:717739810642:android:0e7f52a81f155aaeb3e48b",
+        "android_client_info": {
+          "package_name": "com.example.friggy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0bgVGFXtwSwed_19VyaULMZKp4hXX2Nk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
