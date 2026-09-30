@@ -27,6 +27,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-# APK binaries — host on GitHub Releases instead
-public/*.apk
