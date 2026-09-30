@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  Post,
   Patch,
   Delete,
   Param,
@@ -26,6 +27,7 @@ import {
 } from './dto/notifications-response.dto';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import type { JwtPayload } from 'src/common/interfaces/jwt-payload.interface';
+import { RegisterFcmTokenDto, RemoveFcmTokenDto, FcmTokenResponseDto } from './dto/fcm-token.dto';
 
 @ApiTags('Notifications')
 @ApiBearerAuth('access-token')
@@ -98,5 +100,36 @@ export class NotificationsController {
     @Param('id') id: string,
   ): Promise<void> {
     return this.notificationsService.remove(user.sub, id);
+  }
+
+  // ─────────────────────────────────────────────────────────
+  // FCM Token
+  // ─────────────────────────────────────────────────────────
+
+  @Post('fcm-token')
+  @ApiOperation({
+    summary: 'Đăng ký FCM token',
+    description: 'Gọi sau khi đăng nhập để nhận push notification. Token sẽ được upsert.',
+  })
+  @ApiResponse({ status: 201, type: FcmTokenResponseDto })
+  registerFcmToken(
+    @CurrentUser() user: JwtPayload,
+    @Body() dto: RegisterFcmTokenDto,
+  ): Promise<FcmTokenResponseDto> {
+    return this.notificationsService.registerFcmToken(user.sub, dto);
+  }
+
+  @Delete('fcm-token')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Xóa FCM token',
+    description: 'Gọi khi logout để ngưng nhận push notification trên thiết bị này.',
+  })
+  @ApiResponse({ status: 200, type: FcmTokenResponseDto })
+  removeFcmToken(
+    @CurrentUser() user: JwtPayload,
+    @Body() dto: RemoveFcmTokenDto,
+  ): Promise<FcmTokenResponseDto> {
+    return this.notificationsService.removeFcmToken(user.sub, dto.token);
   }
 }

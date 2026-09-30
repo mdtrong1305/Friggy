@@ -12,6 +12,7 @@ import { Injectable, Logger, OnModuleInit, Inject } from '@nestjs/common';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from 'cron';
 import { PrismaService } from 'src/modules-system/prisma/prisma.service';
+import { FcmService } from 'src/modules-system/fcm/fcm.service';
 import type { ClientProxy } from '@nestjs/microservices';
 
 // ─── Tên cron job (phải khớp với seed data trong DB) ──────────────────
@@ -48,6 +49,7 @@ export class NotificationCronService implements OnModuleInit {
   constructor(
     private readonly prisma: PrismaService,
     private readonly schedulerRegistry: SchedulerRegistry,
+    private readonly fcmService: FcmService,
     @Inject('EMAIL_SERVICE') private readonly emailClient: ClientProxy,
   ) {}
 
@@ -238,6 +240,13 @@ export class NotificationCronService implements OnModuleInit {
         },
       });
 
+      // ── Gửi FCM push notification ────────────────────────────
+      await this.fcmService.sendToUser(userId, {
+        title: `⚠️ Có ${count} nguyên liệu sắp hết hạn`,
+        body: `${preview}${suffix} sẽ hết hạn trong ${withinDays} ngày`,
+        data: { type: 'expiry_warning', screen: 'fridge' },
+      });
+
       notifCreated++;
     }
 
@@ -306,6 +315,13 @@ export class NotificationCronService implements OnModuleInit {
           body: 'Bạn chưa lên thực đơn cho tuần tới. Để Friggy AI lập thực đơn ngay nhé!',
           metadata: { weekStartDate },
         },
+      });
+
+      // ── Gửi FCM push notification ────────────────────────────
+      await this.fcmService.sendToUser(userId, {
+        title: '📅 Tuần mới sắp tới!',
+        body: 'Bạn chưa lên thực đơn cho tuần tới. Để Friggy AI lập thực đơn ngay nhé!',
+        data: { type: 'weekly_remind', screen: 'meal_planning' },
       });
 
       notifCreated++;
@@ -409,6 +425,14 @@ export class NotificationCronService implements OnModuleInit {
             },
           },
         });
+
+        // ── Gửi FCM push notification ────────────────────────
+        await this.fcmService.sendToUser(sub.userId, {
+          title: `💳 Gói ${sub.plan.displayName} sắp hết hạn`,
+          body: bodyText,
+          data: { type: 'subscription_reminder', screen: 'subscription' },
+        });
+
         notifCreated++;
       }
 
