@@ -1,3 +1,5 @@
+/// Model cho bảng local_ingredients trong SQLite
+/// sync_status: 'synced' | 'pending'
 class LocalIngredientModel {
   final String id;
   final int ingredientId;
@@ -9,6 +11,7 @@ class LocalIngredientModel {
   final int? daysUntilExpiry;
   final String? imagePath;
   final int updatedAt;
+  final String syncStatus; // 'synced' | 'pending'
 
   LocalIngredientModel({
     required this.id,
@@ -21,7 +24,11 @@ class LocalIngredientModel {
     this.daysUntilExpiry,
     this.imagePath,
     required this.updatedAt,
+    this.syncStatus = 'synced',
   });
+
+  bool get isPending => syncStatus == 'pending';
+  bool get isSynced => syncStatus == 'synced';
 
   Map<String, dynamic> toMap() {
     return {
@@ -35,6 +42,7 @@ class LocalIngredientModel {
       'days_until_expiry': daysUntilExpiry,
       'image_path': imagePath,
       'updated_at': updatedAt,
+      'sync_status': syncStatus,
     };
   }
 
@@ -50,6 +58,27 @@ class LocalIngredientModel {
       daysUntilExpiry: map['days_until_expiry'] as int?,
       imagePath: map['image_path'] as String?,
       updatedAt: map['updated_at'] as int? ?? DateTime.now().millisecondsSinceEpoch,
+      syncStatus: map['sync_status'] as String? ?? 'synced',
+    );
+  }
+
+  LocalIngredientModel copyWith({
+    String? id,
+    String? syncStatus,
+    String? imagePath,
+  }) {
+    return LocalIngredientModel(
+      id: id ?? this.id,
+      ingredientId: ingredientId,
+      name: name,
+      quantity: quantity,
+      unit: unit,
+      storageLocation: storageLocation,
+      expiresAt: expiresAt,
+      daysUntilExpiry: daysUntilExpiry,
+      imagePath: imagePath ?? this.imagePath,
+      updatedAt: updatedAt,
+      syncStatus: syncStatus ?? this.syncStatus,
     );
   }
 }

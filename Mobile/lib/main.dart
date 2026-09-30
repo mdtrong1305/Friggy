@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'l10n/app_localizations.dart';
 import 'l10n/language_provider.dart';
@@ -10,9 +12,16 @@ import 'theme/app_theme.dart';
 import 'theme/theme_provider.dart';
 import 'screens/initial_loading_screen.dart';
 import 'utils/navigation_service.dart';
+import 'data/services/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Khoi tao Firebase (bat buoc truoc runApp)
+  await Firebase.initializeApp();
+
+  // Dang ky background handler (phai la top-level function)
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   // Enable true edge-to-edge full screen display without top/bottom black bars
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
@@ -46,6 +55,7 @@ void main() async {
     ),
   );
 }
+
 
 class GroceryApp extends StatelessWidget {
   const GroceryApp({super.key});

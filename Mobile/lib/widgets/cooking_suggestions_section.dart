@@ -1,6 +1,7 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:async';
 import 'dart:convert';
 import '../data/models/recipe_model.dart';
 import '../data/services/api_exception.dart';
@@ -10,7 +11,10 @@ import '../screens/recipe_detail_screen.dart';
 import '../screens/package_management_screen.dart';
 import '../theme/app_theme.dart';
 import '../sqlite/services/weekly_plan_local_service.dart';
+import '../sqlite/services/slot_completion_local_service.dart';
+import '../sqlite/services/stats_local_service.dart';
 import '../sqlite/models/local_weekly_plan_model.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class DailyMealSlotData {
   final String id;
@@ -78,6 +82,11 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
   List<DailyMealSlotData> _dailySlots = [];
   int _dayOfWeek = 1; // 1 = Thứ 2, ..., 7 = Chủ nhật
 
+  final SlotCompletionLocalService _slotCompletionSvc = SlotCompletionLocalService();
+  final StatsLocalService _statsLocalSvc = StatsLocalService();
+  StreamSubscription<List<ConnectivityResult>>? _connectivitySub;
+  bool _wasOffline = false;
+
   void reload() {
     _loadTodayMealPlan();
   }
@@ -89,6 +98,23 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
     super.initState();
     _dayOfWeek = DateTime.now().weekday;
     _loadTodayMealPlan();
+    // Lắng nghe kết nối mạng: khi online trở lại sau offline → reload để lấy dữ liệu mới nhất
+    _connectivitySub = Connectivity().onConnectivityChanged.listen((results) {
+      final isOnline = results.any((r) => r != ConnectivityResult.none);
+      if (isOnline && _wasOffline) {
+        // Đợi 3 giây cho BackgroundSync upload pending xong rồi mới reload
+        Future.delayed(const Duration(seconds: 3), () {
+          if (mounted) _loadTodayMealPlan();
+        });
+      }
+      _wasOffline = !isOnline;
+    });
+  }
+
+  @override
+  void dispose() {
+    _connectivitySub?.cancel();
+    super.dispose();
   }
 
   Future<void> _loadTodayMealPlan() async {
@@ -351,22 +377,81 @@ class CookingSuggestionsSectionState extends State<CookingSuggestionsSection> {
       if (confirm != true) return;
     }
 
+    // Kiểm tra kết nối mạng
+    final connectivityResult = await Connectivity().checkConnectivity();
+    final isOnline = connectivityResult.contains(ConnectivityResult.wifi) ||
+        connectivityResult.contains(ConnectivityResult.mobile) ||
+        connectivityResult.contains(ConnectivityResult.ethernet);
+
+    // Cập nhật UI ngay lập tức
     setState(() {
       _dailySlots[index] = targetSlot.copyWith(isCompleted: newStatus);
     });
 
     if (targetSlot.id.isNotEmpty && !targetSlot.id.startsWith('slot_')) {
-      try {
-        await ApiService().updateMealSlot(
+      if (isOnline) {
+        // === ONLINE: gọi API bình thường ===
+        try {
+          await ApiService().updateMealSlot(
+            slotId: targetSlot.id,
+            completed: newStatus,
+          );
+          widget.onMealToggled?.call();
+        } catch (e) {
+          debugPrint('[CookingSuggestionsSection] Error toggling status (online): $e');
+        }
+      } else {
+        // === OFFLINE: lưu pending vào SQLite ===
+        await _slotCompletionSvc.savePendingCompletion(
           slotId: targetSlot.id,
           completed: newStatus,
         );
+        // Cập nhật số bữa nấu trong local_fridge_stats ngay lập tức
+        if (newStatus) {
+          await _statsLocalSvc.incrementMealsCookedLocally();
+        } else {
+          await _statsLocalSvc.decrementMealsCookedLocally();
+        }
+        // Cập nhật days_data_json trong local_weekly_plans
+        await _updateWeeklyPlanLocalCompleted(targetSlot.id, newStatus);
+        // Notify home screen reload stats
         widget.onMealToggled?.call();
-      } catch (e) {
-        debugPrint('[CookingSuggestionsSection] Error toggling status: $e');
       }
     } else {
       widget.onMealToggled?.call();
+    }
+  }
+
+  /// Cập nhật trạng thái completed của slot trong local_weekly_plans (days_data_json)
+  Future<void> _updateWeeklyPlanLocalCompleted(String slotId, bool completed) async {
+    try {
+      final svc = WeeklyPlanLocalService();
+      final cached = await svc.getCachedWeeklyPlan();
+      if (cached == null) return;
+      final days = cached.decodedDaysData;
+      final updatedDays = days.map((day) {
+        if (day is! Map) return day;
+        final dayMap = Map<String, dynamic>.from(day);
+        final slots = (dayMap['mealSlots'] as List<dynamic>? ?? []).map((s) {
+          if (s is! Map) return s;
+          final slot = Map<String, dynamic>.from(s);
+          if (slot['id']?.toString() == slotId) {
+            slot['completed'] = completed;
+            slot['completedAt'] = completed ? DateTime.now().toIso8601String() : null;
+          }
+          return slot;
+        }).toList();
+        dayMap['mealSlots'] = slots;
+        return dayMap;
+      }).toList();
+      await svc.saveWeeklyPlanOverwrite(LocalWeeklyPlanModel(
+        id: cached.id,
+        weekStartDate: cached.weekStartDate,
+        daysDataJson: jsonEncode(updatedDays),
+        updatedAt: DateTime.now().millisecondsSinceEpoch,
+      ));
+    } catch (e) {
+      debugPrint('[CookingSuggestionsSection] Error updating weekly plan local: $e');
     }
   }
 

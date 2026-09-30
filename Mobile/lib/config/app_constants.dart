@@ -121,5 +121,8 @@ class AppConstants {
   static const String epFamilyReject = '/family/reject';
   static const String epFamilyMembers = '/family/members';
   static const String epFamilyGroups = '/family/groups';
+
+  // FCM Token APIs
+  static const String epFcmToken = '/notifications/fcm-token';
 }
 

@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../data/models/ingredient_model.dart';
@@ -11,7 +11,10 @@ import '../widgets/fridge_members_modal.dart';
 import '../widgets/ingredient_avatar_widget.dart';
 import '../theme/app_theme.dart';
 import '../sqlite/services/ingredient_local_service.dart';
+import '../sqlite/services/fridge_ops_local_service.dart';
+import '../sqlite/helpers/database_helper.dart';
 import '../sqlite/models/local_ingredient_model.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class FridgeInventoryScreen extends StatefulWidget {
   final FridgeModel fridge;
@@ -40,6 +43,7 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
   List<IngredientModel> _ingredients = [];
   bool _isLoading = true;
   final ApiService _apiService = ApiService();
+  final FridgeOpsLocalService _fridgeOpsSvc = FridgeOpsLocalService();
   FamilyRoleModel? _familyRole;
 
   @override
@@ -96,7 +100,43 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
       debugPrint('[FridgeInventoryScreen] Error/Offline loading fridge items: $e. Loading from SQLite...');
       try {
         final cached = await ingredientLocalService.getCachedIngredients();
+
+        // Helper: tính badge màu giống IngredientModel.fromFridgeApi()
+        Color resolveBgColor(int? days) {
+          if (days == null) return const Color(0xFFF5F5F5);
+          if (days < 0) return const Color(0xFFFFEBEE);  // quá hạn → đỏ
+          if (days == 0) return const Color(0xFFFFF8E1);  // hôm nay → vàng
+          if (days <= 2) return const Color(0xFFFFF8E1);  // sắp hết → vàng
+          return const Color(0xFFE8F5E9);                 // còn nhiều → xanh
+        }
+        Color resolveTextColor(int? days) {
+          if (days == null) return const Color(0xFF757575);
+          if (days < 0) return const Color(0xFFC62828);
+          if (days <= 2) return const Color(0xFFF57F17);
+          return const Color(0xFF2E7D32);
+        }
+        String resolveExpiryText(int? days) {
+          if (days == null) return 'Chưa có HSD';
+          if (days < 0) return 'Quá hạn ${days.abs()} ngày';
+          if (days == 0) return 'Hết hạn hôm nay';
+          return 'Còn $days ngày';
+        }
+
+        // Tính daysUntilExpiry từ expiresAt nếu chưa có (item thêm offline)
+        int? calcDays(LocalIngredientModel item) {
+          if (item.daysUntilExpiry != null) return item.daysUntilExpiry;
+          if (item.expiresAt == null || item.expiresAt!.isEmpty) return null;
+          try {
+            final expiry = DateTime.parse(item.expiresAt!);
+            final diff = expiry.difference(DateTime.now()).inDays;
+            return diff;
+          } catch (_) {
+            return null;
+          }
+        }
+
         final List<IngredientModel> offlineList = cached.map((item) {
+          final days = calcDays(item);
           return IngredientModel(
             id: item.id,
             fridgeId: widget.fridge.id,
@@ -107,15 +147,20 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
             unit: item.unit,
             category: 'Thực phẩm',
             storageArea: item.storageLocation,
-            daysUntilExpiry: item.daysUntilExpiry ?? 5,
-            expiryText: (item.daysUntilExpiry ?? 5) < 0
-                ? 'Quá hạn ${(item.daysUntilExpiry ?? 5).abs()} ngày'
-                : 'Còn ${item.daysUntilExpiry ?? 5} ngày',
+            daysUntilExpiry: days ?? 999,
+            expiryText: resolveExpiryText(days),
             imagePath: item.imagePath ?? '',
-            badgeBgColor: const Color(0xFFE8F5E9),
-            badgeTextColor: const Color(0xFF2E7D32),
+            badgeBgColor: resolveBgColor(days),
+            badgeTextColor: resolveTextColor(days),
           );
         }).toList();
+
+        // Sắp xếp tăng dần theo daysUntilExpiry (quá hạn → sắp hết → còn nhiều → chưa có HSD)
+        offlineList.sort((a, b) {
+          final da = a.daysUntilExpiry == 999 ? 99999 : a.daysUntilExpiry;
+          final db = b.daysUntilExpiry == 999 ? 99999 : b.daysUntilExpiry;
+          return da.compareTo(db);
+        });
 
         if (mounted) {
           setState(() {
@@ -139,6 +184,26 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  /// Cập nhật quantity + unit của ingredient trong SQLite local ngay (dùng khi offline)
+  Future<void> _applyLocalFridgeUpdate(String itemId, double quantity, String unit) async {
+    try {
+      final db = await DatabaseHelper.instance.database;
+      await db.update(
+        'local_ingredients',
+        {
+          'quantity': quantity,
+          'unit': unit,
+          'updated_at': DateTime.now().millisecondsSinceEpoch,
+        },
+        where: 'id = ?',
+        whereArgs: [itemId],
+      );
+      debugPrint('[FridgeInventoryScreen] Local ingredient $itemId updated offline: $quantity $unit');
+    } catch (e) {
+      debugPrint('[FridgeInventoryScreen] Error updating local ingredient: $e');
+    }
   }
 
   // Open Quantity Update Modal Dialog with Numeric Keyboard & +/- Controls
@@ -435,15 +500,35 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                           final valStr = qtyNumberController.text.trim();
                           if (valStr.isNotEmpty) {
                             final numVal = double.tryParse(valStr) ?? 1.0;
-                            try {
-                              await _apiService.updateFridgeItem(item.id, {
-                                'quantity': numVal,
-                                'unit': selectedUnit,
-                              });
-                            } catch (e) {
-                              debugPrint('API Update quantity error: $e');
+
+                            // Kiểm tra kết nối
+                            final connectivity = await Connectivity().checkConnectivity();
+                            final isOnline = connectivity.contains(ConnectivityResult.wifi) ||
+                                connectivity.contains(ConnectivityResult.mobile) ||
+                                connectivity.contains(ConnectivityResult.ethernet);
+
+                            if (isOnline) {
+                              // ONLINE: gọi API
+                              try {
+                                await _apiService.updateFridgeItem(item.id, {
+                                  'quantity': numVal,
+                                  'unit': selectedUnit,
+                                });
+                              } catch (e) {
+                                debugPrint('API Update quantity error: $e');
+                              }
+                              _loadIngredients();
+                            } else {
+                              // OFFLINE: lưu pending + cập nhật local ngay
+                              await _fridgeOpsSvc.savePendingOp(
+                                itemId: item.id,
+                                action: FridgeOpAction.update,
+                                quantity: numVal,
+                                unit: selectedUnit,
+                              );
+                              await _applyLocalFridgeUpdate(item.id, numVal, selectedUnit);
+                              _loadIngredients();
                             }
-                            _loadIngredients();
                           }
                           if (context.mounted) Navigator.pop(context);
                         },
@@ -483,10 +568,25 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                               ),
                             ),
                             onPressed: () async {
-                              try {
-                                await _apiService.consumeFridgeItem(item.id);
-                              } catch (e) {
-                                debugPrint('API Consume item error: $e');
+                              // Kiểm tra kết nối
+                              final connectivity = await Connectivity().checkConnectivity();
+                              final isOnline = connectivity.contains(ConnectivityResult.wifi) ||
+                                  connectivity.contains(ConnectivityResult.mobile) ||
+                                  connectivity.contains(ConnectivityResult.ethernet);
+
+                              if (isOnline) {
+                                try {
+                                  await _apiService.consumeFridgeItem(item.id);
+                                } catch (e) {
+                                  debugPrint('API Consume item error: $e');
+                                }
+                              } else {
+                                // OFFLINE: đánh dấu pending consume + xóa khỏi local display
+                                await _fridgeOpsSvc.savePendingOp(
+                                  itemId: item.id,
+                                  action: FridgeOpAction.consume,
+                                );
+                                await IngredientLocalService().deleteIngredientFromCache(item.id);
                               }
                               _loadIngredients();
                               if (context.mounted) Navigator.pop(context);
@@ -513,10 +613,25 @@ class FridgeInventoryScreenState extends State<FridgeInventoryScreen> {
                               ),
                             ),
                             onPressed: () async {
-                              try {
-                                await _apiService.deleteFridgeItem(item.id);
-                              } catch (e) {
-                                debugPrint('API Delete item error: $e');
+                              // Kiểm tra kết nối
+                              final connectivity = await Connectivity().checkConnectivity();
+                              final isOnline = connectivity.contains(ConnectivityResult.wifi) ||
+                                  connectivity.contains(ConnectivityResult.mobile) ||
+                                  connectivity.contains(ConnectivityResult.ethernet);
+
+                              if (isOnline) {
+                                try {
+                                  await _apiService.deleteFridgeItem(item.id);
+                                } catch (e) {
+                                  debugPrint('API Delete item error: $e');
+                                }
+                              } else {
+                                // OFFLINE: đánh dấu pending delete + xóa khỏi local display
+                                await _fridgeOpsSvc.savePendingOp(
+                                  itemId: item.id,
+                                  action: FridgeOpAction.delete,
+                                );
+                                await IngredientLocalService().deleteIngredientFromCache(item.id);
                               }
                               _loadIngredients();
                               if (context.mounted) Navigator.pop(context);
