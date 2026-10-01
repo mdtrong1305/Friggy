@@ -7,12 +7,25 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:717739810642:android:0e7f52a81f155aaeb3e48b",
+        "mobilesdk_app_id": "1:717739810642:android:5605544265767482b3e48b",
         "android_client_info": {
-          "package_name": "com.example.friggy"
+          "package_name": "com.tqlam.friggy"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "717739810642-972vaqidadjjv087ff631tq9u38j6u3l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tqlam.friggy",
+            "certificate_hash": "ecedd586565aca4b9eef6de02cacd81fffe2d705"
+          }
+        },
+        {
+          "client_id": "717739810642-4neqbd4q4v3i65hup78shtn557u80d3s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyD0bgVGFXtwSwed_19VyaULMZKp4hXX2Nk"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "717739810642-4neqbd4q4v3i65hup78shtn557u80d3s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
