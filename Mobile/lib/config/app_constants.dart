@@ -45,7 +45,11 @@ class AppConstants {
     final leadingSlash = formatted.startsWith('/') ? '' : '/';
     return '$fileBaseUrl$leadingSlash$formatted';
   }
-  static const String googleClientId = '302076463841-itoefla7rlbl9rgadphcodev7poj62rn.apps.googleusercontent.com';
+
+  static const String googleClientId = String.fromEnvironment(
+    'GOOGLE_CLIENT_ID',
+    defaultValue: '717739810642-4neqbd4q4v3i65hup78shtn557u80d3s.apps.googleusercontent.com',
+  );
   static const Duration connectTimeout = Duration(seconds: 30);
   static const Duration receiveTimeout = Duration(seconds: 30);
 
@@ -67,19 +71,20 @@ class AppConstants {
   static const String epAuthPhoneVerify = '/auth/phone/verify';
   static const String epAuthRefreshToken = '/auth/refresh';
   static const String epAuthLogout = '/auth/logout';
-  
+
   static const String epUsersMe = '/users/me';
   static const String epUsersProfile = '/users/me/profile';
   static const String epUsersAvatar = '/users/me/avatar';
   static const String epUsersPreferences = '/users/me/preferences';
   static const String epUsersAllergies = '/users/me/allergies';
   static const String epUsersAiUsage = '/users/me/ai-usage';
-  static const String epUsersNotificationSettings = '/users/me/notification-settings';
+  static const String epUsersNotificationSettings =
+      '/users/me/notification-settings';
   static const String epUsersOnboarding = '/users/me/onboarding';
 
   static const String epIngredients = '/ingredients';
   static const String epIngredientCategories = '/ingredients/categories';
-  
+
   static const String epFridgeItems = '/fridge/items';
   static const String epFridge = '/fridge';
   static const String epFridgeExpiring = '/fridge/expiring';
@@ -92,12 +97,14 @@ class AppConstants {
 
   static const String epRecipes = '/recipes';
   static const String epRecipeDetail = '/recipes'; // + /{id}
-  
+
   static const String epWeeklyPlans = '/weekly-plans';
   static const String epMealPlanningGenerate = '/meal-planning/plans/generate';
-  static const String epMealPlanningGenerateExpiring = '/meal-planning/plans/generate-from-expiring';
+  static const String epMealPlanningGenerateExpiring =
+      '/meal-planning/plans/generate-from-expiring';
   static const String epMealPlanningPlans = '/meal-planning/plans';
-  static const String epMealPlanningShoppingLists = '/meal-planning/shopping-lists';
+  static const String epMealPlanningShoppingLists =
+      '/meal-planning/shopping-lists';
   static const String epChatSessions = '/chat/sessions';
   static const String epAiChatSessions = '/ai-chat/sessions';
 
@@ -106,12 +113,14 @@ class AppConstants {
   static const String epSubscriptionsMe = '/subscriptions/me';
   static const String epSubscriptionsSubscribe = '/subscriptions/subscribe';
   static const String epSubscriptionsRenew = '/subscriptions/renew';
-  static const String epSubscriptionsAutoRenewal = '/subscriptions/me/auto-renewal';
+  static const String epSubscriptionsAutoRenewal =
+      '/subscriptions/me/auto-renewal';
   static const String epSubscriptionsWebhook = '/subscriptions/webhook';
 
   // Notifications APIs
   static const String epNotifications = '/notifications';
-  static const String epNotificationsUnreadCount = '/notifications/unread-count';
+  static const String epNotificationsUnreadCount =
+      '/notifications/unread-count';
   static const String epNotificationsReadAll = '/notifications/read-all';
 
   // Family APIs
@@ -125,4 +134,3 @@ class AppConstants {
   // FCM Token APIs
   static const String epFcmToken = '/notifications/fcm-token';
 }
-

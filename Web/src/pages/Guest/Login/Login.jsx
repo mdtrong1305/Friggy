@@ -135,7 +135,7 @@ export const Login = ({ onBack, onLoginSuccess }) => {
     try {
       const clientId =
         import.meta.env.VITE_GOOGLE_CLIENT_ID ||
-        '302076463841-itoefla7rlbl9rgadphcodev7poj62rn.apps.googleusercontent.com';
+        '717739810642-4neqbd4q4v3i65hup78shtn557u80d3s.apps.googleusercontent.com';
 
       if (!window.google?.accounts?.id) {
         showToast.error('Thư viện Google SDK đang được tải, vui lòng bấm lại sau 2 giây!');

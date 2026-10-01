@@ -5,3 +5,6 @@
 .env.local
 .env.docker
 
+*.apk
+*.aab
+
